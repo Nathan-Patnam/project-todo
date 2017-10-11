@@ -1,9 +1,27 @@
 package edu.wofford;
 
-public class feature01 {
+public class Feature01 {
+    protected String [] arguments;
 
-    public boolean testMissingArgument(String input){
-        return false;
+    public Feature01(){
+
     }
+
+
+    public boolean testMissingArgument(String[] input){
+        
+        if(input.length==3){
+            return true;
+        }
+        else{
+            return false;
+        }
+       
+    }
+
+    
+
+
+
 
 }

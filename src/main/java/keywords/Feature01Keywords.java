@@ -2,13 +2,15 @@ package keywords;
 
 import edu.wofford.*;
 
-public class Feature01 {
+public class Feature01Keywords extends Feature01 {
+	private Feature01 model;
 
 	public void startProgramWithArguments(String[] args) {
-		
+		model=new Feature01();
 	}
 	
 	public String getLength() {
+		
 		return "7";
 	}
 	
