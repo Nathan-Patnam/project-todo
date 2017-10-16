@@ -5,93 +5,71 @@ public class CheckArguments {
     protected String[] arguments;
     //how to get positional arguments from demo
     //program name seperated from scanned input? impossible
-    String demo_args = "length width height";
-
-
-    //dictionry
-
-
-
-
+    private String demo_args = "length width height";
+    private Map<String, String> dictionary;
 
     public void main(){
+        dictionary = new HashMap<String, String>();
+    }
 
-        //dictionary
+//checks that arrays exist and
 
-
-
-
-        Scanner scanner = new Scanner(System.in);
-
-        String input_arguments = scanner.nextLine();
-        String[] arguments_array = input_arguments.split(" ");
-
-        String program_call = scanner.nextLine();
-        String[] call_array = input_arguments.split(" ");
-
-        if (arguments_array.length() < 3) {
-          throw new InvalidArgsException();
+    private boolean ArrayCheck(String filename, String[] keys, String[] values){
+      for (int i = 0; i < keys.length(); i++){
+        String key_string =+ " " + keys[i];
+      }
+      if (keys.length == 0){
+        String message = "No arguments have been supplied.";
+        throw new InvalidArgsException(message);
+        return false;
+      }
+      if (values.length == 0){
+        String message = "No argument values have been supplied.";
+        throw new InvalidArgsException(message);
+        return false;
+      }
+      else if (keys.length() < values.length()){
+        for (int i = keys.length(); i < values.length(); i++){
+          String message = "usage: java " + filename + key_string + "\n"
+          +filename + ".java: error: unrecognized arguments" + values[i];
+          throw new InvalidArgsException(message);
+          return false;
         }
-
-        else if (arguments_array.length()  ) {
-          throw new InvalidArgsException();
+      }
+      else if (keys.length() > values.length()){
+        for (int i = values.length(); i < keys.length(); i++){
+          String message = "usage: java " + filename + key_string + "\n"
+          +filename + ".java: error: the following arguments are required:" + keys[i];
+          throw new InvalidArgsException(message);
+          return false;
         }
+      }
+    }
 
+    //builds the dictionary
 
+    private void writeDictionary(){
+      for (int i = 0; i < key.length; i++){
 
-
-
-        String[] string_array = input.split(" ");
-
-        String program_name = "" + string_array[0] + string_array[1];
-
-        Strng no_args = "usage:" + program_name + demo_args +"\n"
-        + string_array[1]+"."+string_array[0]": " + "error: no arguments";
-
-        String 4_args = "usage:" + program_name + demo_args +"\n"
-        + string_array[1]+"."+string_array[0]": " + "error: the following arguments are required: width height";
-
-        String 5_args = "usage:" + program_name + demo_args +"\n"
-        + string_array[1]+"."+string_array[0]": " + "error: the following arguments are required: height";
-
-        // if (string_array.length > 5){
-        //   for(int i = 5; i < string_array.length i++){
-        //
-        //   }
-        //
-        // }
-
-
-        String 6_args = "" + input + "\n" +
-        "usage:" + program_name + demo_args +"\n"
-        + string_array[1]+"."+string_array[0]": " + "unrecognized arguments:" string_array[5];
-
-
-
-
-        try {
-          if(string_array.length<3){
-            throw new InvalidArgsException();
-            }
-          else if (string_array.length<4){
-            throw new InvalidArgsException(
+          String key = "";
+          if (key.length() > i && keys[i] != null){
+          key = keys[i];
           }
-          else if (string_array.length<5){
-            throw new InvalidArgsException
 
-          }catch(InvalidArgsException ex){
-            //stop program
+          String value = "";
+          if (values.length() > i && values[i] != null){
+          value = values[i];
           }
+
+          dictionary.put(key,value);
     }
 
 
-    public void SetArgs(String[] keys, String[] values){
-      
+    public void setArgs(filename, String[] keys, String[] values){
+      if(ArrayCheck(filename, keys, values)){
+          writeDictionary(keys, values);
+      }
     }
-
-
-
-
 
     public int getLength(String[] args){
       return Integer.valueOf(args[2]);
