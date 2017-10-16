@@ -37,12 +37,12 @@ public class CheckArgumentsTest{
 
     @Test
     public final void testGetWidth(){
-        assertEquals(5, argCheck.getLength(string_array));
+        assertEquals(5, argCheck.getWidth(string_array));
     }
 
     @Test
     public final void testGetHeight(){
-        assertEquals(2, argCheck.getLength(string_array));
+        assertEquals(6, argCheck.getHeight(string_array));
     }
 
 }
