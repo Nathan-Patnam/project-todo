@@ -19,7 +19,7 @@ public class ArgumentParser {
 //alternatively we could make product owner pass in a string array for the keys and values, and a string for filename.
 
 
-     void setArgs(String keys_string, String values_string){
+     public void setArgs(String keys_string, String values_string){
       this.keys = keys_string.split(" ");
       this.values = values_string.split(" ");
 
