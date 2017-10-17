@@ -8,9 +8,9 @@ public class ArgumentParser {
     private String[] values;
     private Map<String, String> dictionary;
 
-    public void main(){
-      // how to get file name???
-        dictionary = new HashMap<String, String>();
+    public ArgumentParser(String filename){
+      this.filename = filename;
+      this.dictionary = new HashMap<String, String>();
     }
 
 // method product owner uses.  Must pass in filename, a string of arguments seperated by spaces, and a string of values seprated by spaces
@@ -19,8 +19,7 @@ public class ArgumentParser {
 //alternatively we could make product owner pass in a string array for the keys and values, and a string for filename.
 
 
-     void setArgs(String file, String keys_string, String values_string){
-      this.filename = file;
+     void setArgs(String keys_string, String values_string){
       this.keys = keys_string.split(" ");
       this.values = values_string.split(" ");
 
@@ -29,10 +28,16 @@ public class ArgumentParser {
       }
     }
 
+    public String getArgs(String len_str){
+        return dictionary.get(len_str);
+    }
+
 
 //checks that arrays exist and
 
     private boolean ArrayCheck(){
+      try{
+
       String key_string = "";
       for (int i = 0; i < keys.length; i++){
         key_string += " " + keys[i];
@@ -60,6 +65,9 @@ public class ArgumentParser {
         }
       }
 
+    }catch(InvalidArgsException e){
+      e.printStackTrace();
+    }
       return true;
 
     }
@@ -79,5 +87,5 @@ public class ArgumentParser {
         }
         dictionary.put(key,value);
       }
-    }
+   }
 }
