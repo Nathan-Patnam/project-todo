@@ -6,3 +6,4 @@ To compile and run any demo program, you should do so against the built JAR file
 
 `javac -cp .:../build/libs/argparse-<version>.jar MyDemoProgram1.java`
 `java -cp .:../build/libs/argparse-<version>.jar MyDemoProgram`
+

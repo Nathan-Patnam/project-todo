@@ -8,9 +8,9 @@ public class Feature01 {
     }
 
 
-    public boolean testMissingArgument(String[] input){
+    public boolean testMissingArgument(String input){
         
-        if(input.length==3){
+        if(input.length()==3){
             return true;
         }
         else{
