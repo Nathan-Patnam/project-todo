@@ -1,19 +1,19 @@
 
 package edu.wofford;
+
 public class Demo {
-        
-    
-          
-       
-    
             public static void main(String[] args) {
                 
-                ArgumentParser argchecker = new ArgumentParser("VolumeCalculator");  
+            ArgumentParser argchecker = new ArgumentParser("VolumeCalculator");  
 
-                argchecker.setArgs("length width height", "7 5 2");
-                int length=Integer.parseInt(argchecker.getArgs("length"));
-                int width=Integer.parseInt(argchecker.getArgs("width"));
-                int height=Integer.parseInt(argchecker.getArgs("height"));
+                argchecker.addArg("length");
+                argchecker.addArg("width");
+                argchecker.addArg("height");
+
+                argchecker.parse(args);
+                int length=Integer.parseInt(argchecker.getArgValue("length"));
+                int width=Integer.parseInt(argchecker.getArgValue("width"));
+                int height=Integer.parseInt(argchecker.getArgValue("height"));
                 int volume= length*width*height;
 
                 System.out.println("The length arguement is " + String.valueOf(length));
