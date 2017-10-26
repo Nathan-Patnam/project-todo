@@ -40,7 +40,7 @@ public class ArgumentParser {
       argumentNames.add(argname);
     }
 
-    public void AddArg(String argname, String description){
+    public void addArg(String argname, String description){
       argumentNames.add(argname);
       argDescriptions.put(argname, description);
     }
