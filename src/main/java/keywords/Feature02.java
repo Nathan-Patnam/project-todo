@@ -13,11 +13,10 @@ public class Feature02 {
         argCheck.parse(args);
 }
 
-
-
-        public String getProgramOutput() {
-			return argCheck.getArgValue("length");
-	}
+public String getProgramOutput() {
+argCheck.getHelpMessage();
+//yyyyy
+}
 
 
 }
