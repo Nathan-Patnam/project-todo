@@ -4,7 +4,7 @@ import java.util.*;
 public class ArgumentParser {
 
     private String programName;
-    //give this dictionary a beter name
+    //give this dictionary a better name
     private Map<String, String> dictionary;
     private List<String> argumentNames;
     private String programDescription;
@@ -22,6 +22,7 @@ public class ArgumentParser {
       this.programDescription = description;
       dictionary = new HashMap<>();
       argumentNames = new ArrayList<>();
+      argDescriptions = new HashMap<>();
     }
 
     public String getProgramName() {
@@ -44,6 +45,26 @@ public class ArgumentParser {
       argumentNames.add(argname);
       argDescriptions.put(argname, description);
     }
+    private String getParameterString(){
+      String key_string = "";
+        for (int i = 0; i < argumentNames.size(); i++){
+          key_string += " " + argumentNames.get(i);
+        }
+        return key_string;
+    }
+
+    public String getHelpMessage(){
+      String message="";
+      if(this.help){
+
+         message = "usage: java " + programName + getParameterString() + "\n" + programDescription + "\n" + "positional arguments:" + "\n";
+         for (int i = 0; i < argumentNames.size(); i++){
+           message += "   "+ argumentNames.get(i) + " " + argDescriptions.get(argumentNames.get(i)) + "\n";
+         }
+
+       }
+       return message;
+    }
 
     public void parse(String[] args) {
 
@@ -56,24 +77,13 @@ public class ArgumentParser {
       for(int i = 0; i < args.length; i++){
         if(args[i] == "-h"){
             this.help = true;
+            System.exit(0);
         }
       }
 
-      if(help){
-        String message = "usage: java " + programName + key_string + "\n" + programDescription + "\n" + "positional arguments:" + "\n";
-         for (int i = 0; i < argumentNames.size(); i++){
-           message += "   "+ argumentNames.get(i) + " " + argDescriptions.get(argumentNames.get(i)) + "\n";
-         }
-
-
-      }
-
-
-
-
-        if(args.length<argumentNames.size()){
+      if(args.length<argumentNames.size()){
           String missingArguements="";
-        for (int i = args.length; i < argumentNames.size(); i++){
+          for (int i = args.length; i < argumentNames.size(); i++){
           missingArguements+=" " + argumentNames.get(i);
         }
         String message = "usage: java " + programName + key_string + "\n"

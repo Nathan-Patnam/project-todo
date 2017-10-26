@@ -5,11 +5,14 @@ import org.junit.*;
 
 public class ArgumentParserTest{
     private ArgumentParser argCheck;
+    private ArgumentParser argCheck2;
 
     @Before
     public final void setup(){
         argCheck = new ArgumentParser("VolumeCalculator");
     }
+
+
 
     @Test
     public final void testProgramName() {
@@ -83,18 +86,28 @@ public class ArgumentParserTest{
       }
     }
 
+
+    @Before
+    public final void setupAgain(){
+        argCheck2 = new ArgumentParser("VolumeCalculator","Calculate the volume of a box.");
+
+    }
+
     @Test
     public void TestHelp(){
-      argCheck.addArg("length","the length of the box");
-      argCheck.addArg("width","the width of the box");
-      argCheck.addArg("height","the height of the box");
+      String[] cla = {"-h"};
+      argCheck2.addArg("length","the length of the box");
+      argCheck2.addArg("width","the width of the box");
+      argCheck2.addArg("height","the height of the box");
+
+      argCheck2.parse(cla);
+
       String msg="usage: java VolumeCalculator length width height\nCalculate the volume of a box.\npositional arguments:\n   length the length of the box\n   width the width of the box\n   height the height of the box";
-      assertEquals(msg, );
+      assertEquals(msg, argCheck2.getHelpMessage());
     }
     @Test
     public void TestProgramDescription(){
-      argCheck2 = ArgumentParser("VolumeCalculator", "Calculate the volume of a box.");
       String msg = "Calculate the volume of a box.";
-      assertEquals(msg, );
+      assertEquals(msg, argCheck2.getProgramDescription());
     }
 }
