@@ -9,9 +9,6 @@ public class ArgumentParserTest{
     @Before
     public final void setup(){
         argCheck = new ArgumentParser("VolumeCalculator");
-        // argCheck.addArgs("width");
-        // argCheck.addArgs("height");
-				//argCheck.setArgs(args);
     }
 
     @Test
@@ -39,47 +36,65 @@ public class ArgumentParserTest{
       assertEquals("5", argCheck.getArgValue("length"));
     }
 
-    @Test(expected = InvalidArgsException.class)
+    @Test(expected = TooFewArguments.class)
     public final void testTooFewArguments(){
       argCheck.addArg("length");
       argCheck.addArg("width");
       String[] cla = {"5"};
-
       argCheck.parse(cla);
-
-
     }
 
-
-    @Test(expected = InvalidArgsException.class)
+    @Test(expected = TooManyArguments.class)
     public final void testTooManyArguments(){
       argCheck.addArg("length");
       String[] cla = {"5","3"};
       argCheck.parse(cla);
-
-
     }
-    /*
+
     @Test
-    public final void testLengthKeyExist(){
-        assertEquals("length", argCheck.keys[0]);
+    public void TestTooManyArgumentsString(){
+      argCheck.addArg("length");
+      argCheck.addArg("width");
+      argCheck.addArg("height");
+      String[] cla = {"7","5","2","43"};
+      try{
+      argCheck.parse(cla);
+      fail("Should have thrown TooManyArguments but did not!");
+      }catch(TooManyArguments expected)
+      {
+      String msg = "usage: java VolumeCalculator length width height\nVolumeCalculator.java: error: unrecognized arguments: 43";
+      assertEquals(msg, expected.getMessage());
+      }
     }
-    */
 
+    @Test
+    public void TestTooFewArgumentsString(){
+      argCheck.addArg("length");
+      argCheck.addArg("width");
+      argCheck.addArg("height");
+      String[] cla = {"7","5"};
+      try{
+      argCheck.parse(cla);
+      fail("Should have thrown TooFewArguments but did not!");
+    }catch(TooFewArguments expected)
+      {
+      String msg = "usage: java VolumeCalculator length width height\nVolumeCalculator.java: error: the following arguments are required: height";
+      assertEquals(msg, expected.getMessage());
+      }
+    }
 
-    // @Test
-    // public final void testGetWidth(){
-    //     assertEquals("3", argCheck.getArgs("width"));
-    // }
-    //
-    // @Test
-    // public final void testGetHeight(){
-    //     assertEquals("2", argCheck.getArgs("length"));
-    // }
-		// @Test
-		// public final void testGetHeight(){
-		// 		assertEquals(, argCheck.getArgs("length"));
-		// }
-
-
+    @Test
+    public void TestHelp(){
+      argCheck.addArg("length","the length of the box");
+      argCheck.addArg("width","the width of the box");
+      argCheck.addArg("height","the height of the box");
+      String msg="usage: java VolumeCalculator length width height\nCalculate the volume of a box.\npositional arguments:\n   length the length of the box\n   width the width of the box\n   height the height of the box";
+      assertEquals(msg, );
+    }
+    @Test
+    public void TestProgramDescription(){
+      argCheck2 = ArgumentParser("VolumeCalculator", "Calculate the volume of a box.");
+      String msg = "Calculate the volume of a box.";
+      assertEquals(msg, );
+    }
 }
