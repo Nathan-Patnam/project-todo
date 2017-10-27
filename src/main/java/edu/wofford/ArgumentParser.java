@@ -9,7 +9,9 @@ public class ArgumentParser {
     private List<String> argumentNames;
     private String programDescription;
     private Map<String, String> argDescriptions;
+    private Map<String, String> argDataTypes;
     private Boolean help = false;
+    private List<String> dataTypes;
 
     public ArgumentParser(String programName) {
       this.programName = programName;
@@ -37,14 +39,34 @@ public class ArgumentParser {
       return argumentNames.size();
     }
 
+    public String getDataType(String argname){
+        return argDataTypes.get(argname);
+    }
+
     public void addArg(String argname) {
       argumentNames.add(argname);
     }
 
-    public void addArg(String argname, String description){
+    public void addArg(String argname, String param2){
       argumentNames.add(argname);
-      argDescriptions.put(argname, description);
+      dataTypes.add("string");
+      dataTypes.add("float");
+      dataTypes.add("int");
+      dataTypes.add("boolean");
+      if(dataTypes.contains(param2)){
+          argDataTypes.put(argname, param2);
+      }
+      else{
+          argDescriptions.put(argname, param2);
+      }
     }
+
+    public void addArg(String argname, String description, String dataType){
+        argumentNames.add(argname);
+        argDescriptions.put(argname, description);
+        argDataTypes.put(argname, description);
+    }
+
     private String getParameterString(){
       String key_string = "";
         for (int i = 0; i < argumentNames.size(); i++){
