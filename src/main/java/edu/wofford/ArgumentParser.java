@@ -121,7 +121,6 @@ public class ArgumentParser {
         +programName + ".java: error: unrecognized arguments:" + tooManyArguments;
 
         throw new TooManyArguments(message);
-
       }
 
       else{
