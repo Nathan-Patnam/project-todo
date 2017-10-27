@@ -75,7 +75,7 @@ public class ArgumentParser {
 
 
       for(int i = 0; i < args.length; i++){
-        if(args[i] == "-h"){
+        if(args[i].equals("-h")){
             this.help = true;
             System.exit(0);
         }
