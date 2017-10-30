@@ -78,9 +78,9 @@ public class ArgumentParser {
     public String getHelpMessage(){
       String message="";
       if(this.help){
-         message = "usage: java " + programName + getParameterString() + "\n" + programDescription + "\n" + "positional arguments:" + "\n";
+         message = "usage: java " + programName + getParameterString() + "\n" + programDescription + "\n" + "positional arguments:";
          for (int i = 0; i < argumentNames.size(); i++){
-           message += "   "+ argumentNames.get(i) + " " + argDescriptions.get(argumentNames.get(i)) + "\n";
+           message +="\n   "+ argumentNames.get(i) + " " + argDescriptions.get(argumentNames.get(i));
          }
        }
        return message;
@@ -97,7 +97,8 @@ public class ArgumentParser {
       for(int i = 0; i < args.length; i++){
         if(args[i].equals("-h")){
             this.help = true;
-            System.exit(0);
+            String message = getHelpMessage();
+            throw new HelpException(message);
         }
       }
 

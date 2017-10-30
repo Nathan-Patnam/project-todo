@@ -10,6 +10,7 @@ public class ArgumentParserTest{
     @Before
     public final void setup(){
         argCheck = new ArgumentParser("VolumeCalculator");
+        argCheck2 = new ArgumentParser("VolumeCalculator","Calculate the volume of a box.");
     }
 
 
@@ -79,19 +80,12 @@ public class ArgumentParserTest{
       try{
       argCheck.parse(cla);
       fail("Should have thrown TooFewArguments but did not!");
-    }catch(TooFewArguments expected)
-      {
+      }catch(TooFewArguments expected){
       String msg = "usage: java VolumeCalculator length width height\nVolumeCalculator.java: error: the following arguments are required: height";
       assertEquals(msg, expected.getMessage());
       }
     }
 
-
-    @Before
-    public final void setupAgain(){
-        argCheck2 = new ArgumentParser("VolumeCalculator","Calculate the volume of a box.");
-
-    }
 
     @Test
     public void TestHelp(){
@@ -100,11 +94,16 @@ public class ArgumentParserTest{
       argCheck2.addArg("width","the width of the box");
       argCheck2.addArg("height","the height of the box");
 
-      argCheck2.parse(cla);
 
       String msg="usage: java VolumeCalculator length width height\nCalculate the volume of a box.\npositional arguments:\n   length the length of the box\n   width the width of the box\n   height the height of the box";
-      assertEquals(msg, argCheck2.getHelpMessage());
+      try{
+      argCheck2.parse(cla);
+      fail("Should have thrown HelpException but did not!");
+      }catch(HelpException expected){
+        assertEquals(msg, expected.getMessage());
+      }
     }
+
     @Test
     public void TestProgramDescription(){
       String msg = "Calculate the volume of a box.";
