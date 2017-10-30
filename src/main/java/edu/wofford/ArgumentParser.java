@@ -57,9 +57,9 @@ public class ArgumentParser {
       String message="";
       if(this.help){
 
-         message = "usage: java " + programName + getParameterString() + "\n" + programDescription + "\n" + "positional arguments:" + "\n";
+         message = "usage: java " + programName + getParameterString() + "\n" + programDescription + "\n" + "positional arguments:";
          for (int i = 0; i < argumentNames.size(); i++){
-           message += + "\n   "+ argumentNames.get(i) + " " + argDescriptions.get(argumentNames.get(i));
+           message +="\n   "+ argumentNames.get(i) + " " + argDescriptions.get(argumentNames.get(i));
          }
 
        }
