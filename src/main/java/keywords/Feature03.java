@@ -12,20 +12,21 @@ public class Feature03 {
         argCheck.addArg("width", "the width of the box", "float");
         argCheck.addArg("height", "the height of the box", "float");
         try{argCheck.parse(args);
-        }
+            }
         catch(HelpException e){
             helpmessage = e.getMessage();
             System.out.println("print message below");
 
-            System.out.println(helpmessage);
+					System.out.println(helpmessage);
 
-            System.out.println("bye bye");
-        }
-    }
+					System.out.println("bye bye");
+				}
+}
 
-    public String getProgramOutput() {
-        return helpmessage;
-    }
+public String getProgramOutput() {
+	return helpmessage;
+}
 
 
 }
+
