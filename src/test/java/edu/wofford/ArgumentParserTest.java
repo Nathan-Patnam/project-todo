@@ -109,4 +109,10 @@ public class ArgumentParserTest{
       String msg = "Calculate the volume of a box.";
       assertEquals(msg, argCheck2.getProgramDescription());
     }
+
+    @Test
+    public void TestgetDataType(){
+        argCheck2.addArg("Length", "Length of the box.", "float");
+        assertEquals("float", argCheck2.getDataType("Length"));
+    }
 }

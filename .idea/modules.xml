@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/argparse.iml" filepath="$PROJECT_DIR$/argparse.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/argparse.iml" filepath="$PROJECT_DIR$/.idea/modules/argparse.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/argparse_main.iml" filepath="$PROJECT_DIR$/.idea/modules/argparse_main.iml" group="argparse" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/argparse_test.iml" filepath="$PROJECT_DIR$/.idea/modules/argparse_test.iml" group="argparse" />
     </modules>

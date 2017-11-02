@@ -17,6 +17,11 @@ public class ArgumentParser {
       this.programName = programName;
       dictionary = new HashMap<>();
       argumentNames = new ArrayList<>();
+      dataTypes = new ArrayList<>();
+      dataTypes.add("string");
+      dataTypes.add("float");
+      dataTypes.add("int");
+      dataTypes.add("boolean");
     }
 
     public ArgumentParser(String programName, String description){
@@ -25,6 +30,11 @@ public class ArgumentParser {
       dictionary = new HashMap<>();
       argumentNames = new ArrayList<>();
       argDescriptions = new HashMap<>();
+      dataTypes = new ArrayList<>();
+      dataTypes.add("string");
+      dataTypes.add("float");
+      dataTypes.add("int");
+      dataTypes.add("boolean");
     }
 
     public String getProgramName() {
@@ -64,7 +74,7 @@ public class ArgumentParser {
     public void addArg(String argname, String description, String dataType){
         argumentNames.add(argname);
         argDescriptions.put(argname, description);
-        argDataTypes.put(argname, description);
+        argDataTypes.put(argname, dataType);
     }
 
     private String getParameterString(){
