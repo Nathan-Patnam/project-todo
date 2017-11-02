@@ -59,6 +59,7 @@ public class ArgumentParser {
 
     public void addArg(String argname) {
       argumentNames.add(argname);
+      argDataTypes.put(argname,"string");
     }
 
     public void addArg(String argname, String param2){
@@ -69,6 +70,8 @@ public class ArgumentParser {
       }
       else{
           argDescriptions.put(argname, param2);
+          argDataTypes.put(argname,"string");
+
       }
     }
 
@@ -97,6 +100,12 @@ public class ArgumentParser {
        return message;
     }
 
+    public String getTypeExceptionMessage(String invalidarg){
+      String message="";
+      message = "usage: java " + programName + getParameterString() + "\n" + programName+".java: error: argument " + invalidarg + ":" + "invalid " + argDataTypes.get(invalidarg) + " value:" + invalidarg;
+      return message;
+    }
+
     public void parse(String[] args) {
 
       String key_string = "";
@@ -112,6 +121,34 @@ public class ArgumentParser {
             throw new HelpException(message);
         }
       }
+
+      for(int i = 0; i < args.length; i++){
+        if (argDataTypes.get(argumentNames.get(args[i])).equals("float")){
+          try{  float temp = Float.parseFloat(args[i]);
+            }
+            catch(NumberFormatException e){
+              String message = getTypeExceptionMessage(args[i]);
+              throw new HelpException(message);
+            }
+        }
+        else if (argDataTypes.get(argumentNames.get(args[i])).equals("int")){
+          try{  int temp = Integer.parseInt(args[i]);
+            }
+            catch(NumberFormatException e){
+              String message = getTypeExceptionMessage(args[i]);
+              throw new HelpException(message);
+            }
+        }
+        else if (argDataTypes.get(argumentNames.get(args[i])).equals("boolean")){
+          try{  Boolean temp = Boolean.parseBoolean(args[i]);
+            }
+            catch(NumberFormatException e){
+              String message = getTypeExceptionMessage(args[i]);
+              throw new HelpException(message);
+            }
+        }
+      }
+
 
       if(args.length<argumentNames.size()){
           String missingArguements="";
