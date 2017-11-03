@@ -1,17 +1,18 @@
 
 import edu.wofford.ArgumentParser;
+//javac -cp .:../build/libs/argparse-1.0.jar Feature03.java
+// java -cp .:../build/libs/argparse-1.0.jar Feature03 1 one 2
 
-public class Demo {
+
+public class Feature03 {
             public static void main(String[] args) {
 
 
                 ArgumentParser argchecker = new ArgumentParser("VolumeCalculator", "a program that calculates the volume of a box");
 
-                argchecker.addArg("length", "length of the box");
-                argchecker.addArg("width", "width of the box");
-                argchecker.addArg("height", "height of the box");
-
-                System.out.println("The help message is: \n");
+                argchecker.addArg("length", "length of the box","int");
+                argchecker.addArg("width", "width of the box", "int");
+                argchecker.addArg("height", "height of the box", "int");
                 argchecker.parse(args);
                 /*
                 int length=Integer.parseInt(argchecker.getArgValue("length"));
