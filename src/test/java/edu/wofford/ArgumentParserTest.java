@@ -135,7 +135,9 @@ public class ArgumentParserTest{
       argCheck2.parse(cla);
       fail("Should have thrown HelpException but did not!");
       }catch(HelpException expected){
+        System.out.println("help message is");
         assertEquals(msg, expected.getMessage());
+        System.out.println("end help message");
       }
     }
 }
