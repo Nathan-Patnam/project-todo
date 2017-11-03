@@ -1,7 +1,7 @@
 
 import edu.wofford.ArgumentParser;
-//javac -cp .:../build/libs/argparse-1.0.jar Feature03.java
-// java -cp .:../build/libs/argparse-1.0.jar Feature03 1 one 2
+// javac -cp .:../build/libs/argparse-1.0.jar Feature03.java
+// java -cp .:../build/libs/argparse-1.0.jar Feature03 1 one two
 
 
 public class Feature03 {

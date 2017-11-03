@@ -13,6 +13,7 @@ public class ArgumentParser {
   private Map<String, String> argDataTypes;
   private Boolean help = false;
   private List<String> dataTypes;
+  private ArrayList<ArrayList<String>> listBadDataTypes = new ArrayList<ArrayList<String>>();
 
   public ArgumentParser(String programName) {
     this.programName = programName;
@@ -101,12 +102,77 @@ public class ArgumentParser {
     return message;
   }
 
-  public String getTypeExceptionMessage(String invalidarg, String dataType, String invalidArgValue) {
+  public String getTypeExceptionMessage(ArrayList<ArrayList<String>> listBadDataTypes, int sizeBadDataTypes) {
     String message = "";
-    message = "usage: java " + programName + getParameterString() + "\n" + programName + ".java: error: argument "
-        + invalidarg + ":" + " invalid " + dataType + " value: " + invalidArgValue;
+    message = "usage: java " + programName + getParameterString() + "\n" + programName + ".java: error: "; 
+//special casing if only paramater has a bad data type
+    if(sizeBadDataTypes==1) {
+        message+="argument " + listBadDataTypes.get(0).get(0) + ":" + " invalid " + listBadDataTypes.get(0).get(1) + " value: " + listBadDataTypes.get(0).get(2);
+  }
+  else{
+    for( int i=0; i< sizeBadDataTypes; i++){
+      message+="argument " + listBadDataTypes.get(i).get(0) + ":" + " invalid " + listBadDataTypes.get(i).get(1) + " value: " + listBadDataTypes.get(i).get(2) +"\n";
+    }
+  }
     return message;
   }
+
+public void areThereWrongDataTypes(String[] args){
+  int sizeBadDataTypes=0;
+
+  for (int i = 0; i < args.length; i++) {
+    if (argDataTypes.get(argumentNames.get(i)).equals("float")) {
+      try {
+        float temp = Float.parseFloat(args[i]);
+      } catch (NumberFormatException e) {
+
+        ArrayList<String> badDataType = new ArrayList<String>();
+        badDataType.add(argumentNames.get(i));
+        badDataType.add("float");
+        badDataType.add(args[i]);
+        listBadDataTypes.add(badDataType);
+        sizeBadDataTypes++;
+      }
+    } else if (argDataTypes.get(argumentNames.get(i)).equals("int")) {
+      try {
+        int temp = Integer.parseInt(args[i]);
+      } catch (NumberFormatException e) {
+    
+        ArrayList<String> badDataType = new ArrayList<String>();
+        badDataType.add(argumentNames.get(i));
+        badDataType.add("int");
+        badDataType.add(args[i]);
+  
+        listBadDataTypes.add(badDataType);
+        sizeBadDataTypes++;
+      }
+    } 
+    else if (argDataTypes.get(argumentNames.get(i)).equals("boolean")) {
+      try {
+        Boolean temp = Boolean.parseBoolean(args[i]);
+      } catch (NumberFormatException e) {
+
+        ArrayList<String> badDataType = new ArrayList<String>();
+        badDataType.add(argumentNames.get(i));
+        badDataType.add("boolean");
+        badDataType.add(args[i]);
+  
+        listBadDataTypes.add(badDataType);
+        sizeBadDataTypes++;
+      }
+
+    } 
+
+  }
+
+  if (sizeBadDataTypes>0){
+    String message = getTypeExceptionMessage(listBadDataTypes,sizeBadDataTypes);
+    throw new HelpException(message);
+
+  }
+
+}
+
 
   public void parse(String[] args) {
 
@@ -143,44 +209,8 @@ public class ArgumentParser {
 
       throw new TooManyArguments(message);
     }
-
     else {
-      for (int i = 0; i < args.length; i++) {
-        if (argDataTypes.get(argumentNames.get(i)).equals("float")) {
-          try {
-            float temp = Float.parseFloat(args[i]);
-          } catch (NumberFormatException e) {
-            String message = getTypeExceptionMessage(argumentNames.get(i), "float",args[i]);
-            throw new HelpException(message);
-          }
-        } else if (argDataTypes.get(argumentNames.get(i)).equals("int")) {
-          try {
-            int temp = Integer.parseInt(args[i]);
-          } catch (NumberFormatException e) {
-            String message = getTypeExceptionMessage(argumentNames.get(i), "int",args[i]);
-            throw new HelpException(message);
-          }
-        } else if (argDataTypes.get(argumentNames.get(i)).equals("boolean")) {
-          try {
-            Boolean temp = Boolean.parseBoolean(args[i]);
-          } catch (NumberFormatException e) {
-            String message = getTypeExceptionMessage(argumentNames.get(i), "boolean",args[i]);
-            throw new HelpException(message);
-          }
-
-        } 
-        else {
-          Object dataType = args[i];
-          if (dataType instanceof String) {
-            // do something String related to foo
-          } else {
-            String message = getTypeExceptionMessage(argumentNames.get(i), "string",args[i]);
-            throw new HelpException(message);
-          }
-
-        }
-
-      }
+      areThereWrongDataTypes(args);
       for (int i = 0; i < argumentNames.size(); i++) {
         dictionary.put(argumentNames.get(i), args[i]);
       }
