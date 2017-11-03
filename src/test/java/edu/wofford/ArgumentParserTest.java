@@ -143,7 +143,7 @@ public class ArgumentParserTest{
 
 
     @Test
-    public void multipleBadDataTypes(){
+    public void TestMultipleBadDataTypes(){
       String[] cla = {"yup","something","one"};
       argCheck2.addArg("length","the length of the box","float");
       argCheck2.addArg("width","the width of the box","boolean");
