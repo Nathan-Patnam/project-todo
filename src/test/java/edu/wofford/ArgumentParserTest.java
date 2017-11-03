@@ -140,4 +140,24 @@ public class ArgumentParserTest{
         System.out.println("end help message");
       }
     }
+
+
+    @Test
+    public void multipleBadDataTypes(){
+      String[] cla = {"yup","something","one"};
+      argCheck2.addArg("length","the length of the box","float");
+      argCheck2.addArg("width","the width of the box","boolean");
+      argCheck2.addArg("height","the height of the box","int");
+
+
+      String msg="usage: java VolumeCalculator length width height\nVolumeCalculator.java: error: argument length: invalid float value: yup\n"
+      + "argument width: invalid boolean value: something\n"
+      + "argument height: invalid int value: one\n";
+      try{
+      argCheck2.parse(cla);
+      fail("Should have thrown HelpException but did not!");
+      }catch(HelpException expected){
+        assertEquals(msg, expected.getMessage());
+      }
+    }
 }

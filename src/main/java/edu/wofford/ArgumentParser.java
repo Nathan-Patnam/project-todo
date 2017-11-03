@@ -67,8 +67,8 @@ public class ArgumentParser {
   public void addArg(String argname, String param2) {
     argumentNames.add(argname);
 
-    if (dataTypes.contains(param2)) {
-      argDataTypes.put(argname, param2);
+    if (dataTypes.contains(param2.toLowerCase())) {
+      argDataTypes.put(argname, param2.toLowerCase());
     } else {
       argDescriptions.put(argname, param2);
       argDataTypes.put(argname, "string");
@@ -79,7 +79,7 @@ public class ArgumentParser {
   public void addArg(String argname, String description, String dataType) {
     argumentNames.add(argname);
     argDescriptions.put(argname, description);
-    argDataTypes.put(argname, dataType);
+    argDataTypes.put(argname, dataType.toLowerCase());
   }
 
   private String getParameterString() {
@@ -105,15 +105,16 @@ public class ArgumentParser {
   public String getTypeExceptionMessage(ArrayList<ArrayList<String>> listBadDataTypes, int sizeBadDataTypes) {
     String message = "";
     message = "usage: java " + programName + getParameterString() + "\n" + programName + ".java: error: "; 
-//special casing if only paramater has a bad data type
-    if(sizeBadDataTypes==1) {
-        message+="argument " + listBadDataTypes.get(0).get(0) + ":" + " invalid " + listBadDataTypes.get(0).get(1) + " value: " + listBadDataTypes.get(0).get(2);
-  }
-  else{
+ if(sizeBadDataTypes==1){
+    message+="argument " + listBadDataTypes.get(0).get(0) + ":" + " invalid " + listBadDataTypes.get(0).get(1) + " value: " + listBadDataTypes.get(0).get(2);
+ }
+//if there are more than bad data argument
+else{
     for( int i=0; i< sizeBadDataTypes; i++){
       message+="argument " + listBadDataTypes.get(i).get(0) + ":" + " invalid " + listBadDataTypes.get(i).get(1) + " value: " + listBadDataTypes.get(i).get(2) +"\n";
     }
-  }
+  } 
+  
     return message;
   }
 
@@ -148,9 +149,7 @@ public void areThereWrongDataTypes(String[] args){
       }
     } 
     else if (argDataTypes.get(argumentNames.get(i)).equals("boolean")) {
-      try {
-        Boolean temp = Boolean.parseBoolean(args[i]);
-      } catch (NumberFormatException e) {
+      if(!(args[i].equals("true") || args[i].equals( "false"))){
 
         ArrayList<String> badDataType = new ArrayList<String>();
         badDataType.add(argumentNames.get(i));
