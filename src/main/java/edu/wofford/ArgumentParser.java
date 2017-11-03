@@ -104,74 +104,74 @@ public class ArgumentParser {
 
   public String getTypeExceptionMessage(ArrayList<ArrayList<String>> listBadDataTypes, int sizeBadDataTypes) {
     String message = "";
-    message = "usage: java " + programName + getParameterString() + "\n" + programName + ".java: error: "; 
- if(sizeBadDataTypes==1){
-    message+="argument " + listBadDataTypes.get(0).get(0) + ":" + " invalid " + listBadDataTypes.get(0).get(1) + " value: " + listBadDataTypes.get(0).get(2);
- }
-//if there are more than bad data argument
-else{
-    for( int i=0; i< sizeBadDataTypes; i++){
-      message+="argument " + listBadDataTypes.get(i).get(0) + ":" + " invalid " + listBadDataTypes.get(i).get(1) + " value: " + listBadDataTypes.get(i).get(2) +"\n";
+    message = "usage: java " + programName + getParameterString() + "\n" + programName + ".java: error: ";
+    if (sizeBadDataTypes == 1) {
+      message += "argument " + listBadDataTypes.get(0).get(0) + ":" + " invalid " + listBadDataTypes.get(0).get(1)
+          + " value: " + listBadDataTypes.get(0).get(2);
     }
-  } 
-  
+    //if there are more than bad data argument
+    else {
+      for (int i = 0; i < sizeBadDataTypes; i++) {
+        message += "argument " + listBadDataTypes.get(i).get(0) + ":" + " invalid " + listBadDataTypes.get(i).get(1)
+            + " value: " + listBadDataTypes.get(i).get(2) + "\n";
+      }
+    }
+
     return message;
   }
 
-public void areThereWrongDataTypes(String[] args){
-  int sizeBadDataTypes=0;
+  public void areThereWrongDataTypes(String[] args) {
+    int sizeBadDataTypes = 0;
 
-  for (int i = 0; i < args.length; i++) {
-    if (argDataTypes.get(argumentNames.get(i)).equals("float")) {
-      try {
-        float temp = Float.parseFloat(args[i]);
-      } catch (NumberFormatException e) {
+    for (int i = 0; i < args.length; i++) {
+      if (argDataTypes.get(argumentNames.get(i)).equals("float")) {
+        try {
+          float temp = Float.parseFloat(args[i]);
+        } catch (NumberFormatException e) {
 
-        ArrayList<String> badDataType = new ArrayList<String>();
-        badDataType.add(argumentNames.get(i));
-        badDataType.add("float");
-        badDataType.add(args[i]);
-        listBadDataTypes.add(badDataType);
-        sizeBadDataTypes++;
+          ArrayList<String> badDataType = new ArrayList<String>();
+          badDataType.add(argumentNames.get(i));
+          badDataType.add("float");
+          badDataType.add(args[i]);
+          listBadDataTypes.add(badDataType);
+          sizeBadDataTypes++;
+        }
+      } else if (argDataTypes.get(argumentNames.get(i)).equals("int")) {
+        try {
+          int temp = Integer.parseInt(args[i]);
+        } catch (NumberFormatException e) {
+
+          ArrayList<String> badDataType = new ArrayList<String>();
+          badDataType.add(argumentNames.get(i));
+          badDataType.add("int");
+          badDataType.add(args[i]);
+
+          listBadDataTypes.add(badDataType);
+          sizeBadDataTypes++;
+        }
+      } else if (argDataTypes.get(argumentNames.get(i)).equals("boolean")) {
+        if (!(args[i].equals("true") || args[i].equals("false"))) {
+
+          ArrayList<String> badDataType = new ArrayList<String>();
+          badDataType.add(argumentNames.get(i));
+          badDataType.add("boolean");
+          badDataType.add(args[i]);
+
+          listBadDataTypes.add(badDataType);
+          sizeBadDataTypes++;
+        }
+
       }
-    } else if (argDataTypes.get(argumentNames.get(i)).equals("int")) {
-      try {
-        int temp = Integer.parseInt(args[i]);
-      } catch (NumberFormatException e) {
-    
-        ArrayList<String> badDataType = new ArrayList<String>();
-        badDataType.add(argumentNames.get(i));
-        badDataType.add("int");
-        badDataType.add(args[i]);
-  
-        listBadDataTypes.add(badDataType);
-        sizeBadDataTypes++;
-      }
-    } 
-    else if (argDataTypes.get(argumentNames.get(i)).equals("boolean")) {
-      if(!(args[i].equals("true") || args[i].equals( "false"))){
 
-        ArrayList<String> badDataType = new ArrayList<String>();
-        badDataType.add(argumentNames.get(i));
-        badDataType.add("boolean");
-        badDataType.add(args[i]);
-  
-        listBadDataTypes.add(badDataType);
-        sizeBadDataTypes++;
-      }
+    }
 
-    } 
+    if (sizeBadDataTypes > 0) {
+      String message = getTypeExceptionMessage(listBadDataTypes, sizeBadDataTypes);
+      throw new HelpException(message);
+
+    }
 
   }
-
-  if (sizeBadDataTypes>0){
-    String message = getTypeExceptionMessage(listBadDataTypes,sizeBadDataTypes);
-    throw new HelpException(message);
-
-  }
-
-}
-
 
   public void parse(String[] args) {
 
@@ -207,8 +207,7 @@ public void areThereWrongDataTypes(String[] args){
           + ".java: error: unrecognized arguments:" + tooManyArguments;
 
       throw new TooManyArguments(message);
-    }
-    else {
+    } else {
       areThereWrongDataTypes(args);
       for (int i = 0; i < argumentNames.size(); i++) {
         dictionary.put(argumentNames.get(i), args[i]);
