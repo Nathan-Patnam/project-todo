@@ -122,32 +122,7 @@ public class ArgumentParser {
         }
       }
 
-      for(int i = 0; i < args.length; i++){
-        if (argDataTypes.get(argumentNames.get(args[i])).equals("float")){
-          try{  float temp = Float.parseFloat(args[i]);
-            }
-            catch(NumberFormatException e){
-              String message = getTypeExceptionMessage(args[i]);
-              throw new HelpException(message);
-            }
-        }
-        else if (argDataTypes.get(argumentNames.get(args[i])).equals("int")){
-          try{  int temp = Integer.parseInt(args[i]);
-            }
-            catch(NumberFormatException e){
-              String message = getTypeExceptionMessage(args[i]);
-              throw new HelpException(message);
-            }
-        }
-        else if (argDataTypes.get(argumentNames.get(args[i])).equals("boolean")){
-          try{  Boolean temp = Boolean.parseBoolean(args[i]);
-            }
-            catch(NumberFormatException e){
-              String message = getTypeExceptionMessage(args[i]);
-              throw new HelpException(message);
-            }
-        }
-      }
+    
 
 
       if(args.length<argumentNames.size()){
@@ -173,6 +148,32 @@ public class ArgumentParser {
       }
 
       else{
+        for(int i = 0; i < args.length; i++){
+          if (argDataTypes.get(argumentNames.get(i)).equals("float")){
+            try{  float temp = Float.parseFloat(args[i]);
+              }
+              catch(NumberFormatException e){
+                String message = getTypeExceptionMessage(args[i]);
+                throw new HelpException(message);
+              }
+          }
+          else if (argDataTypes.get(argumentNames.get(i)).equals("int")){
+            try{  int temp = Integer.parseInt(args[i]);
+              }
+              catch(NumberFormatException e){
+                String message = getTypeExceptionMessage(args[i]);
+                throw new HelpException(message);
+              }
+          }
+          else if (argDataTypes.get(argumentNames.get(i)).equals("boolean")){
+            try{  Boolean temp = Boolean.parseBoolean(args[i]);
+              }
+              catch(NumberFormatException e){
+                String message = getTypeExceptionMessage(args[i]);
+                throw new HelpException(message);
+              }
+          }
+        }
       for(int i = 0; i < argumentNames.size(); i++) {
         dictionary.put(argumentNames.get(i), args[i]);
       }
