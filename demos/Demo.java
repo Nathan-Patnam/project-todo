@@ -23,9 +23,15 @@ public class Demo {
                 System.out.println("The width arguement is " + String.valueOf(width));
                 System.out.println("The height arguement is " + String.valueOf(height));
                 System.out.println("The volume is " + String.valueOf(volume));
+                */
 
+                ArgumentParser argchecker2 = new ArgumentParser("AnotherVolumeCalculator", "a program that calculates the volume of a box but has MORE FEATURES!");
 
-        */
+                argchecker2.addArg("length", "length of the box", "float");
+                argchecker2.addArg("width", "float");
+                argchecker2.addArg("height", "height of the box");
 
+                System.out.println("The help message is: \n");
+                argchecker.parse(args);
             }
         }
