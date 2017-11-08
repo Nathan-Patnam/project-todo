@@ -115,4 +115,49 @@ public class ArgumentParserTest{
         argCheck2.addArg("Length", "Length of the box.", "float");
         assertEquals("float", argCheck2.getDataType("Length"));
     }
+
+    @Test
+    public void TestGetDefaultStringType(){
+      argCheck2.addArg("Length");
+      assertEquals("string", argCheck2.getDataType("Length"));
+    }
+
+    @Test
+    public void TestValidDataTypes(){
+      String[] cla = {"3","something","7"};
+      argCheck2.addArg("length","the length of the box","float");
+      argCheck2.addArg("width","the width of the box","float");
+      argCheck2.addArg("height","the height of the box","float");
+
+
+      String msg="usage: java VolumeCalculator length width height\nVolumeCalculator.java: error: argument width: invalid float value: something";
+      try{
+      argCheck2.parse(cla);
+      fail("Should have thrown HelpException but did not!");
+      }catch(HelpException expected){
+        System.out.println("help message is");
+        assertEquals(msg, expected.getMessage());
+        System.out.println("end help message");
+      }
+    }
+
+
+    @Test
+    public void TestMultipleBadDataTypes(){
+      String[] cla = {"yup","something","one"};
+      argCheck2.addArg("length","the length of the box","float");
+      argCheck2.addArg("width","the width of the box","boolean");
+      argCheck2.addArg("height","the height of the box","int");
+
+
+      String msg="usage: java VolumeCalculator length width height\nVolumeCalculator.java: error: argument length: invalid float value: yup\n"
+      + "argument width: invalid boolean value: something\n"
+      + "argument height: invalid int value: one\n";
+      try{
+      argCheck2.parse(cla);
+      fail("Should have thrown HelpException but did not!");
+      }catch(HelpException expected){
+        assertEquals(msg, expected.getMessage());
+      }
+    }
 }
