@@ -15,11 +15,7 @@ public class Feature02 {
 				}
 				catch(HelpException e){
 					helpmessage = e.getMessage();
-					System.out.println("print message below");
-
 					System.out.println(helpmessage);
-
-					System.out.println("bye bye");
 
 				}
 }

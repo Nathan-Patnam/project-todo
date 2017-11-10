@@ -1,6 +1,7 @@
 package keywords;
 
 import edu.wofford.*;
+import edu.wofford.Argument.DataType;
 
 public class Feature03 {
     private ArgumentParser argCheck;
@@ -8,9 +9,9 @@ public class Feature03 {
 
     public void startProgramWithArguments(String[] args) {
         argCheck = new ArgumentParser("VolumeCalculator", "Calculate the volume of a box.");
-        argCheck.addArg("length", "the length of the box","float");
-        argCheck.addArg("width", "the width of the box", "float");
-        argCheck.addArg("height", "the height of the box", "float");
+        argCheck.addArg("length", "the length of the box",Argument.DataType.FLOAT);
+        argCheck.addArg("width", "the width of the box", Argument.DataType.FLOAT);
+        argCheck.addArg("height", "the height of the box", Argument.DataType.FLOAT);
         try{argCheck.parse(args);
             }
         catch(HelpException e){

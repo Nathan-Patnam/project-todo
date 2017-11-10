@@ -1,3 +1,4 @@
+
 package keywords;
 
 import edu.wofford.*;
@@ -18,22 +19,22 @@ public class Feature01 {
 	}
 
 	public String getLength() {
-			return argCheck.getArgValue("length");
+			return argCheck.getArgumentValue("length");
 	}
 
 	public String getWidth() {
-		return argCheck.getArgValue("width");
+		return argCheck.getArgumentValue("width");
 	}
 
 	public String getHeight() {
-		return argCheck.getArgValue("height");
+		return argCheck.getArgumentValue("height");
 	}
 
 	public String getProgramOutput() {
 		if(this.message.equals("")){
-			int l = Integer.valueOf(argCheck.getArgValue("length"));
-			int w = Integer.valueOf(argCheck.getArgValue("width"));
-			int h = Integer.valueOf(argCheck.getArgValue("height"));
+			int l = Integer.valueOf(argCheck.getArgumentValue("length"));
+			int w = Integer.valueOf(argCheck.getArgumentValue("width"));
+			int h = Integer.valueOf(argCheck.getArgumentValue("height"));
 			int volume = l * w * h;
 
 			return Integer.toString(volume);
@@ -52,18 +53,18 @@ public class Feature01 {
 			argCheck.parse(args);
 	}
 	public String getPet() {
-		return argCheck.getArgValue("pet");
+		return argCheck.getArgumentValue("pet");
 	}
 
 	public String getNumber() {
-		return argCheck.getArgValue("number");
+		return argCheck.getArgumentValue("number");
 	}
 
 	public String getRainy() {
-		return argCheck.getArgValue("rainy");
+		return argCheck.getArgumentValue("rainy");
 	}
 
 	public String getBathrooms() {
-		return argCheck.getArgValue("bathrooms");
+		return argCheck.getArgumentValue("bathrooms");
 		}
 }
