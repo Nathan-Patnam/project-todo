@@ -6,7 +6,7 @@ public class ArgumentParser {
 
   private String programName;
   private String programDescription;
-  //private DataTypes dataType;
+  Map<String, OptionalArgument> optionalarguments = new LinkedHashMap<String, OptionalArgument>();
   Map<String, Argument> arguments = new LinkedHashMap<String, Argument>();
   private ArrayList<ArrayList<String>> listBadDataTypes = new ArrayList<ArrayList<String>>();
 
@@ -20,6 +20,13 @@ public class ArgumentParser {
     this.programDescription = description;
     arguments = new LinkedHashMap<>();
   }
+
+  public void addOptionalArg(String optionalArgName, defaultVal){
+    //product owner doesnt have to put in -- for the optionalArgName, user does
+    optionalarguments.put(optionalArgName, new OptionalArgument(optionalArgName, defaultVal));
+  }
+
+
 
   public void addArg(String argname) {
     arguments.put(argname, new Argument(argname));

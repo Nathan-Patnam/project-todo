@@ -1,21 +1,18 @@
-
 package edu.wofford;
 
 import java.util.*;
 
-public class OptionalArgument {
+public class OptionalArgument extends Argument {
     private String optionalArgumentName;
     private String optionalArgumentValue;
-    private ArrayList<String> multipleArgumentValue = new ArrayList<String>();
+    private String optionalDescription;
+    private Argument.DataType optionalType;
 
-    public OptionalArgument(String optionalArgumentName, String optionalArgumentDefaultValue) {
-        this.optionalArgumentName = optionalArgumentName;
+    public OptionalArgument(String optionalArgumentName, String optionalArgumentDefaultValue, String description, Argument.DataType type) {
+        this.optionalArgumentName = "--"+optionalArgumentName;
         this.optionalArgumentValue = optionalArgumentDefaultValue;
-    }
-
-    public OptionalArgument(String optionalArgumentName, ArrayList<String> multipleArgumentValue) {
-        this.optionalArgumentName = optionalArgumentName;
-        this.multipleArgumentValue = multipleArgumentValue;
+        this.optionalDescription = description;
+        this.optionalType = type;
     }
 
     public void setOptionalArgumentValue(String optionalArgumentValue) {
@@ -33,5 +30,4 @@ public class OptionalArgument {
     public ArrayList<String> getOptionalArgumentValues() {
         return this.multipleArgumentValue;
     }
-
 }
