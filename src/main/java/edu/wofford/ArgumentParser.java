@@ -5,103 +5,51 @@ import java.util.*;
 public class ArgumentParser {
 
   private String programName;
-  //give this dictionary a better name
-  private Map<String, String> dictionary;
-  private List<String> argumentNames;
   private String programDescription;
-  private Map<String, String> argDescriptions;
-  private Map<String, String> argDataTypes;
-  private Boolean help = false;
-  private List<String> dataTypes;
+  //private DataTypes dataType;
+  Map<String, Argument> arguments = new LinkedHashMap<String, Argument>();
   private ArrayList<ArrayList<String>> listBadDataTypes = new ArrayList<ArrayList<String>>();
 
   public ArgumentParser(String programName) {
     this.programName = programName;
-    dictionary = new HashMap<>();
-    argumentNames = new ArrayList<>();
-    dataTypes = new ArrayList<>();
-    dataTypes.add("string");
-    dataTypes.add("float");
-    dataTypes.add("int");
-    dataTypes.add("boolean");
-    argDescriptions = new HashMap<>();
-    argDataTypes = new HashMap<>();
+    arguments = new LinkedHashMap<>();
   }
 
   public ArgumentParser(String programName, String description) {
     this.programName = programName;
     this.programDescription = description;
-    dictionary = new HashMap<>();
-    argumentNames = new ArrayList<>();
-    argDescriptions = new HashMap<>();
-    argDataTypes = new HashMap<>();
-    dataTypes = new ArrayList<>();
-
-    dataTypes.add("string");
-    dataTypes.add("float");
-    dataTypes.add("int");
-    dataTypes.add("boolean");
-  }
-
-  public String getProgramName() {
-    return programName;
-  }
-
-  public String getProgramDescription() {
-    return programDescription;
-  }
-
-  public int getNumArguments() {
-    return argumentNames.size();
-  }
-
-  public String getDataType(String argname) {
-    return argDataTypes.get(argname);
+    arguments = new LinkedHashMap<>();
   }
 
   public void addArg(String argname) {
-    argumentNames.add(argname);
-    argDataTypes.put(argname, "string");
+    arguments.put(argname, new Argument(argname));
   }
 
-  public void addArg(String argname, String param2) {
-    argumentNames.add(argname);
+  public void addArg(String argname, String description) {
+    arguments.put(argname, new Argument(argname, description));
 
-    if (dataTypes.contains(param2.toLowerCase())) {
-      argDataTypes.put(argname, param2.toLowerCase());
-    } else {
-      argDescriptions.put(argname, param2);
-      argDataTypes.put(argname, "string");
-
-    }
   }
 
-  public void addArg(String argname, String description, String dataType) {
-    argumentNames.add(argname);
-    argDescriptions.put(argname, description);
-    argDataTypes.put(argname, dataType.toLowerCase());
+  public void addArg(String argname, Argument.DataType dataType) {
+    arguments.put(argname, new Argument(argname, dataType));
+
+  }
+  public void addArg(String argname, String description, Argument.DataType dataType) {
+    arguments.put(argname, new Argument(argname, description, dataType));
   }
 
-  private String getParameterString() {
-    String key_string = "";
-    for (int i = 0; i < argumentNames.size(); i++) {
-      key_string += " " + argumentNames.get(i);
-    }
-    return key_string;
-  }
+  //messages and error handling
 
-  public String getHelpMessage() {
-    String message = "";
-    if (this.help) {
-      message = "usage: java " + programName + getParameterString() + "\n" + programDescription + "\n"
-          + "positional arguments:";
-      for (int i = 0; i < argumentNames.size(); i++) {
-        message += "\n   " + argumentNames.get(i) + " " + argDescriptions.get(argumentNames.get(i));
+  private void checkIfHelpMessage(String[] args) {
+    for (int i = 0; i < args.length; i++) {
+      if (args[i].equals("-h")) {
+        String message = getHelpMessage();
+        throw new HelpException(message);
       }
     }
-    return message;
   }
 
+  //rewrite
   public String getTypeExceptionMessage(ArrayList<ArrayList<String>> listBadDataTypes, int sizeBadDataTypes) {
     String message = "";
     message = "usage: java " + programName + getParameterString() + "\n" + programName + ".java: error: ";
@@ -116,106 +64,139 @@ public class ArgumentParser {
             + " value: " + listBadDataTypes.get(i).get(2) + "\n";
       }
     }
-
     return message;
   }
-
+//rewrite using hopefully dataTypes class instead
   public void areThereWrongDataTypes(String[] args) {
     int sizeBadDataTypes = 0;
-
-    for (int i = 0; i < args.length; i++) {
-      if (argDataTypes.get(argumentNames.get(i)).equals("float")) {
+    int i = 0;
+    for (String argNameIterator : arguments.keySet()) {
+      String currentArgumentIteratorDataType = arguments.get(argNameIterator).getargumentDataTypeString();
+      if (currentArgumentIteratorDataType.equals("float")) {
         try {
           float temp = Float.parseFloat(args[i]);
         } catch (NumberFormatException e) {
-
           ArrayList<String> badDataType = new ArrayList<String>();
-          badDataType.add(argumentNames.get(i));
+          badDataType.add(argNameIterator);
           badDataType.add("float");
           badDataType.add(args[i]);
           listBadDataTypes.add(badDataType);
           sizeBadDataTypes++;
         }
-      } else if (argDataTypes.get(argumentNames.get(i)).equals("int")) {
+      } else if (currentArgumentIteratorDataType.equals("int")) {
         try {
           int temp = Integer.parseInt(args[i]);
         } catch (NumberFormatException e) {
-
           ArrayList<String> badDataType = new ArrayList<String>();
-          badDataType.add(argumentNames.get(i));
+          badDataType.add(argNameIterator);
           badDataType.add("int");
           badDataType.add(args[i]);
-
           listBadDataTypes.add(badDataType);
           sizeBadDataTypes++;
         }
-      } else if (argDataTypes.get(argumentNames.get(i)).equals("boolean")) {
+      } else if (currentArgumentIteratorDataType.equals("boolean")) {
         if (!(args[i].equals("true") || args[i].equals("false"))) {
-
           ArrayList<String> badDataType = new ArrayList<String>();
-          badDataType.add(argumentNames.get(i));
+          badDataType.add(argNameIterator);
           badDataType.add("boolean");
           badDataType.add(args[i]);
-
           listBadDataTypes.add(badDataType);
           sizeBadDataTypes++;
         }
-
       }
-
+      i++;
     }
 
     if (sizeBadDataTypes > 0) {
       String message = getTypeExceptionMessage(listBadDataTypes, sizeBadDataTypes);
       throw new HelpException(message);
-
     }
-
   }
 
-  public void parse(String[] args) {
-
-    String key_string = "";
-    for (int i = 0; i < argumentNames.size(); i++) {
-      key_string += " " + argumentNames.get(i);
-    }
-
-    for (int i = 0; i < args.length; i++) {
-      if (args[i].equals("-h")) {
-        this.help = true;
-        String message = getHelpMessage();
-        throw new HelpException(message);
-      }
-    }
-
-    if (args.length < argumentNames.size()) {
+  private void checkIfTooFewArguments(String[] args, String key_string) {
+    if (args.length < arguments.size()) {
       String missingArguements = "";
-      for (int i = args.length; i < argumentNames.size(); i++) {
-        missingArguements += " " + argumentNames.get(i);
+      int iterator = 0;
+      for (String argNameIterator : arguments.keySet()) {
+        if (iterator++ < args.length) {
+          continue;
+        }
+        missingArguements += " " + argNameIterator;
       }
       String message = "usage: java " + programName + key_string + "\n" + programName
           + ".java: error: the following arguments are required:" + missingArguements;
       throw new TooFewArguments(message);
     }
+  }
 
-    else if (args.length > argumentNames.size()) {
+  private void checkIfTooManyArguments(String[] args, String key_string) {
+    if (args.length > arguments.size()) {
       String tooManyArguments = "";
-      for (int i = argumentNames.size(); i < args.length; i++) {
+      for (int i = arguments.size(); i < args.length; i++) {
         tooManyArguments += " " + args[i];
       }
       String message = "usage: java " + programName + key_string + "\n" + programName
           + ".java: error: unrecognized arguments:" + tooManyArguments;
-
       throw new TooManyArguments(message);
-    } else {
-      areThereWrongDataTypes(args);
-      for (int i = 0; i < argumentNames.size(); i++) {
-        dictionary.put(argumentNames.get(i), args[i]);
-      }
     }
   }
 
-  public String getArgValue(String argname) {
-    return dictionary.get(argname);
+  public String getArgumentValue(String argument) {
+    return arguments.get(argument).getArgumentValue();
+  }
+
+  public Argument.DataType getArgumentDataType(String argument) {
+    return arguments.get(argument).getArgumentDataType();
+  }
+
+  public String getArgumentDataTypeString(String argument) {
+    return arguments.get(argument).getargumentDataTypeString();
+  }
+
+  public String getHelpMessage() {
+    String message = "";
+
+    message = "usage: java " + programName + getParameterString() + "\n" + programDescription + "\n"
+        + "positional arguments:";
+    for (String argNameIterator : arguments.keySet()) {
+      Argument currentArgumentIterator = arguments.get(argNameIterator);
+      message += "\n   " + argNameIterator + " " + currentArgumentIterator.getArgumentDescription();
+    }
+
+    return message;
+  }
+
+  public int getNumberArguments() {
+    return arguments.size();
+  }
+
+  private String getParameterString() {
+    String key_string = "";
+    for (String argNameIterator : arguments.keySet()) {
+      key_string += " " + argNameIterator;
+    }
+    return key_string;
+  }
+
+  public String getProgramName() {
+    return programName;
+  }
+
+  public String getProgramDescription() {
+    return programDescription;
+  }
+
+  public void parse(String[] args) {
+    String key_string = getParameterString();
+    checkIfHelpMessage(args);
+    checkIfTooFewArguments(args, key_string);
+    checkIfTooManyArguments(args, key_string);
+    areThereWrongDataTypes(args);
+    int i = 0;
+    for (String argNameIterator : arguments.keySet()) {
+      Argument currentArgumentIterator = arguments.get(argNameIterator);
+      currentArgumentIterator.setArgumentValue(args[i]);
+      i++;
+    }
   }
 }
