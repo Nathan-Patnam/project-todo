@@ -139,7 +139,6 @@ public class ArgumentParser {
           + ".java: error: unrecognized arguments:" + tooManyArguments;
       throw new TooManyArguments(message);
     }
-  }
 
   public String getArgumentValue(String argument) {
     return arguments.get(argument).getArgumentValue();
