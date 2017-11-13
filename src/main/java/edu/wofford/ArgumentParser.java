@@ -7,15 +7,17 @@ public class ArgumentParser {
   private String programName;
   private String programDescription;
   //Map<String, OptionalArgument> optionalarguments = new LinkedHashMap<String, OptionalArgument>();
-  Map<String, Argument> arguments = new LinkedHashMap<String, Argument>();
-  ArrayList<String> argumentNames = new ArrayList<String>();
+  private Map<String, Argument> arguments = new LinkedHashMap<String, Argument>();
+  private ArrayList<String> argumentNames = new ArrayList<String>();
   private ArrayList<ArrayList<String>> listBadDataTypes = new ArrayList<ArrayList<String>>();
+  private Map<String, Flag> flags= new HashMap<String, Flag>();
   private int numberOptionalArguments;
 
   public ArgumentParser(String programName) {
     this.programName = programName;
     arguments = new LinkedHashMap<>();
     argumentNames = new ArrayList<>();
+    flags = new HashMap<>();
     numberOptionalArguments=0;
   }
 
@@ -24,6 +26,7 @@ public class ArgumentParser {
     this.programDescription = description;
     arguments = new LinkedHashMap<>();
     argumentNames = new ArrayList<>();
+    flags = new HashMap<>();
     numberOptionalArguments=0;
   }
 
@@ -69,6 +72,11 @@ public class ArgumentParser {
     arguments.put(argname, new OptionalArgument(argname, defaultValue, dataType, description));
     argumentNames.add(argname);
     numberOptionalArguments++;
+  }
+
+
+  public void addFlag(String argname){
+    flags.put(("--"+argname), new Flag(("--"+argname)));
   }
 
 
@@ -226,7 +234,7 @@ public class ArgumentParser {
         + "positional arguments:";
     for (String argNameIterator : arguments.keySet()) {
       Argument currentArgumentIterator = arguments.get(argNameIterator);
-      message += "\n   " + argNameIterator + " " + currentArgumentIterator.getArgumentDescription();
+      message += "\n   " + argNameIterator + " " + currentArgumentIterator.getArgumentDescription()+" (" + currentArgumentIterator.getargumentDataTypeString()+")";
     }
 
     return message;
@@ -258,9 +266,16 @@ public class ArgumentParser {
     for (int i = 0; i < args.length; i++) {
       String argumentValue = args[i];
       //help message logic
-      if (argumentValue.equals("-h") || argumentValue.equals("-help")) {
+      if (argumentValue.equals("-h")) {
         String message = getHelpMessage();
         throw new HelpException(message);
+      }
+      else if(flags.get(argumentValue) != null){
+        flags.get(argumentValue).flagIsPresent();
+        if(argumentValue.equals("--help")){
+          String message = getHelpMessage();
+          throw new HelpException(message);
+        }
       }
       //when optionalArgument is first encountered
       else if (argumentValue.contains("--") && isThereOptionalArgument == false) {

@@ -93,7 +93,7 @@ public class ArgumentParserTest {
     argCheck.addArg("width", "the width of the box");
     argCheck.addArg("height", "the height of the box");
 
-    String msg = "usage: java VolumeCalculator length width height\nCalculate the volume of a box.\npositional arguments:\n   length the length of the box\n   width the width of the box\n   height the height of the box";
+    String msg = "usage: java VolumeCalculator length width height \nCalculate the volume of a box.\npositional arguments:\n   length the length of the box (string)\n   width the width of the box (string)\n   height the height of the box (string)";
     try {
       argCheck.parse(cla);
       fail("Should have thrown HelpException but did not!");
@@ -183,6 +183,22 @@ public class ArgumentParserTest {
     assertEquals("7", argCheck.getArgumentValue("length"));
     assertEquals("optionalArgOneDefaultValue", argCheck.getOptionalArgumentValue("optionalArgOne"));
     }
+
+
+    @Test (expected = HelpException.class)
+    public void testHelpFlag() {
+      String[] cla = { "7","--help", "3","2" };
+      argCheck.addArg("length", "the length of the box", Argument.DataType.FLOAT);
+      argCheck.addFlag("help");
+      argCheck.addArg("width", "the width of the box", Argument.DataType.FLOAT);
+      argCheck.addArg("height", "the height of the box", Argument.DataType.FLOAT);
+      argCheck.parse(cla);
   
+     
+        argCheck.parse(cla);
+ 
+  
+      
+    }
 
 }

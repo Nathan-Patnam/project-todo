@@ -1,7 +1,5 @@
 package edu.wofford;
 
-import java.util.*;
-
 public class Argument {
   public enum DataType {
     STRING, INT, BOOLEAN, FLOAT
@@ -11,11 +9,15 @@ public class Argument {
   private String argumentDescription;
   private DataType argumentDataType;
   private String argValue;
+  private Boolean presentInCLA;
   //private List<String> argDataTypes = new ArrayList<String>(Arrays.asList("string", "float", "int", "boolean"));
-
   public Argument(String argname) {
     this.argumentName = argname;
     this.argumentDataType = DataType.STRING;
+  }
+
+  public Argument(Boolean presentInCLA){
+    this.presentInCLA= presentInCLA;
   }
 
   public Argument(String argname, String argDescription) {
@@ -58,6 +60,7 @@ public class Argument {
   public DataType getArgumentDataType() {
     return this.argumentDataType;
   }
+
 
   public String getargumentDataTypeString() {
     String datatype = "";
