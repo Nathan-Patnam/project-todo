@@ -1,33 +1,50 @@
 package edu.wofford;
 
-import java.util.*;
-
 public class OptionalArgument extends Argument {
-    private String optionalArgumentName;
+  
     private String optionalArgumentValue;
-    private String optionalDescription;
-    private Argument.DataType optionalType;
 
-    public OptionalArgument(String optionalArgumentName, String optionalArgumentDefaultValue, String description, Argument.DataType type) {
-        this.optionalArgumentName = "--"+optionalArgumentName;
-        this.optionalArgumentValue = optionalArgumentDefaultValue;
-        this.optionalDescription = description;
-        this.optionalType = type;
+    OptionalArgument(String optionalArgumentName, String defaultValue){
+        super(optionalArgumentName);
+        this.optionalArgumentValue=defaultValue;
     }
+    OptionalArgument(String optionalArgumentName, String defaultValue,  String description){
+        super(optionalArgumentName, description);
+        this.optionalArgumentValue=defaultValue;
+    }
+
+    OptionalArgument(String optionalArgumentName, String defaultValue, Argument.DataType dataType){
+        super(optionalArgumentName, dataType);
+        this.optionalArgumentValue=defaultValue;
+    }
+
+
+    OptionalArgument(String optionalArgumentName, String defaultValue, Argument.DataType datatype, String description) {
+        
+        super("--"+optionalArgumentName, description, datatype );
+        this.optionalArgumentValue=defaultValue;
+    }
+
+
 
     public void setOptionalArgumentValue(String optionalArgumentValue) {
         this.optionalArgumentValue = optionalArgumentValue;
     }
 
-    public void setOptionalArgumentValues(ArrayList<String> multipleArgumentValue) {
-        this.multipleArgumentValue = multipleArgumentValue;
-    }
+
+
 
     public String getOptionalArgumentValue() {
         return this.optionalArgumentValue;
     }
 
-    public ArrayList<String> getOptionalArgumentValues() {
-        return this.multipleArgumentValue;
+    public String getOptionalDescription(){
+        return super.getArgumentDescription();
     }
+
+    public DataType getOptionalArgumentDataType(){
+        return super.getArgumentDataType();
+    }
+
+
 }

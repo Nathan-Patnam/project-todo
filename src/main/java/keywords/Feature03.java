@@ -1,7 +1,6 @@
 package keywords;
 
 import edu.wofford.*;
-import edu.wofford.Argument.DataType;
 
 public class Feature03 {
     private ArgumentParser argCheck;

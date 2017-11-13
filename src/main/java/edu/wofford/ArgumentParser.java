@@ -45,6 +45,22 @@ public class ArgumentParser {
     arguments.put(argname, new Argument(argname, description, dataType));
   }
 
+
+  public void addOptionalArgument(String argname, String defaultValue){
+    arguments.put(argname, new OptionalArgument(argname,defaultValue));
+  }
+  public void addOptionalArgument(String argname, String defaultValue, String description){
+    arguments.put(argname, new OptionalArgument(argname,defaultValue,description));
+  }
+
+  public void addOptionalArgument(String argname, String defaultValue, Argument.DataType dataType){
+    arguments.put(argname, new OptionalArgument(argname,defaultValue,dataType));
+  }
+
+  public void addOptionalArgument(String argname, String defaultValue, Argument.DataType dataType, String description){
+    arguments.put(argname, new OptionalArgument(argname,defaultValue,dataType,description);
+  }
+
   //messages and error handling
 
   private void checkIfHelpMessage(String[] args) {
