@@ -13,6 +13,7 @@ public class ArgumentParserTest {
     //argCheck2 = new ArgumentParser("VolumeCalculator","Calculate the volume of a box.");
   }
 
+
   @Test
   public final void testProgramName() {
     assertEquals("VolumeCalculator", argCheck.getProgramName());
@@ -123,6 +124,14 @@ public class ArgumentParserTest {
   }
 
   @Test
+  public void Test2ParamConstructor() {
+    argCheck.addArg("Length",Argument.DataType.FLOAT);
+    assertEquals(Argument.DataType.FLOAT, argCheck.getArgumentDataType("Length"));
+  }
+
+
+
+  @Test
   public void TestValidDataTypes() {
     String[] cla = { "3", "something", "3.0" };
     argCheck.addArg("length", "the length of the box", Argument.DataType.FLOAT);
@@ -156,6 +165,25 @@ public class ArgumentParserTest {
   }
 
   @Test
+  public void TestBadArguments() {
+    String[] cla = { "yup", "something", "one" };
+    argCheck.addArg("length", "the length of the box", Argument.DataType.FLOAT);
+    argCheck.addArg("width", "the width of the box", Argument.DataType.BOOLEAN);
+    argCheck.addArg("height", "the height of the box", Argument.DataType.INT);
+
+    String msg = "usage: java VolumeCalculator length width height\nVolumeCalculator.java: error: argument length: invalid float value: yup\n"
+        + "argument width: invalid boolean value: something\n" + "argument height: invalid int value: one\n";
+    try {
+      argCheck.parse(cla);
+      fail("Should have thrown HelpException but did not!");
+    } catch (HelpException expected) {
+      assertEquals(msg, expected.getMessage());
+    }
+  }
+
+
+
+  @Test
   public void testOptionalArgumentDefault() {
     String[] cla = {"--optionalArgOne" };
     argCheck.addOptionalArgument("optionalArgOne","optionalArgOneDefaultValue");
@@ -169,7 +197,7 @@ public class ArgumentParserTest {
       String[] cla = {"--optionalArgOne", "8" };
       argCheck.addOptionalArgument("optionalArgOne","optionalArgOneDefaultValue");
       argCheck.parse(cla);
-  
+
       assertEquals("8", argCheck.getOptionalArgumentValue("optionalArgOne"));
       }
 
@@ -183,6 +211,42 @@ public class ArgumentParserTest {
     assertEquals("7", argCheck.getArgumentValue("length"));
     assertEquals("optionalArgOneDefaultValue", argCheck.getOptionalArgumentValue("optionalArgOne"));
     }
-  
+
+    @Test
+    public void testOptionalMultiArgument() {
+      String[] cla = { "7","--optionalArgOne" };
+      argCheck.addArg("length");
+      argCheck.addOptionalArgument("optionalArgOne","optionalArgOneDefaultValue","this is an optional argument");
+      argCheck.parse(cla);
+
+      assertEquals("7", argCheck.getArgumentValue("length"));
+      assertEquals("optionalArgOneDefaultValue", argCheck.getOptionalArgumentValue("optionalArgOne"));
+      assertEquals("this is an optional argument", argCheck.getOptionalDescription("optionalArgOne"));
+      }
+
+  @Test
+  public void getDataTypeOptionaArgument() {
+    String[] cla = { "rip","--optionalArgOne" };
+    argCheck.addArg("length");
+    argCheck.addOptionalArgument("optionalArgOne","optionalArgOneDefaultValue", Argument.DataType.STRING);
+    argCheck.parse(cla);
+
+    assertEquals(Argument.DataType.STRING, argCheck.getOptionalArgumentDataType("optionalArgOne"));
+
+  }
+
+  @Test
+  public void addOptionalArgumentConstructorTests(){
+    String[] cla = { "rip","--optionalArgOne","--type"};
+    argCheck.addArg("length");
+    argCheck.addOptionalArgument("optionalArgOne","optionalArgOneDefaultValue", Argument.DataType.STRING, "my funeral");
+    argCheck.addOptionalArgument("type","typevalue", Argument.DataType.STRING, "my funeral");
+    assertEquals("typevalue", argCheck.getOptionalArgumentValue("type"));
+    assertEquals("optionalArgOneDefaultValue", argCheck.getOptionalArgumentValue("optionalArgOne"));
+
+
+
+  }
+
 
 }
