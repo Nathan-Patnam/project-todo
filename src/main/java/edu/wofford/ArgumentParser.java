@@ -6,9 +6,14 @@ public class ArgumentParser {
 
   private String programName;
   private String programDescription;
+<<<<<<< HEAD
   //Map<String, OptionalArgument> optionalarguments = new LinkedHashMap<String, OptionalArgument>();
   private Map<String, Argument> arguments = new LinkedHashMap<String, Argument>();
   private ArrayList<String> argumentNames = new ArrayList<String>();
+=======
+  Map<String, Argument> arguments = new LinkedHashMap<String, Argument>();
+  ArrayList<String> argumentNames = new ArrayList<String>();
+>>>>>>> origin/master
   private ArrayList<ArrayList<String>> listBadDataTypes = new ArrayList<ArrayList<String>>();
   private Map<String, Flag> flags= new HashMap<String, Flag>();
   private int numberOptionalArguments;
@@ -215,6 +220,10 @@ public class ArgumentParser {
     return ((OptionalArgument) arguments.get(optionalArgName)).getOptionalArgumentValue();
   }
 
+  public String getOptionalDescription(String optionalArgName) {
+    return ((OptionalArgument) arguments.get(optionalArgName)).getOptionalDescription();
+  }
+
   public Argument.DataType getArgumentDataType(String argument) {
     return arguments.get(argument).getArgumentDataType();
   }
@@ -297,7 +306,7 @@ public class ArgumentParser {
           badArguments.add(args[i]);
         } else {
           argumentNames.remove(0);
-         
+
         }
       }
       //special case if last value is a optionalArgument
