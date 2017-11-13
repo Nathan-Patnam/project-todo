@@ -5,16 +5,16 @@ public class OptionalArgument extends Argument {
     private String optionalArgumentValue;
 
     OptionalArgument(String optionalArgumentName, String defaultValue){
-        super(optionalArgumentName);
+        super(("--"+optionalArgumentName));
         this.optionalArgumentValue=defaultValue;
     }
     OptionalArgument(String optionalArgumentName, String defaultValue,  String description){
-        super(optionalArgumentName, description);
+        super("--"+optionalArgumentName, description);
         this.optionalArgumentValue=defaultValue;
     }
 
     OptionalArgument(String optionalArgumentName, String defaultValue, Argument.DataType dataType){
-        super(optionalArgumentName, dataType);
+        super("--"+optionalArgumentName, dataType);
         this.optionalArgumentValue=defaultValue;
     }
 

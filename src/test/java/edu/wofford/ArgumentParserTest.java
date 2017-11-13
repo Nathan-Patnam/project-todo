@@ -124,7 +124,7 @@ public class ArgumentParserTest {
 
   @Test
   public void TestValidDataTypes() {
-    String[] cla = { "3", "something", "7" };
+    String[] cla = { "3", "something", "3.0" };
     argCheck.addArg("length", "the length of the box", Argument.DataType.FLOAT);
     argCheck.addArg("width", "the width of the box", Argument.DataType.FLOAT);
     argCheck.addArg("height", "the height of the box", Argument.DataType.FLOAT);
@@ -154,5 +154,35 @@ public class ArgumentParserTest {
       assertEquals(msg, expected.getMessage());
     }
   }
+
+  @Test
+  public void testOptionalArgumentDefault() {
+    String[] cla = {"--optionalArgOne" };
+    argCheck.addOptionalArgument("optionalArgOne","optionalArgOneDefaultValue");
+    argCheck.parse(cla);
+
+    assertEquals("optionalArgOneDefaultValue", argCheck.getOptionalArgumentValue("optionalArgOne"));
+    }
+
+    @Test
+    public void testOptionalArgumentSetValue() {
+      String[] cla = {"--optionalArgOne", "8" };
+      argCheck.addOptionalArgument("optionalArgOne","optionalArgOneDefaultValue");
+      argCheck.parse(cla);
+  
+      assertEquals("8", argCheck.getOptionalArgumentValue("optionalArgOne"));
+      }
+
+  @Test
+  public void testOptionalArgument() {
+    String[] cla = { "7","--optionalArgOne" };
+    argCheck.addArg("length");
+    argCheck.addOptionalArgument("optionalArgOne","optionalArgOneDefaultValue");
+    argCheck.parse(cla);
+
+    assertEquals("7", argCheck.getArgumentValue("length"));
+    assertEquals("optionalArgOneDefaultValue", argCheck.getOptionalArgumentValue("optionalArgOne"));
+    }
+  
 
 }
