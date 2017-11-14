@@ -99,13 +99,12 @@ public class ArgumentParser {
   public void checkForWrongDataTypes() {
 
     int sizeBadDataTypes = 0;
-    int i = 0;
     for (String argNameIterator : arguments.keySet()) {
       String currentArgumentIteratorDataType = arguments.get(argNameIterator).getargumentDataTypeString();
       String currentArgumentIteratorValue = arguments.get(argNameIterator).getArgumentValue();
       if (currentArgumentIteratorDataType.equals("float")) {
         try {
-          float temp = Float.parseFloat(currentArgumentIteratorValue);
+          Float.parseFloat(currentArgumentIteratorValue);
         } catch (NumberFormatException e) {
           ArrayList<String> badDataType = new ArrayList<String>();
           badDataType.add(argNameIterator);
@@ -116,7 +115,7 @@ public class ArgumentParser {
         }
       } else if (currentArgumentIteratorDataType.equals("int")) {
         try {
-          int temp = Integer.parseInt(currentArgumentIteratorValue);
+          Integer.parseInt(currentArgumentIteratorValue);
         } catch (NumberFormatException e) {
           ArrayList<String> badDataType = new ArrayList<String>();
           badDataType.add(argNameIterator);
@@ -135,7 +134,6 @@ public class ArgumentParser {
           sizeBadDataTypes++;
         }
       }
-      i++;
     }
 
     if (sizeBadDataTypes > 0) {
@@ -231,7 +229,7 @@ public class ArgumentParser {
       String argumentValue = args[i];
       //throw error if argument or flag is not found
       //help message logic
-     if (argumentValue.equals("-h")) {
+      if (argumentValue.equals("-h")) {
         String message = getHelpMessage();
         throw new HelpException(message);
       } else if (flags.get(argumentValue) != null) {
@@ -240,12 +238,11 @@ public class ArgumentParser {
           String message = getHelpMessage();
           throw new HelpException(message);
         }
-      }
-      else if ((argumentValue.matches("^--[A-Za-z0-9]") && arguments.get(argumentValue.substring(2)) == null)) {
-      throw new IllegalArgumentException("argument " + argumentValue.replace("--", " ") + "does not exist");
+      } else if ((argumentValue.matches("^--[A-Za-z0-9]") && arguments.get(argumentValue.substring(2)) == null)) {
+        throw new IllegalArgumentException("argument " + argumentValue.replace("--", " ") + "does not exist");
       } else if ((argumentValue.matches("^-[A-Za-z0-9]") && flags.get(argumentValue.substring(1)) == null)) {
-      throw new IllegalArgumentException("argument " + argumentValue.replace("-", " ") + "does not exist");
-       }
+        throw new IllegalArgumentException("argument " + argumentValue.replace("-", " ") + "does not exist");
+      }
       //when optionalArgument is first encountered
       else if (argumentValue.contains("--") && isThereOptionalArgument == false) {
         isThereOptionalArgument = true;
@@ -270,7 +267,7 @@ public class ArgumentParser {
         }
       }
       //special case if last value is a optionalArgument
-      else if (i == args.length && argumentValue.contains("--")) {
+      else if ((i == (args.length-1)) && argumentValue.contains("--")) {
         argumentNames.remove(0);
 
       }

@@ -11,7 +11,6 @@ public class ArgumentParserTest {
     argCheck = new ArgumentParser("VolumeCalculator", "Calculate the volume of a box.");
   }
 
-
   @Test
   public final void testProgramName() {
     assertEquals("VolumeCalculator", argCheck.getProgramName());
@@ -123,11 +122,9 @@ public class ArgumentParserTest {
 
   @Test
   public void Test2ParamConstructor() {
-    argCheck.addArg("Length",Argument.DataType.FLOAT);
+    argCheck.addArg("Length", Argument.DataType.FLOAT);
     assertEquals(Argument.DataType.FLOAT, argCheck.getArgumentDataType("Length"));
   }
-
-
 
   @Test
   public void TestValidDataTypes() {
@@ -179,54 +176,52 @@ public class ArgumentParserTest {
     }
   }
 
-
-
   @Test
   public void testOptionalArgumentDefault() {
-    String[] cla = {"--optionalArgOne" };
-    argCheck.addOptionalArgument("optionalArgOne","optionalArgOneDefaultValue");
+    String[] cla = { "--optionalArgOne" };
+    argCheck.addOptionalArgument("optionalArgOne", "optionalArgOneDefaultValue");
     argCheck.parse(cla);
 
     assertEquals("optionalArgOneDefaultValue", argCheck.getOptionalArgumentValue("optionalArgOne"));
-    }
+  }
 
-    @Test
-    public void testOptionalArgumentSetValue() {
-      String[] cla = {"--optionalArgOne", "8" };
-      argCheck.addOptionalArgument("optionalArgOne","optionalArgOneDefaultValue");
-      argCheck.parse(cla);
+  @Test
+  public void testOptionalArgumentSetValue() {
+    String[] cla = { "--optionalArgOne", "8" };
+    argCheck.addOptionalArgument("optionalArgOne", "optionalArgOneDefaultValue");
+    argCheck.parse(cla);
 
-      assertEquals("8", argCheck.getOptionalArgumentValue("optionalArgOne"));
-      }
+    assertEquals("8", argCheck.getOptionalArgumentValue("optionalArgOne"));
+  }
 
   @Test
   public void testOptionalArgument() {
-    String[] cla = { "7","--optionalArgOne" };
+    String[] cla = { "7", "--optionalArgOne" };
     argCheck.addArg("length");
-    argCheck.addOptionalArgument("optionalArgOne","optionalArgOneDefaultValue");
+    argCheck.addOptionalArgument("optionalArgOne", "optionalArgOneDefaultValue");
     argCheck.parse(cla);
 
     assertEquals("7", argCheck.getArgumentValue("length"));
     assertEquals("optionalArgOneDefaultValue", argCheck.getOptionalArgumentValue("optionalArgOne"));
-    }
+  }
 
-    @Test
-    public void testOptionalMultiArgument() {
-      String[] cla = { "7","--optionalArgOne" };
-      argCheck.addArg("length");
-      argCheck.addOptionalArgument("optionalArgOne","optionalArgOneDefaultValue","this is an optional argument");
-      argCheck.parse(cla);
+  @Test
+  public void testOptionalMultiArgument() {
+    String[] cla = { "7", "--optionalArgOne" };
+    argCheck.addArg("length");
+    argCheck.addOptionalArgument("optionalArgOne", "optionalArgOneDefaultValue", "this is an optional argument");
+    argCheck.parse(cla);
 
-      assertEquals("7", argCheck.getArgumentValue("length"));
-      assertEquals("optionalArgOneDefaultValue", argCheck.getOptionalArgumentValue("optionalArgOne"));
-      assertEquals("this is an optional argument", argCheck.getOptionalDescription("optionalArgOne"));
-      }
+    assertEquals("7", argCheck.getArgumentValue("length"));
+    assertEquals("optionalArgOneDefaultValue", argCheck.getOptionalArgumentValue("optionalArgOne"));
+    assertEquals("this is an optional argument", argCheck.getOptionalDescription("optionalArgOne"));
+  }
 
   @Test
   public void getDataTypeOptionaArgument() {
-    String[] cla = { "rip","--optionalArgOne" };
+    String[] cla = { "rip", "--optionalArgOne" };
     argCheck.addArg("length");
-    argCheck.addOptionalArgument("optionalArgOne","optionalArgOneDefaultValue", Argument.DataType.STRING);
+    argCheck.addOptionalArgument("optionalArgOne", "optionalArgOneDefaultValue", Argument.DataType.STRING);
     argCheck.parse(cla);
 
     assertEquals(Argument.DataType.STRING, argCheck.getOptionalArgumentDataType("optionalArgOne"));
@@ -234,17 +229,17 @@ public class ArgumentParserTest {
   }
 
   @Test
-  public void addOptionalArgumentConstructorTests(){
-    String[] cla = { "rip","--optionalArgOne","--type"};
+  public void addOptionalArgumentConstructorTests() {
+    String[] cla = { "rip", "--optionalArgOne", "--type" };
     argCheck.addArg("length");
-    argCheck.addOptionalArgument("optionalArgOne","optionalArgOneDefaultValue", Argument.DataType.STRING, "my funeral");
-    argCheck.addOptionalArgument("type","typevalue", Argument.DataType.STRING, "my funeral");
-    assertEquals("typevalue", argCheck.getOptionalArgumentValue("type"));
+    argCheck.addOptionalArgument("optionalArgOne", "optionalArgOneDefaultValue", Argument.DataType.STRING,
+        "my funeral");
+    argCheck.addOptionalArgument("type", "typevalue", Argument.DataType.STRING, "my funeral");
+    argCheck.parse(cla);
     assertEquals("optionalArgOneDefaultValue", argCheck.getOptionalArgumentValue("optionalArgOne"));
-
-
+    assertEquals("typevalue", argCheck.getOptionalArgumentValue("type"));
+  
 
   }
-
 
 }

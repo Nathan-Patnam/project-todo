@@ -9,18 +9,15 @@ public class Argument {
   private String argumentDescription;
   private DataType argumentDataType;
   private String argValue;
-  private Boolean presentInCLA;
- 
+
   public Argument(String argname) {
     this.argumentName = argname;
     this.argumentDataType = DataType.STRING;
   }
 
-
-
   public Argument(String argname, String argDescription) {
     this.argumentName = argname;
-    this.argumentDescription=argDescription;
+    this.argumentDescription = argDescription;
     this.argumentDataType = DataType.STRING;
   }
 
@@ -59,23 +56,25 @@ public class Argument {
     return this.argumentDataType;
   }
 
-
   public String getargumentDataTypeString() {
     String datatype = "";
     switch (this.argumentDataType) {
-    case STRING: datatype= "string";
-    break;
-    case BOOLEAN: datatype= "boolean";
-    break;
-    case FLOAT: datatype= "float";
-    break;
-    case INT: datatype= "int";
-    break;
+    case STRING:
+      datatype = "string";
+      break;
+    case BOOLEAN:
+      datatype = "boolean";
+      break;
+    case FLOAT:
+      datatype = "float";
+      break;
+    case INT:
+      datatype = "int";
+      break;
 
     }
     return datatype;
   }
-
 
   public String getArgumentValue() {
     return argValue;
