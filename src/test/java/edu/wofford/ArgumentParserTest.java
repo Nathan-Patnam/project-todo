@@ -6,11 +6,9 @@ import org.junit.*;
 public class ArgumentParserTest {
   private ArgumentParser argCheck;
 
-  //private ArgumentParser argCheck2;
   @Before
   public final void setup() {
     argCheck = new ArgumentParser("VolumeCalculator", "Calculate the volume of a box.");
-    //argCheck2 = new ArgumentParser("VolumeCalculator","Calculate the volume of a box.");
   }
 
 

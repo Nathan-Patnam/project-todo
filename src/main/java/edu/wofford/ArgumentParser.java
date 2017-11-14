@@ -274,8 +274,15 @@ public class ArgumentParser {
     Boolean isThereOptionalArgument = false;
     for (int i = 0; i < args.length; i++) {
       String argumentValue = args[i];
+      //throw error if argument or flag is not found
+      if((argumentValue.contains("--") && arguments.get(argumentValue)==null)){
+        throw new IllegalArgumentException("argument " + argumentValue.replace("--"," ") +"does not exist");
+      }
+      else if((argumentValue.contains("-") && flags.get(argumentValue)==null)){
+        throw new IllegalArgumentException("argument " + argumentValue.replace("-"," ") +"does not exist");
+      }
       //help message logic
-      if (argumentValue.equals("-h")) {
+      else if (argumentValue.equals("-h")) {
         String message = getHelpMessage();
         throw new HelpException(message);
       }
@@ -314,7 +321,6 @@ public class ArgumentParser {
         argumentNames.remove(0);
 
       }
-
       // if its just a regular value
       else {
         if (argumentNames.isEmpty()) {
