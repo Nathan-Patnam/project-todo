@@ -10,15 +10,13 @@ public class Argument {
   private DataType argumentDataType;
   private String argValue;
   private Boolean presentInCLA;
-  //private List<String> argDataTypes = new ArrayList<String>(Arrays.asList("string", "float", "int", "boolean"));
+ 
   public Argument(String argname) {
     this.argumentName = argname;
     this.argumentDataType = DataType.STRING;
   }
 
-  public Argument(Boolean presentInCLA){
-    this.presentInCLA= presentInCLA;
-  }
+
 
   public Argument(String argname, String argDescription) {
     this.argumentName = argname;
