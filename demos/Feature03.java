@@ -10,9 +10,9 @@ public class Feature03 {
 
                 ArgumentParser argchecker = new ArgumentParser("VolumeCalculator", "a program that calculates the volume of a box");
 
-                argchecker.addArg("length", "length of the box","int");
-                argchecker.addArg("width", "width of the box", "int");
-                argchecker.addArg("height", "height of the box", "int");
+                argchecker.addArg("length", "length of the box",Argument.DataType.FLOAT);
+                argchecker.addArg("width", "width of the box", Argument.DataType.INT);
+                argchecker.addArg("height", "height of the box", Argument.DataType.INT);
                 argchecker.parse(args);
                 /*
                 int length=Integer.parseInt(argchecker.getArgValue("length"));
