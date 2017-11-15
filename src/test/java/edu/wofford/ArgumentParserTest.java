@@ -204,8 +204,8 @@ public class ArgumentParserTest {
   }
 
   @Test
-  public void testOptionalMultiArgument() {
-    String[] cla = { "7", "--optionalArgOne" };
+  public void testOptionalArgumentWithDifferentConstructor() {
+    String[] cla = { "7"};
     argCheck.addArg("length");
     argCheck.addOptionalArgument("optionalArgOne", "optionalArgOneDefaultValue", "this is an optional argument");
     argCheck.parse(cla);
@@ -228,7 +228,7 @@ public class ArgumentParserTest {
 
   @Test
   public void addOptionalArgumentConstructorTests() {
-    String[] cla = { "rip", "--optionalArgOne", "--type" };
+    String[] cla = { "rip"};
     argCheck.addArg("length");
     argCheck.addOptionalArgument("optionalArgOne", "optionalArgOneDefaultValue", Argument.DataType.STRING,
         "my funeral");
