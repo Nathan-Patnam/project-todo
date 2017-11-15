@@ -17,18 +17,9 @@ public class Argument {
   protected String description;
   protected DataType dataType;
   protected String value;
+  protected String shortFormName;
 
-  public Argument(String name) {
-    this(name, "", DataType.STRING);
-  }
 
-  public Argument(String name, String description) {
-    this(name, description, DataType.STRING);
-  }
-
-  public Argument(String name, DataType dataType) {
-    this(name, "", dataType);
-  }
 
   public Argument(String name, String description, DataType dataType) {
     this.name = name;
@@ -38,6 +29,10 @@ public class Argument {
 
   public void setDescription(String description) {
     this.description = description;
+  }
+
+  public void setShortFormName(String shortFormName){
+    this.shortFormName= shortFormName;
   }
 
   public void setDataType(DataType dataType) {

@@ -3,15 +3,12 @@ package edu.wofford;
 import java.util.*;
 
 public class ArgumentParser {
-
   private String programName;
   private String programDescription;
   private Map<String, String> shortToLong;
   private Map<String, Argument> arguments;
   private ArrayList<String> argumentNames;
 
-  //private ArrayList<ArrayList<String>> listBadDataTypes = new ArrayList<ArrayList<String>>();
-  //private Map<String, Flag> flags = new HashMap<String, Flag>();
   public ArgumentParser(String programName) {
     this(programName, "");
   }
@@ -61,11 +58,17 @@ public class ArgumentParser {
 
   }
 
-  /*
-  public void addFlag(String argname) {
-    arguments.put("--" + argname, new OptionalArgument("--" + argname, "false", Argument.DataType.BOOLEAN));
+  public void setArgumentShortFormName(String argument, String shortFormName){
+    arguments.get(argument).setShortFormName(shortFormName);
+    shortToLong.put(shortFormName,argument);
   }
-  */
+
+
+
+  public void addFlag(String argname) {
+    arguments.put(argname, new OptionalArgument(argname, "false", Argument.DataType.BOOLEAN));
+  }
+  
 
   private boolean checkType(String value, Argument.DataType type) {
     switch (type) {
@@ -97,7 +100,6 @@ public class ArgumentParser {
   public String getArgumentValue(String argument) {
     return arguments.get(argument).getValue();
   }
-
   public String getArgumentDescription(String argument) {
     return arguments.get(argument).getDescription();
   }
@@ -105,23 +107,11 @@ public class ArgumentParser {
     return arguments.get(argument).getDataType();
   }
 
-  public String getOptionalArgumentValue(String optionalArgName) {
-    return arguments.get(optionalArgName).getValue();
-  }
-
-  public String getOptionalDescription(String optionalArgName) {
-    return arguments.get(optionalArgName).getDescription();
-  }
-
-  public Argument.DataType getOptionalArgumentDataType(String argument) {
-    return ((OptionalArgument) arguments.get(argument)).getDataType();
-  }
-
   public String getArgumentDataTypeString(String argument) {
     return arguments.get(argument).getDataType().toString();
   }
 
-  public String getHelpMessage() {
+  private String getHelpMessage() {
     String message = "";
     message = "usage: java " + programName + getParameterString() + "\n" + programDescription + "\n"
         + "positional arguments:";
@@ -164,24 +154,42 @@ public class ArgumentParser {
   }
 
   public void parse(String[] args) {
-
     int usedArguments = 0;
     for (int i = 0; i < args.length; i++) {
       String aname = "";
       if (args[i].equals("-h") || args[i].equals("--help")) {
         String message = getHelpMessage();
         throw new HelpException(message);
-      } else if (args[i].startsWith("-")) {
+      } 
+      else if (args[i].startsWith("-")) {
         if (args[i].startsWith("--")) {
           aname = args[i].substring(2);
-        } else {
+        } 
+        else {
           String sname = args[i].substring(1);
+          //argument is a flag
+          if(arguments.get(sname)!= null){
+                    arguments.get(sname).setValue("true");
+                    usedArguments++;
+              }
+                //argument is a collection of flags
+          else if(sname.length()>1){
+            for (int j = 0; i < sname.length(); i++){
+              String flagIterator = String.valueOf(sname.charAt(j));   
+              if(arguments.get(sname)!= null){
+                arguments.get(flagIterator).setValue("true");
+              }     
+              else{
+                throw new IllegalArgumentException("flag " + flagIterator + "does not exist");
+              }
+          }
+          usedArguments++;
+          }
           aname = shortToLong.get(sname);
           if (aname == null) {
             throw new IllegalArgumentException("argument " + aname + "does not exist");
           }
         }
-
         Argument a = arguments.get(aname);
         if (a.getDataType() == Argument.DataType.BOOLEAN) {
           a.setValue("true");
@@ -198,7 +206,11 @@ public class ArgumentParser {
             throw new HelpException(message);
           }
         }
-      } else {
+      } 
+      
+      
+      
+      else {
         // Regular argument value
         if (usedArguments == argumentNames.size()) {
           String message = "usage: java " + programName + getParameterString() + "\n" + programName

@@ -2,7 +2,6 @@ package edu.wofford;
 
 public class OptionalArgument extends Argument {
 
-    private String defaultValue;
 
     OptionalArgument(String name, String defaultValue) {
         this(name, defaultValue, Argument.DataType.STRING, "");
@@ -19,15 +18,10 @@ public class OptionalArgument extends Argument {
     OptionalArgument(String optionalArgumentName, String defaultValue, Argument.DataType datatype, String description) {
         super("--" + optionalArgumentName, description, datatype);
         this.value = defaultValue;
-        this.defaultValue = defaultValue;
+
     }
 
-    public void setOptionalArgumentValue(String defaultValue) {
-        this.defaultValue = defaultValue;
-    }
 
-    public String getOptionalArgumentValue() {
-        return this.defaultValue;
-    }
+ 
 
 }

@@ -238,7 +238,7 @@ public class ArgumentParserTest {
     argCheck.addOptionalArgument("optionalArgOne", "optionalArgOneDefaultValue");
     argCheck.parse(cla);
 
-    assertEquals("optionalArgOneDefaultValue", argCheck.getOptionalArgumentValue("optionalArgOne"));
+    assertEquals("optionalArgOneDefaultValue", argCheck.getArgumentValue("optionalArgOne"));
   }
 
   @Test
@@ -247,7 +247,7 @@ public class ArgumentParserTest {
     argCheck.addOptionalArgument("optionalArgOne", "optionalArgOneDefaultValue");
     argCheck.parse(cla);
 
-    assertEquals("8", argCheck.getOptionalArgumentValue("optionalArgOne"));
+    assertEquals("8", argCheck.getArgumentValue("optionalArgOne"));
   }
 
   @Test
@@ -258,7 +258,7 @@ public class ArgumentParserTest {
     argCheck.parse(cla);
 
     assertEquals("7", argCheck.getArgumentValue("length"));
-    assertEquals("optionalArgOneDefaultValue", argCheck.getOptionalArgumentValue("optionalArgOne"));
+    assertEquals("optionalArgOneDefaultValue", argCheck.getArgumentValue("optionalArgOne"));
   }
 
   @Test
@@ -269,8 +269,8 @@ public class ArgumentParserTest {
     argCheck.parse(cla);
 
     assertEquals("7", argCheck.getArgumentValue("length"));
-    assertEquals("optionalArgOneDefaultValue", argCheck.getOptionalArgumentValue("optionalArgOne"));
-    assertEquals("this is an optional argument", argCheck.getOptionalDescription("optionalArgOne"));
+    assertEquals("optionalArgOneDefaultValue", argCheck.getArgumentValue("optionalArgOne"));
+    assertEquals("this is an optional argument", argCheck.getArgumentDescription("optionalArgOne"));
   }
 
   @Test
@@ -280,7 +280,7 @@ public class ArgumentParserTest {
     argCheck.addOptionalArgument("optionalArgOne", "optionalArgOneDefaultValue", Argument.DataType.STRING);
     argCheck.parse(cla);
 
-    assertEquals(Argument.DataType.STRING, argCheck.getOptionalArgumentDataType("optionalArgOne"));
+    assertEquals(Argument.DataType.STRING, argCheck.getArgumentDataType("optionalArgOne"));
 
   }
 
@@ -292,8 +292,8 @@ public class ArgumentParserTest {
         "my funeral");
     argCheck.addOptionalArgument("type", "typevalue", Argument.DataType.STRING, "my funeral");
     argCheck.parse(cla);
-    assertEquals("optionalArgOneDefaultValue", argCheck.getOptionalArgumentValue("optionalArgOne"));
-    assertEquals("typevalue", argCheck.getOptionalArgumentValue("type"));
+    assertEquals("optionalArgOneDefaultValue", argCheck.getArgumentValue("optionalArgOne"));
+    assertEquals("typevalue", argCheck.getArgumentValue("type"));
   
 
   }
@@ -308,4 +308,67 @@ public class ArgumentParserTest {
 
   }
 
+
+  @Test
+  public void addOneFlag(){
+    String[]cla={"-y"};
+    argCheck.addFlag("y");
+    assertEquals("true", argCheck.getArgumentValue("y"));
+  }
+
+  @Test
+  public void throwFlagError(){
+    String[]cla={"-y"};
+    argCheck.addFlag("d");
+    assertEquals("true", argCheck.getArgumentValue("y"));
+  }
 }
+
+
+/*
+public void parse(String[] args) {
+
+
+      
+      else if (args[i].startsWith("-")) {
+        if (args[i].startsWith("--")) {
+          aname = args[i].substring(2);
+          isArgNotAValue=true;
+        }
+        //argument is a flag or shortname Argument
+        else {
+          String sname = args[i].substring(1);
+          //if argument is a flag
+          if(arguments.get(sname)!= null){
+    
+            arguments.get(sname).setValue("true");
+            usedArguments++;
+          }
+
+          //argument is a collection of flags
+          else if(sname.length()>1){
+            for (int j = 0; i < sname.length(); i++){
+              String flagIterator = String.valueOf(sname.charAt(j));   
+              if(arguments.get(sname)!= null){
+                isArgNotAValue=true;
+                arguments.get(flagIterator).setValue("true");
+              }     
+              else{
+                throw new IllegalArgumentException("flag " + flagIterator + "does not exist");
+              }
+        
+          }
+          usedArguments++;
+          }
+
+          else{
+            aname = shortToLong.get(sname);
+          if (aname == null) {
+            throw new IllegalArgumentException("argument " + aname + "does not exist");
+          }
+          isArgNotAValue=true;
+        }
+        }
+      }
+
+*/

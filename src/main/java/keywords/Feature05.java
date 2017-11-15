@@ -35,11 +35,11 @@ public String getHeight() {
 }
 
 public String getType() {
-    return argCheck.getOptionalArgumentValue("type");
+    return argCheck.getArgumentValue("type");
 }
 
 public String getDigits() {
-    return argCheck.getOptionalArgumentValue("digits");
+    return argCheck.getArgumentValue("digits");
 }
 
 
