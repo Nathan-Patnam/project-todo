@@ -14,6 +14,11 @@ public class OptionalArgument extends Argument {
     OptionalArgument(String optionalArgumentName, String defaultValue, Argument.DataType dataType) {
         this(optionalArgumentName, defaultValue, dataType, "");
     }
+//flag constructor
+    OptionalArgument(String optionalArgumentName, boolean turnedOff , Argument.DataType dataType){
+        super("-"+optionalArgumentName, "", Argument.DataType.BOOLEAN);
+        this.value = "false";
+    }
 
     OptionalArgument(String optionalArgumentName, String defaultValue, Argument.DataType datatype, String description) {
         super("--" + optionalArgumentName, description, datatype);

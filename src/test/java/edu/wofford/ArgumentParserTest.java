@@ -313,6 +313,7 @@ public class ArgumentParserTest {
   public void addOneFlag(){
     String[]cla={"-y"};
     argCheck.addFlag("y");
+    argCheck.parse(cla);
     assertEquals("true", argCheck.getArgumentValue("y"));
   }
 
@@ -320,55 +321,27 @@ public class ArgumentParserTest {
   public void throwFlagError(){
     String[]cla={"-y"};
     argCheck.addFlag("d");
-    assertEquals("true", argCheck.getArgumentValue("y"));
+    String msg ="argument y does not exist";
+    try {
+      argCheck.parse(cla);
+      fail("Should have thrown IllegalArgumentException but did not!");
+    } catch (IllegalArgumentException expected) {
+      assertEquals(msg, expected.getMessage());
+    }
+  }
+
+  @Test
+  public void testMultipleBadFlags(){
+    String[]cla={"-yf"};
+    argCheck.addFlag("y");
+    argCheck.addFlag("d");
+    String msg ="flag f does not exist";
+    try {
+      argCheck.parse(cla);
+      fail("Should have thrown IllegalArgumentException but did not!");
+    } catch (IllegalArgumentException expected) {
+      assertEquals(msg, expected.getMessage());
+    }
   }
 }
 
-
-/*
-public void parse(String[] args) {
-
-
-      
-      else if (args[i].startsWith("-")) {
-        if (args[i].startsWith("--")) {
-          aname = args[i].substring(2);
-          isArgNotAValue=true;
-        }
-        //argument is a flag or shortname Argument
-        else {
-          String sname = args[i].substring(1);
-          //if argument is a flag
-          if(arguments.get(sname)!= null){
-    
-            arguments.get(sname).setValue("true");
-            usedArguments++;
-          }
-
-          //argument is a collection of flags
-          else if(sname.length()>1){
-            for (int j = 0; i < sname.length(); i++){
-              String flagIterator = String.valueOf(sname.charAt(j));   
-              if(arguments.get(sname)!= null){
-                isArgNotAValue=true;
-                arguments.get(flagIterator).setValue("true");
-              }     
-              else{
-                throw new IllegalArgumentException("flag " + flagIterator + "does not exist");
-              }
-        
-          }
-          usedArguments++;
-          }
-
-          else{
-            aname = shortToLong.get(sname);
-          if (aname == null) {
-            throw new IllegalArgumentException("argument " + aname + "does not exist");
-          }
-          isArgNotAValue=true;
-        }
-        }
-      }
-
-*/

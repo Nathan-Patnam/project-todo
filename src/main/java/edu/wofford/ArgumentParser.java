@@ -58,17 +58,14 @@ public class ArgumentParser {
 
   }
 
-  public void setArgumentShortFormName(String argument, String shortFormName){
+  public void setArgumentShortFormName(String argument, String shortFormName) {
     arguments.get(argument).setShortFormName(shortFormName);
-    shortToLong.put(shortFormName,argument);
+    shortToLong.put(shortFormName, argument);
   }
-
-
 
   public void addFlag(String argname) {
-    arguments.put(argname, new OptionalArgument(argname, "false", Argument.DataType.BOOLEAN));
+    arguments.put(argname, new OptionalArgument(argname, false, Argument.DataType.BOOLEAN));
   }
-  
 
   private boolean checkType(String value, Argument.DataType type) {
     switch (type) {
@@ -93,16 +90,18 @@ public class ArgumentParser {
     }
   }
 
-  public Argument getArgument(String argument){
+  public Argument getArgument(String argument) {
     return arguments.get(argument);
   }
 
   public String getArgumentValue(String argument) {
     return arguments.get(argument).getValue();
   }
+
   public String getArgumentDescription(String argument) {
     return arguments.get(argument).getDescription();
   }
+
   public Argument.DataType getArgumentDataType(String argument) {
     return arguments.get(argument).getDataType();
   }
@@ -142,9 +141,10 @@ public class ArgumentParser {
     return key_string;
   }
 
-  public String setProgramName(String programName){
-    return this.programName=programName;
+  public String setProgramName(String programName) {
+    return this.programName = programName;
   }
+
   public String getProgramName() {
     return programName;
   }
@@ -156,40 +156,44 @@ public class ArgumentParser {
   public void parse(String[] args) {
     int usedArguments = 0;
     for (int i = 0; i < args.length; i++) {
+      boolean isArgAFlag = false;
       String aname = "";
       if (args[i].equals("-h") || args[i].equals("--help")) {
         String message = getHelpMessage();
         throw new HelpException(message);
-      } 
-      else if (args[i].startsWith("-")) {
+      } else if (args[i].startsWith("-")) {
         if (args[i].startsWith("--")) {
           aname = args[i].substring(2);
-        } 
-        else {
+        } else {
           String sname = args[i].substring(1);
           //argument is a flag
-          if(arguments.get(sname)!= null){
-                    arguments.get(sname).setValue("true");
-                    usedArguments++;
-              }
-                //argument is a collection of flags
-          else if(sname.length()>1){
-            for (int j = 0; i < sname.length(); i++){
-              String flagIterator = String.valueOf(sname.charAt(j));   
-              if(arguments.get(sname)!= null){
+          if (arguments.get(sname) != null) {
+            arguments.get(sname).setValue("true");
+            usedArguments++;
+            isArgAFlag = true;
+            continue;
+          }
+          //argument is a collection of flags
+          else if (sname.length() > 1) {
+            for (int j = 0; i < sname.length(); j++) {
+              String flagIterator = String.valueOf(sname.charAt(j));
+              if (arguments.get(sname) != null) {
                 arguments.get(flagIterator).setValue("true");
-              }     
-              else{
+                isArgAFlag = true;
+              } else {
                 throw new IllegalArgumentException("flag " + flagIterator + "does not exist");
               }
+            }
+            usedArguments++;
+            continue;
           }
-          usedArguments++;
-          }
+
           aname = shortToLong.get(sname);
-          if (aname == null) {
-            throw new IllegalArgumentException("argument " + aname + "does not exist");
+          if (aname == null && !isArgAFlag) {
+            throw new IllegalArgumentException("argument " + args[i].substring(1) + " does not exist");
           }
         }
+
         Argument a = arguments.get(aname);
         if (a.getDataType() == Argument.DataType.BOOLEAN) {
           a.setValue("true");
@@ -206,10 +210,8 @@ public class ArgumentParser {
             throw new HelpException(message);
           }
         }
-      } 
-      
-      
-      
+      }
+
       else {
         // Regular argument value
         if (usedArguments == argumentNames.size()) {
@@ -231,7 +233,9 @@ public class ArgumentParser {
           }
         }
       }
+
     }
+
     if (usedArguments < argumentNames.size()) {
       String missingArguements = "";
       for (int i = usedArguments; i < argumentNames.size(); i++) {
