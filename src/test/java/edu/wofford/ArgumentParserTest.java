@@ -149,8 +149,7 @@ public class ArgumentParserTest {
     argCheck.addArg("width", "the width of the box", Argument.DataType.BOOLEAN);
     argCheck.addArg("height", "the height of the box", Argument.DataType.INT);
 
-    String msg = "usage: java VolumeCalculator length width height\nVolumeCalculator.java: error: argument length: invalid float value: yup\n"
-        + "argument width: invalid boolean value: something\n" + "argument height: invalid int value: one\n";
+    String msg = "usage: java VolumeCalculator length width height\nVolumeCalculator.java: error: argument length: invalid float value: yup";
     try {
       argCheck.parse(cla);
       fail("Should have thrown HelpException but did not!");
@@ -166,8 +165,7 @@ public class ArgumentParserTest {
     argCheck.addArg("width", "the width of the box", Argument.DataType.BOOLEAN);
     argCheck.addArg("height", "the height of the box", Argument.DataType.INT);
 
-    String msg = "usage: java VolumeCalculator length width height\nVolumeCalculator.java: error: argument length: invalid float value: yup\n"
-        + "argument width: invalid boolean value: something\n" + "argument height: invalid int value: one\n";
+    String msg = "usage: java VolumeCalculator length width height\nVolumeCalculator.java: error: argument length: invalid float value: yup";
     try {
       argCheck.parse(cla);
       fail("Should have thrown HelpException but did not!");
@@ -178,7 +176,7 @@ public class ArgumentParserTest {
 
   @Test
   public void testOptionalArgumentDefault() {
-    String[] cla = { "--optionalArgOne" };
+    String[] cla = { };
     argCheck.addOptionalArgument("optionalArgOne", "optionalArgOneDefaultValue");
     argCheck.parse(cla);
 
@@ -196,7 +194,7 @@ public class ArgumentParserTest {
 
   @Test
   public void testOptionalArgument() {
-    String[] cla = { "7", "--optionalArgOne" };
+    String[] cla = { "7" };
     argCheck.addArg("length");
     argCheck.addOptionalArgument("optionalArgOne", "optionalArgOneDefaultValue");
     argCheck.parse(cla);
@@ -219,7 +217,7 @@ public class ArgumentParserTest {
 
   @Test
   public void getDataTypeOptionaArgument() {
-    String[] cla = { "rip", "--optionalArgOne" };
+    String[] cla = { "rip" };
     argCheck.addArg("length");
     argCheck.addOptionalArgument("optionalArgOne", "optionalArgOneDefaultValue", Argument.DataType.STRING);
     argCheck.parse(cla);

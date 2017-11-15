@@ -2,43 +2,32 @@ package edu.wofford;
 
 public class OptionalArgument extends Argument {
 
-    private String optionalArgumentValue;
+    private String defaultValue;
 
-    OptionalArgument(String optionalArgumentName, String defaultValue) {
-        super("--" + optionalArgumentName);
-        this.optionalArgumentValue = defaultValue;
+    OptionalArgument(String name, String defaultValue) {
+        this(name, defaultValue, Argument.DataType.STRING, "");
     }
 
-    OptionalArgument(String optionalArgumentName, String defaultValue, String description) {
-        super("--" + optionalArgumentName, description);
-        this.optionalArgumentValue = defaultValue;
+    OptionalArgument(String name, String defaultValue, String description) {
+        this(name, defaultValue, Argument.DataType.STRING, description);
     }
 
     OptionalArgument(String optionalArgumentName, String defaultValue, Argument.DataType dataType) {
-        super("--" + optionalArgumentName, dataType);
-        this.optionalArgumentValue = defaultValue;
+        this(optionalArgumentName, defaultValue, dataType, "");
     }
 
     OptionalArgument(String optionalArgumentName, String defaultValue, Argument.DataType datatype, String description) {
-
         super("--" + optionalArgumentName, description, datatype);
-        this.optionalArgumentValue = defaultValue;
+        this.value = defaultValue;
+        this.defaultValue = defaultValue;
     }
 
-    public void setOptionalArgumentValue(String optionalArgumentValue) {
-        this.optionalArgumentValue = optionalArgumentValue;
+    public void setOptionalArgumentValue(String defaultValue) {
+        this.defaultValue = defaultValue;
     }
 
     public String getOptionalArgumentValue() {
-        return this.optionalArgumentValue;
-    }
-
-    public String getOptionalDescription() {
-        return super.getArgumentDescription();
-    }
-
-    public DataType getOptionalArgumentDataType() {
-        return super.getArgumentDataType();
+        return this.defaultValue;
     }
 
 }

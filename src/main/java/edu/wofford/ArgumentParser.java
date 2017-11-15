@@ -6,18 +6,15 @@ public class ArgumentParser {
 
   private String programName;
   private String programDescription;
-  private Map<String, Argument> arguments = new LinkedHashMap<String, Argument>();
-  private ArrayList<String> argumentNames = new ArrayList<String>();
-  private ArrayList<ArrayList<String>> listBadDataTypes = new ArrayList<ArrayList<String>>();
-  private Map<String, Flag> flags = new HashMap<String, Flag>();
+  private Map<String, String> shortToLong;
+  private Map<String, Argument> arguments;
+  private ArrayList<String> argumentNames;
+  //private ArrayList<ArrayList<String>> listBadDataTypes = new ArrayList<ArrayList<String>>();
+  //private Map<String, Flag> flags = new HashMap<String, Flag>();
   private int numberOptionalArguments;
 
   public ArgumentParser(String programName) {
-    this.programName = programName;
-    arguments = new LinkedHashMap<>();
-    argumentNames = new ArrayList<>();
-    flags = new HashMap<>();
-    numberOptionalArguments = 0;
+    this(programName, "");
   }
 
   public ArgumentParser(String programName, String description) {
@@ -25,23 +22,20 @@ public class ArgumentParser {
     this.programDescription = description;
     arguments = new LinkedHashMap<>();
     argumentNames = new ArrayList<>();
-    flags = new HashMap<>();
+    shortToLong = new HashMap<>();
     numberOptionalArguments = 0;
   }
 
   public void addArg(String argname) {
-    arguments.put(argname, new Argument(argname));
-    argumentNames.add(argname);
+    addArg(argname, "", Argument.DataType.STRING);
   }
 
   public void addArg(String argname, String description) {
-    arguments.put(argname, new Argument(argname, description));
-    argumentNames.add(argname);
+    addArg(argname, description, Argument.DataType.STRING);
   }
 
   public void addArg(String argname, Argument.DataType dataType) {
-    arguments.put(argname, new Argument(argname, dataType));
-    argumentNames.add(argname);
+    addArg(argname, "", dataType);
   }
 
   public void addArg(String argname, String description, Argument.DataType dataType) {
@@ -51,31 +45,29 @@ public class ArgumentParser {
 
   public void addOptionalArgument(String argname, String defaultValue) {
     arguments.put(argname, new OptionalArgument(argname, defaultValue));
-    argumentNames.add(argname);
     numberOptionalArguments++;
   }
 
   public void addOptionalArgument(String argname, String defaultValue, String description) {
     arguments.put(argname, new OptionalArgument(argname, defaultValue, description));
-    argumentNames.add(argname);
     numberOptionalArguments++;
   }
 
   public void addOptionalArgument(String argname, String defaultValue, Argument.DataType dataType) {
     arguments.put(argname, new OptionalArgument(argname, defaultValue, dataType));
-    argumentNames.add(argname);
     numberOptionalArguments++;
   }
 
   public void addOptionalArgument(String argname, String defaultValue, Argument.DataType dataType, String description) {
     arguments.put(argname, new OptionalArgument(argname, defaultValue, dataType, description));
-    argumentNames.add(argname);
     numberOptionalArguments++;
   }
 
+  /*
   public void addFlag(String argname) {
-    flags.put(("--" + argname), new Flag(("--" + argname)));
+    arguments.put("--" + argname, new OptionalArgument("--" + argname, "false", Argument.DataType.BOOLEAN));
   }
+  */
 
   //rewrite
   public String getTypeExceptionMessage(ArrayList<ArrayList<String>> listBadDataTypes, int sizeBadDataTypes) {
@@ -95,52 +87,6 @@ public class ArgumentParser {
     return message;
   }
 
-  //rewrite using hopefully dataTypes class instead
-  public void checkForWrongDataTypes() {
-
-    int sizeBadDataTypes = 0;
-    for (String argNameIterator : arguments.keySet()) {
-      String currentArgumentIteratorDataType = arguments.get(argNameIterator).getargumentDataTypeString();
-      String currentArgumentIteratorValue = arguments.get(argNameIterator).getArgumentValue();
-      if (currentArgumentIteratorDataType.equals("float")) {
-        try {
-          Float.parseFloat(currentArgumentIteratorValue);
-        } catch (NumberFormatException e) {
-          ArrayList<String> badDataType = new ArrayList<String>();
-          badDataType.add(argNameIterator);
-          badDataType.add("float");
-          badDataType.add(currentArgumentIteratorValue);
-          listBadDataTypes.add(badDataType);
-          sizeBadDataTypes++;
-        }
-      } else if (currentArgumentIteratorDataType.equals("int")) {
-        try {
-          Integer.parseInt(currentArgumentIteratorValue);
-        } catch (NumberFormatException e) {
-          ArrayList<String> badDataType = new ArrayList<String>();
-          badDataType.add(argNameIterator);
-          badDataType.add("int");
-          badDataType.add(currentArgumentIteratorValue);
-          listBadDataTypes.add(badDataType);
-          sizeBadDataTypes++;
-        }
-      } else if (currentArgumentIteratorDataType.equals("boolean")) {
-        if (!(currentArgumentIteratorValue.equals("true") || currentArgumentIteratorValue.equals("false"))) {
-          ArrayList<String> badDataType = new ArrayList<String>();
-          badDataType.add(argNameIterator);
-          badDataType.add("boolean");
-          badDataType.add(currentArgumentIteratorValue);
-          listBadDataTypes.add(badDataType);
-          sizeBadDataTypes++;
-        }
-      }
-    }
-
-    if (sizeBadDataTypes > 0) {
-      String message = getTypeExceptionMessage(listBadDataTypes, sizeBadDataTypes);
-      throw new HelpException(message);
-    }
-  }
 
   private void tooFewArgumentsProvided(ArrayList<String> argumentsLeft) {
     String missingArguements = "";
@@ -164,28 +110,43 @@ public class ArgumentParser {
     throw new TooManyArguments(message);
   }
 
+  private boolean checkType(String value, Argument.DataType type) {
+    switch(type) {
+      case BOOLEAN:
+        return (value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false"));
+      case INT:
+        try { Integer.parseInt(value); return true; } 
+        catch(NumberFormatException e) { return false; }
+      case FLOAT:
+        try { Float.parseFloat(value); return true; } 
+        catch(NumberFormatException e) { return false; }
+      default:
+        return true;
+    }
+  }
+
   public String getArgumentValue(String argument) {
-    return arguments.get(argument).getArgumentValue();
+    return arguments.get(argument).getValue();
   }
 
   public String getOptionalArgumentValue(String optionalArgName) {
-    return ((OptionalArgument) arguments.get(optionalArgName)).getOptionalArgumentValue();
+    return arguments.get(optionalArgName).getValue();  
   }
 
   public String getOptionalDescription(String optionalArgName) {
-    return ((OptionalArgument) arguments.get(optionalArgName)).getOptionalDescription();
+    return arguments.get(optionalArgName).getDescription();
   }
 
   public Argument.DataType getArgumentDataType(String argument) {
-    return arguments.get(argument).getArgumentDataType();
+    return arguments.get(argument).getDataType();
   }
 
   public Argument.DataType getOptionalArgumentDataType(String argument) {
-    return ((OptionalArgument) arguments.get(argument)).getArgumentDataType();
+    return ((OptionalArgument) arguments.get(argument)).getDataType();
   }
 
   public String getArgumentDataTypeString(String argument) {
-    return arguments.get(argument).getargumentDataTypeString();
+    return arguments.get(argument).getDataType().toString();
   }
 
   public String getHelpMessage() {
@@ -195,8 +156,8 @@ public class ArgumentParser {
         + "positional arguments:";
     for (String argNameIterator : arguments.keySet()) {
       Argument currentArgumentIterator = arguments.get(argNameIterator);
-      message += "\n   " + argNameIterator + " " + currentArgumentIterator.getArgumentDescription() + " ("
-          + currentArgumentIterator.getargumentDataTypeString() + ")";
+      message += "\n   " + argNameIterator + " " + currentArgumentIterator.getDescription() + " ("
+          + currentArgumentIterator.getDataType().toString() + ")";
     }
 
     return message;
@@ -222,67 +183,170 @@ public class ArgumentParser {
     return programDescription;
   }
 
+  private Boolean isArgAOptionalArgument(String argValue) {
+    return argValue.matches("^--[A-Za-z0-9]");
+  }
+
+  private Boolean isArgaFlag(String argValue) {
+    return argValue.matches("^-[A-Za-z0-9]");
+  }
+
   public void parse(String[] args) {
+    
+    int usedArguments = 0;
+    for(int i = 0; i < args.length; i++) {
+      String aname = "";
+      if(args[i].equals("-h") || args[i].equals("--help")) {
+        throw new HelpException("hi");
+      }
+      else if(args[i].startsWith("-")) {
+        if(args[i].startsWith("--")) {
+          aname = args[i].substring(2);
+        }
+        else {
+          String sname = args[i].substring(1);
+          aname = shortToLong.get(sname);
+          if(aname == null) {
+            // OOPS. The short name isn't valid.
+          }
+        }
+        Argument a = arguments.get(aname);
+        if(a.getDataType() == Argument.DataType.BOOLEAN) {
+          a.setValue("true");
+        }
+        else {
+          if(checkType(args[i + 1], a.getDataType())) {
+            a.setValue(args[i + 1]);
+            i++;
+          }
+          else {
+            // Throw some exception
+            String message = "";
+            message = "usage: java " + programName + getParameterString() + "\n" + 
+                      programName + ".java: error: " +
+                      "argument " + aname + ":" + " invalid " + a.getDataType().toString() +
+                      " value: " + args[i + 1];
+            
+            throw new HelpException(message);
+          }
+        }      
+      }
+      else {
+        // Regular argument value
+        if(usedArguments == argumentNames.size()) {
+          // Too many args exception
+          throw new TooManyArguments("suck it");
+        }
+        else {
+          aname = argumentNames.get(usedArguments);
+          Argument a = arguments.get(aname);
+          if(checkType(args[i], a.getDataType())) {
+            a.setValue(args[i]);
+            usedArguments++;
+          }
+          else {
+            String message = "";
+            message = "usage: java " + programName + getParameterString() + "\n" + 
+                      programName + ".java: error: " +
+                      "argument " + aname + ":" + " invalid " + a.getDataType().toString() +
+                      " value: " + args[i];
+            
+            throw new HelpException(message);
+          }
+        }
+      }
+    }
+    if(usedArguments < argumentNames.size()) {
+      // Too few args exception
+      throw new TooFewArguments("whatever");
+    }
+
+
+    /*
+
     ArrayList<String> badArguments = new ArrayList<String>();
     Boolean isThereOptionalArgument = false;
+    String lastKnowOptionalArgument = "";
+    int lastIndexinArgs = args.length - 1;
     for (int i = 0; i < args.length; i++) {
       String argumentValue = args[i];
-      //throw error if argument or flag is not found
-      //help message logic
-      if (argumentValue.equals("-h")) {
-        String message = getHelpMessage();
-        throw new HelpException(message);
-      } else if (flags.get(argumentValue) != null) {
-        flags.get(argumentValue).flagIsPresent();
+      Boolean argumentIsAOptionalArgument = isArgAOptionalArgument(argumentValue);
+      Boolean argumentIsAFlag = isArgaFlag(argumentValue);
+      
+      //argument is a optional Argument
+      if (argumentIsAOptionalArgument) {
         if (argumentValue.equals("--help")) {
           String message = getHelpMessage();
           throw new HelpException(message);
         }
-      } else if ((argumentValue.matches("^--[A-Za-z0-9]") && arguments.get(argumentValue.substring(2)) == null)) {
-        throw new IllegalArgumentException("argument " + argumentValue.replace("--", " ") + "does not exist");
-      } else if ((argumentValue.matches("^-[A-Za-z0-9]") && flags.get(argumentValue.substring(1)) == null)) {
-        throw new IllegalArgumentException("argument " + argumentValue.replace("-", " ") + "does not exist");
-      }
-      //when optionalArgument is first encountered
-      else if (argumentValue.contains("--") && isThereOptionalArgument == false) {
-        isThereOptionalArgument = true;
-      }
-      //if a value is encountered after a optional Argument
-      else if (isThereOptionalArgument && (arguments.get(args[i]) == null)) {
-        if (argumentNames.isEmpty()) {
-          badArguments.add(args[i]);
-        } else {
-          ((OptionalArgument) arguments.get(argumentNames.get(0))).setOptionalArgumentValue(argumentValue);
-          argumentNames.remove(0);
-          isThereOptionalArgument = false;
-        }
-      }
-      //if a optionalArgument proceeds a optionalArgument
-      else if (argumentValue.contains("--") && isThereOptionalArgument) {
-        if (argumentNames.isEmpty()) {
-          badArguments.add(args[i]);
-        } else {
-          argumentNames.remove(0);
 
+        else if (arguments.get(argumentValue.substring(2)) == null) {
+          throw new IllegalArgumentException("argument " + argumentValue.replace("--", " ") + "does not exist");
         }
-      }
-      //special case if last value is a optionalArgument
-      else if ((i == (args.length-1)) && argumentValue.contains("--")) {
-        argumentNames.remove(0);
+
+        else if (i == lastIndexinArgs) {
+          argumentNames.remove(0);
+        }
+
+        //when optionalArgument is first encountered
+        if (!isThereOptionalArgument) {
+          isThereOptionalArgument = true;
+          lastKnowOptionalArgument = argumentValue.substring(2);
+        }
+        //if a optional argument is followed by another optionalArgument
+        else if (isThereOptionalArgument) {
+          if (argumentNames.isEmpty()) {
+            badArguments.add(args[i]);
+          } else {
+            argumentNames.remove(0);
+            lastKnowOptionalArgument = argumentValue.substring(2);
+          }
+        }
 
       }
-      // if its just a regular value
+      //Argument in a Flag
+      else if (argumentIsAFlag) {
+        if (argumentValue.equals("-h")) {
+          String message = getHelpMessage();
+          throw new HelpException(message);
+        } else if (arguments.get(argumentValue.substring(1)) == null) {
+          throw new IllegalArgumentException("argument " + argumentValue.replace("-", " ") + "does not exist");
+        } else {
+          arguments.get(argumentValue).setValue("true");
+        }
+      }
+
+      //argument is a value
       else {
-        if (argumentNames.isEmpty()) {
-          badArguments.add(args[i]);
-        } else {
-          arguments.get(argumentNames.get(0)).setArgumentValue(argumentValue);
-          argumentNames.remove(0);
+        //if a value is encountered after a optional Argument
+        if (isThereOptionalArgument) {
+
+          if (argumentNames.isEmpty() && i != lastIndexinArgs) {
+            badArguments.add(args[i]);
+          } 
+          else {
+            ((OptionalArgument)arguments.get(lastKnowOptionalArgument)).setOptionalArgumentValue(argumentValue);
+            isThereOptionalArgument = false;
+            if(i!= lastIndexinArgs){
+              argumentNames.remove(0);
+            }
+          }
+
         }
+        else {
+          if (argumentNames.isEmpty()) {
+            badArguments.add(args[i]);
+          }
+          else{
+            arguments.get(argumentNames.get(0)).setValue(argumentValue);
+            argumentNames.remove(0);
+          }
+        }
+
       }
 
     }
-    if (badArguments.size() > 0) {
+    if (badArguments.size() > numberOptionalArguments) {
       tooManyArgumentsProvided(badArguments);
     }
     if (argumentNames.size() > numberOptionalArguments) {
@@ -290,5 +354,7 @@ public class ArgumentParser {
     }
     checkForWrongDataTypes();
 
+    */
   }
+
 }
