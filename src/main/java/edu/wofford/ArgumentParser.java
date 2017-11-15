@@ -90,8 +90,19 @@ public class ArgumentParser {
     }
   }
 
+  public Argument getArgument(String argument){
+    return arguments.get(argument);
+  }
+
   public String getArgumentValue(String argument) {
     return arguments.get(argument).getValue();
+  }
+
+  public String getArgumentDescription(String argument) {
+    return arguments.get(argument).getDescription();
+  }
+  public Argument.DataType getArgumentDataType(String argument) {
+    return arguments.get(argument).getDataType();
   }
 
   public String getOptionalArgumentValue(String optionalArgName) {
@@ -100,10 +111,6 @@ public class ArgumentParser {
 
   public String getOptionalDescription(String optionalArgName) {
     return arguments.get(optionalArgName).getDescription();
-  }
-
-  public Argument.DataType getArgumentDataType(String argument) {
-    return arguments.get(argument).getDataType();
   }
 
   public Argument.DataType getOptionalArgumentDataType(String argument) {
@@ -145,6 +152,9 @@ public class ArgumentParser {
     return key_string;
   }
 
+  public String setProgramName(String programName){
+    return this.programName=programName;
+  }
   public String getProgramName() {
     return programName;
   }
@@ -168,9 +178,10 @@ public class ArgumentParser {
           String sname = args[i].substring(1);
           aname = shortToLong.get(sname);
           if (aname == null) {
-            // OOPS. The short name isn't valid.
+            throw new IllegalArgumentException("argument " + aname + "does not exist");
           }
         }
+
         Argument a = arguments.get(aname);
         if (a.getDataType() == Argument.DataType.BOOLEAN) {
           a.setValue("true");

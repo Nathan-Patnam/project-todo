@@ -48,9 +48,7 @@ public class Argument {
     this.value = value;
   }
 
-  public String getName() {
-    return name;
-  }
+
 
   public String getDescription() {
     return description;

@@ -5,10 +5,19 @@ import org.junit.*;
 
 public class ArgumentParserTest {
   private ArgumentParser argCheck;
+  private ArgumentParser arhCheckSimple;
 
   @Before
   public final void setup() {
     argCheck = new ArgumentParser("VolumeCalculator", "Calculate the volume of a box.");
+    arhCheckSimple=new ArgumentParser("VolumeCalculator");
+
+  }
+
+  @Test
+  public final void setProgramName() {
+    arhCheckSimple.setProgramName("Calculate the volume of a box.");
+    assertEquals("Calculate the volume of a box.", argCheck.getProgramDescription());
   }
 
   @Test
@@ -24,7 +33,8 @@ public class ArgumentParserTest {
   @Test
   public final void testOneProgramArgument() {
     argCheck.addArg("length");
-    //assertEquals("length", argCheck.getArgumentName());
+    argCheck.getArgument("length").setDescription("side of a box");
+    assertEquals("side of a box", argCheck.getArgumentDescription("length"));
   }
 
   @Test
@@ -44,6 +54,14 @@ public class ArgumentParserTest {
     argCheck.addArg("length");
     argCheck.addArg("width");
     String[] cla = { "5" };
+    argCheck.parse(cla);
+  }
+
+  @Test(expected = HelpException.class)
+  public final void helpMessage() {
+    argCheck.addArg("length");
+    argCheck.addArg("width");
+    String[] cla = { "--help" };
     argCheck.parse(cla);
   }
 
@@ -109,6 +127,13 @@ public class ArgumentParserTest {
   }
 
   @Test
+  public void addDataType() {
+    argCheck.addArg("length");
+    argCheck.getArgument("length").setDataType(Argument.DataType.FLOAT);
+    assertEquals(Argument.DataType.FLOAT, argCheck.getArgumentDataType("length"));
+  }
+
+  @Test
   public void TestgetDataType() {
     argCheck.addArg("Length", "Length of the box.", Argument.DataType.FLOAT);
     assertEquals("float", argCheck.getArgumentDataTypeString("Length"));
@@ -150,6 +175,39 @@ public class ArgumentParserTest {
     argCheck.addArg("height", "the height of the box", Argument.DataType.INT);
 
     String msg = "usage: java VolumeCalculator length width height\nVolumeCalculator.java: error: argument length: invalid float value: yup";
+    try {
+      argCheck.parse(cla);
+      fail("Should have thrown HelpException but did not!");
+    } catch (HelpException expected) {
+      assertEquals(msg, expected.getMessage());
+    }
+  }
+
+
+  @Test
+  public void TestMultipleBadDataTypesBoolean() {
+    String[] cla = { "yup", "something", "one" };
+    argCheck.addArg("length", "the length of the box", Argument.DataType.BOOLEAN);
+    argCheck.addArg("width", "the width of the box", Argument.DataType.BOOLEAN);
+    argCheck.addArg("height", "the height of the box", Argument.DataType.INT);
+
+    String msg = "usage: java VolumeCalculator length width height\nVolumeCalculator.java: error: argument length: invalid boolean value: yup";
+    try {
+      argCheck.parse(cla);
+      fail("Should have thrown HelpException but did not!");
+    } catch (HelpException expected) {
+      assertEquals(msg, expected.getMessage());
+    }
+  }
+
+  @Test
+  public void TestMultipleBadDataTypesInt() {
+    String[] cla = { "7", "something", "one" };
+    argCheck.addArg("length", "the length of the box", Argument.DataType.INT);
+    argCheck.addArg("width", "the width of the box", Argument.DataType.INT);
+    argCheck.addArg("height", "the height of the box", Argument.DataType.INT);
+
+    String msg = "usage: java VolumeCalculator length width height\nVolumeCalculator.java: error: argument width: invalid int value: something";
     try {
       argCheck.parse(cla);
       fail("Should have thrown HelpException but did not!");
@@ -237,6 +295,16 @@ public class ArgumentParserTest {
     assertEquals("optionalArgOneDefaultValue", argCheck.getOptionalArgumentValue("optionalArgOne"));
     assertEquals("typevalue", argCheck.getOptionalArgumentValue("type"));
   
+
+  }
+
+  @Test
+  public void checkDifferentArgumentDataTypes(){
+    String[]cla={"true","7"};
+    argCheck.addArg("isNumber", Argument.DataType.BOOLEAN);
+    argCheck.addArg("length", Argument.DataType.FLOAT);
+    assertEquals( Argument.DataType.BOOLEAN, argCheck.getArgumentDataType("isNumber"));
+    assertEquals(Argument.DataType.FLOAT, argCheck.getArgumentDataType("length"));
 
   }
 
