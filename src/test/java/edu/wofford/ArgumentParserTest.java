@@ -10,7 +10,7 @@ public class ArgumentParserTest {
   @Before
   public final void setup() {
     argCheck = new ArgumentParser("VolumeCalculator", "Calculate the volume of a box.");
-    arhCheckSimple=new ArgumentParser("VolumeCalculator");
+    arhCheckSimple = new ArgumentParser("VolumeCalculator");
 
   }
 
@@ -168,6 +168,20 @@ public class ArgumentParserTest {
   }
 
   @Test
+  public void testSingleBadDataType() {
+    String[] cla = { "--optionalArgOne", "true" };
+    argCheck.addOptionalArgument("optionalArgOne", "6", Argument.DataType.FLOAT);
+    String msg = "usage: java VolumeCalculator optionalArgOne\nVolumeCalculator.java: error: argument optionalArgOne: invalid float value: true";
+    try {
+      argCheck.parse(cla);
+      fail("Should have thrown HelpException but did not!");
+    } catch (HelpException expected) {
+      assertEquals(msg, expected.getMessage());
+    }
+  }
+
+
+  @Test
   public void TestMultipleBadDataTypes() {
     String[] cla = { "yup", "something", "one" };
     argCheck.addArg("length", "the length of the box", Argument.DataType.FLOAT);
@@ -182,7 +196,6 @@ public class ArgumentParserTest {
       assertEquals(msg, expected.getMessage());
     }
   }
-
 
   @Test
   public void TestMultipleBadDataTypesBoolean() {
@@ -234,7 +247,7 @@ public class ArgumentParserTest {
 
   @Test
   public void testOptionalArgumentDefault() {
-    String[] cla = { };
+    String[] cla = {};
     argCheck.addOptionalArgument("optionalArgOne", "optionalArgOneDefaultValue");
     argCheck.parse(cla);
 
@@ -263,7 +276,7 @@ public class ArgumentParserTest {
 
   @Test
   public void testOptionalArgumentWithDifferentConstructor() {
-    String[] cla = { "7"};
+    String[] cla = { "7" };
     argCheck.addArg("length");
     argCheck.addOptionalArgument("optionalArgOne", "optionalArgOneDefaultValue", "this is an optional argument");
     argCheck.parse(cla);
@@ -286,7 +299,7 @@ public class ArgumentParserTest {
 
   @Test
   public void addOptionalArgumentConstructorTests() {
-    String[] cla = { "rip"};
+    String[] cla = { "rip" };
     argCheck.addArg("length");
     argCheck.addOptionalArgument("optionalArgOne", "optionalArgOneDefaultValue", Argument.DataType.STRING,
         "my funeral");
@@ -294,34 +307,32 @@ public class ArgumentParserTest {
     argCheck.parse(cla);
     assertEquals("optionalArgOneDefaultValue", argCheck.getArgumentValue("optionalArgOne"));
     assertEquals("typevalue", argCheck.getArgumentValue("type"));
-  
 
   }
 
   @Test
-  public void checkDifferentArgumentDataTypes(){
-    String[]cla={"true","7"};
+  public void checkDifferentArgumentDataTypes() {
+    String[] cla = { "true", "7" };
     argCheck.addArg("isNumber", Argument.DataType.BOOLEAN);
     argCheck.addArg("length", Argument.DataType.FLOAT);
-    assertEquals( Argument.DataType.BOOLEAN, argCheck.getArgumentDataType("isNumber"));
+    assertEquals(Argument.DataType.BOOLEAN, argCheck.getArgumentDataType("isNumber"));
     assertEquals(Argument.DataType.FLOAT, argCheck.getArgumentDataType("length"));
 
   }
 
-
   @Test
-  public void addOneFlag(){
-    String[]cla={"-y"};
+  public void addOneFlag() {
+    String[] cla = { "-y" };
     argCheck.addFlag("y");
     argCheck.parse(cla);
     assertEquals("true", argCheck.getArgumentValue("y"));
   }
 
   @Test
-  public void throwFlagError(){
-    String[]cla={"-y"};
+  public void throwFlagError() {
+    String[] cla = { "-y" };
     argCheck.addFlag("d");
-    String msg ="argument y does not exist";
+    String msg = "argument y does not exist";
     try {
       argCheck.parse(cla);
       fail("Should have thrown IllegalArgumentException but did not!");
@@ -331,11 +342,11 @@ public class ArgumentParserTest {
   }
 
   @Test
-  public void testMultipleBadFlags(){
-    String[]cla={"-yf"};
+  public void testMultipleBadFlags() {
+    String[] cla = { "-yf" };
     argCheck.addFlag("y");
     argCheck.addFlag("d");
-    String msg ="flag f does not exist";
+    String msg = "flag f does not exist";
     try {
       argCheck.parse(cla);
       fail("Should have thrown IllegalArgumentException but did not!");
@@ -344,40 +355,52 @@ public class ArgumentParserTest {
     }
   }
 
-
-
   @Test
-  public void settingMultipleFlags(){
-    String[]cla={"-yf"};
+  public void settingMultipleFlags() {
+    String[] cla = { "-yf" };
     argCheck.addFlag("y");
     argCheck.addFlag("f");
     argCheck.parse(cla);
 
-      assertEquals("true", argCheck.getArgumentValue("y"));
-      assertEquals("true", argCheck.getArgumentValue("f"));
-    
+    assertEquals("true", argCheck.getArgumentValue("y"));
+    assertEquals("true", argCheck.getArgumentValue("f"));
+
   }
 
   @Test
-  public void settingMultipleFlagsInDifferentOrder(){
-    String[]cla={"-fy"};
+  public void settingMultipleFlagsInDifferentOrder() {
+    String[] cla = { "-fy" };
     argCheck.addFlag("y");
     argCheck.addFlag("f");
     argCheck.parse(cla);
 
-      assertEquals("true", argCheck.getArgumentValue("y"));
-      assertEquals("true", argCheck.getArgumentValue("f"));
+    assertEquals("true", argCheck.getArgumentValue("y"));
+    assertEquals("true", argCheck.getArgumentValue("f"));
   }
 
   @Test
-  public void usingAShortName(){
-    String[]cla={"-d 3"};
+  public void addingTheSameFlagTwiceError() {
+    String[] cla = { "-f" };
+    argCheck.addArg("yuh");
+    argCheck.addArg("fun");
+    argCheck.setArgumentShortFormName("yuh", "d");
+    String msg = "The short form name d is already in uses";
+    try {
+      argCheck.setArgumentShortFormName("fun", "d");
+      fail("Should have thrown IllegalArgumentException but did not!");
+    } catch (IllegalArgumentException expected) {
+      assertEquals(msg, expected.getMessage());
+    }
+  }
+  
+/*
+  @Test
+  public void usingAShortName() {
+    String[] cla = { "-d 3" };
     argCheck.addArg("digits");
     argCheck.setArgumentShortFormName("digits", "d");
     argCheck.parse(cla);
     assertEquals("3", argCheck.getArgumentValue("digits"));
-    
   }
-
+*/
 }
-
