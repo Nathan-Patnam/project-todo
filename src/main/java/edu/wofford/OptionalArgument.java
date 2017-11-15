@@ -19,7 +19,7 @@ public class OptionalArgument extends Argument {
     }
 
 
-    OptionalArgument(String optionalArgumentName, String defaultValue, Argument.DataType datatype, String description) {
+    OptionalArgument(String optionalArgumentName, String defaultValue, String description, Argument.DataType datatype) {
         
         super("--"+optionalArgumentName, description, datatype );
         this.optionalArgumentValue=defaultValue;

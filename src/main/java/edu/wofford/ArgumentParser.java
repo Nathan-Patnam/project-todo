@@ -66,7 +66,7 @@ public class ArgumentParser {
   }
 
   public void addOptionalArgument(String argname, String defaultValue, Argument.DataType dataType, String description) {
-    arguments.put(argname, new OptionalArgument(argname, defaultValue, dataType, description));
+    arguments.put(argname, new OptionalArgument(argname, defaultValue, description, dataType));
     argumentNames.add(argname);
     numberOptionalArguments++;
   }
