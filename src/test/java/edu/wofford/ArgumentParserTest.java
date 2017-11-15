@@ -343,5 +343,41 @@ public class ArgumentParserTest {
       assertEquals(msg, expected.getMessage());
     }
   }
+
+
+
+  @Test
+  public void settingMultipleFlags(){
+    String[]cla={"-yf"};
+    argCheck.addFlag("y");
+    argCheck.addFlag("f");
+    argCheck.parse(cla);
+
+      assertEquals("true", argCheck.getArgumentValue("y"));
+      assertEquals("true", argCheck.getArgumentValue("f"));
+    
+  }
+
+  @Test
+  public void settingMultipleFlagsInDifferentOrder(){
+    String[]cla={"-fy"};
+    argCheck.addFlag("y");
+    argCheck.addFlag("f");
+    argCheck.parse(cla);
+
+      assertEquals("true", argCheck.getArgumentValue("y"));
+      assertEquals("true", argCheck.getArgumentValue("f"));
+  }
+
+  @Test
+  public void usingAShortName(){
+    String[]cla={"-d 3"};
+    argCheck.addArg("digits");
+    argCheck.setArgumentShortFormName("digits", "d");
+    argCheck.parse(cla);
+    assertEquals("3", argCheck.getArgumentValue("digits"));
+    
+  }
+
 }
 

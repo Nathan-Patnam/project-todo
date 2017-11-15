@@ -60,6 +60,9 @@ public class ArgumentParser {
 
   public void setArgumentShortFormName(String argument, String shortFormName) {
     arguments.get(argument).setShortFormName(shortFormName);
+    if(shortToLong.get(shortFormName)!= null || shortFormName.equals("h")){
+      throw new IllegalArgumentException("The short form name " + shortFormName +" is already in uses" );
+    }
     shortToLong.put(shortFormName, argument);
   }
 
@@ -91,6 +94,7 @@ public class ArgumentParser {
   }
 
   public Argument getArgument(String argument) {
+
     return arguments.get(argument);
   }
 
@@ -175,13 +179,13 @@ public class ArgumentParser {
           }
           //argument is a collection of flags
           else if (sname.length() > 1) {
-            for (int j = 0; i < sname.length(); j++) {
+            for (int j = 0; j < sname.length(); j++) {
               String flagIterator = String.valueOf(sname.charAt(j));
-              if (arguments.get(sname) != null) {
+              if (arguments.get(flagIterator) != null) {
                 arguments.get(flagIterator).setValue("true");
                 isArgAFlag = true;
               } else {
-                throw new IllegalArgumentException("flag " + flagIterator + "does not exist");
+                throw new IllegalArgumentException("flag " + flagIterator + " does not exist");
               }
             }
             usedArguments++;
