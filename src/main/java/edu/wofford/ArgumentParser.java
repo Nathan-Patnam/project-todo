@@ -6,6 +6,7 @@ public class ArgumentParser {
   private String programName;
   private String programDescription;
   private Map<String, String> shortToLong;
+ 
   private Map<String, Argument> arguments;
   private ArrayList<String> argumentNames;
 
@@ -19,6 +20,7 @@ public class ArgumentParser {
     arguments = new LinkedHashMap<>();
     argumentNames = new ArrayList<>();
     shortToLong = new HashMap<>();
+
   }
 
   public void addArg(String argname) {
@@ -63,7 +65,12 @@ public class ArgumentParser {
     if(shortToLong.get(shortFormName)!= null || shortFormName.equals("h")){
       throw new IllegalArgumentException("The short form name " + shortFormName +" is already in uses" );
     }
+
+    //idea is to put in shortForName and argument, so we can do reverse lookups in O(1) time.
+    // two caveats, all values  have to be unique and values cant be used on top of another another 
     shortToLong.put(shortFormName, argument);
+
+
   }
 
   public void addFlag(String argname) {
@@ -103,14 +110,17 @@ public class ArgumentParser {
   }
 
   public String getArgumentDescription(String argument) {
+  
     return arguments.get(argument).getDescription();
   }
 
   public Argument.DataType getArgumentDataType(String argument) {
+  
     return arguments.get(argument).getDataType();
   }
 
   public String getArgumentDataTypeString(String argument) {
+   
     return arguments.get(argument).getDataType().toString();
   }
 
@@ -196,15 +206,20 @@ public class ArgumentParser {
           if (aname == null && !isArgAFlag) {
             throw new IllegalArgumentException("argument " + args[i].substring(1) + " does not exist");
           }
+          else{
+            usedArguments++;
+          }
         }
 
         Argument a = arguments.get(aname);
         if (a.getDataType() == Argument.DataType.BOOLEAN) {
           a.setValue("true");
-        } else {
+        } 
+        else {
           if (checkType(args[i + 1], a.getDataType())) {
             a.setValue(args[i + 1]);
             i++;
+            //usedArguments++;
           } else {
             // Throw some exception
             String message = "";

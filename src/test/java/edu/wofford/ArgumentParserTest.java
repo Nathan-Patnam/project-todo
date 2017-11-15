@@ -361,10 +361,8 @@ public class ArgumentParserTest {
     argCheck.addFlag("y");
     argCheck.addFlag("f");
     argCheck.parse(cla);
-
     assertEquals("true", argCheck.getArgumentValue("y"));
     assertEquals("true", argCheck.getArgumentValue("f"));
-
   }
 
   @Test
@@ -393,14 +391,27 @@ public class ArgumentParserTest {
     }
   }
   
-/*
+
   @Test
   public void usingAShortName() {
-    String[] cla = { "-d 3" };
+    String[] cla = { "-d" , "3" };
     argCheck.addArg("digits");
     argCheck.setArgumentShortFormName("digits", "d");
     argCheck.parse(cla);
     assertEquals("3", argCheck.getArgumentValue("digits"));
   }
-*/
+
+  @Test
+  public void usingAShortNameForTwoArguments() {
+    String[] cla = { "-d", "3","-f","1" };
+    argCheck.addArg("digits");
+    argCheck.setArgumentShortFormName("digits", "d");
+    argCheck.addArg("fucksGiven");
+    argCheck.setArgumentShortFormName("fucksGiven", "f");
+    argCheck.parse(cla);
+    assertEquals("3", argCheck.getArgumentValue("digits"));
+    assertEquals("1", argCheck.getArgumentValue("fucksGiven"));
+  }
+
+
 }
