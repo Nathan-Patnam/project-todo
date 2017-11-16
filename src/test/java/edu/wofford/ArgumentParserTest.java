@@ -329,6 +329,16 @@ public class ArgumentParserTest {
   }
 
   @Test
+  public void addOneFlagSetValue() {
+    String[] cla = { "-y", "7" };
+    argCheck.addFlag("y");
+    argCheck.addArg("length");
+    argCheck.parse(cla);
+    assertEquals("true", argCheck.getArgumentValue("y"));
+    assertEquals("7", argCheck.getArgumentValue("length"));
+  }
+
+  @Test
   public void throwFlagError() {
     String[] cla = { "-y" };
     argCheck.addFlag("d");
@@ -414,7 +424,22 @@ public class ArgumentParserTest {
   }
 
   //time to throw errors like it's the Oprah Show
+  @Test
+  public void TestArgumentDoesntExist() {
+    String[] cla = { "7", "--myarg","myval","3","2" };
+    argCheck.addArg("length");
+    argCheck.addArg("width");
+    argCheck.addArg("height");
+   
+    String msg = "argument " + "myarg" + " does not exist";
+    try {
+      argCheck.parse(cla);
+      fail("Should have thrown IllegalArgumentException but did not!");
+    } catch (IllegalArgumentException expected) {
+      assertEquals(msg, expected.getMessage());
+    }
 
+  }
   
 
 

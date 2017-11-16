@@ -114,7 +114,7 @@ public class ArgumentParser {
  * and if the argument doesn't exist then an error will be thrown.
  * @param  argument  the name of the arugment you want the value of
  * @return           the value associated with that argument
- * @throws 
+ * @throws  
  */
   public String getArgumentValue(String argument) {
     return arguments.get(argument).getValue();
@@ -197,6 +197,10 @@ public class ArgumentParser {
       } else if (args[i].startsWith("-")) {
         if (args[i].startsWith("--")) {
           aname = args[i].substring(2);
+          if(arguments.get(aname) == null){
+            throw new IllegalArgumentException("argument " + args[i].substring(2) + " does not exist");
+          }
+
         } else {
           String sname = args[i].substring(1);
           //argument is a flag
