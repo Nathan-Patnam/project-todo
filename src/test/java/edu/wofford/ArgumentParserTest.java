@@ -413,5 +413,9 @@ public class ArgumentParserTest {
     assertEquals("1", argCheck.getArgumentValue("fucksGiven"));
   }
 
+  //time to throw errors like it's the Oprah Show
+
+  
+
 
 }

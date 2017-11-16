@@ -219,7 +219,6 @@ public class ArgumentParser {
           if (checkType(args[i + 1], a.getDataType())) {
             a.setValue(args[i + 1]);
             i++;
-            //usedArguments++;
           } else {
             // Throw some exception
             String message = "";
