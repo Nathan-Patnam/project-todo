@@ -1,3 +1,4 @@
+
 buildscript {
     dependencies {
         classpath files(mkdir('build/classes/main'))
@@ -24,13 +25,23 @@ jar {
     }
 }
 
+
+
+
+
 task uberjar(type: OneJar) {
     mainClass = mainClassName
 }
 
+
+
+
 repositories {
     mavenCentral()
 }
+
+
+
 
 dependencies {
     testCompile 'junit:junit:4+'
@@ -47,5 +58,7 @@ jacocoTestReport {
 runrobot.debugfile = 'debug.log'
 runrobot.dependsOn test
 
-
-
+javadoc {
+source = sourceSets.main.allJava
+classpath = configurations.compile
+}

@@ -100,15 +100,34 @@ public class ArgumentParser {
     }
   }
 
+
+
+
   public Argument getArgument(String argument) {
 
     return arguments.get(argument);
   }
 
+
+  /**
+ * Returns the value that the argument holds. If no value has been set for the argument then it will return null
+ * and if the argument doesn't exist then an error will be thrown.
+ * @param  argument  the name of the arugment you want the value of
+ * @return           the value associated with that argument
+ * @throws 
+ */
   public String getArgumentValue(String argument) {
     return arguments.get(argument).getValue();
   }
 
+
+
+  /**
+ * Returns the description of the argument. If no description has been set for the argument then it will
+ * return a empty string. If the arugment doesn't exists and error will be thrown.
+ * @param  argument  the name of the arugment you want the description of
+ * @return           the value associated with that argument
+ */
   public String getArgumentDescription(String argument) {
   
     return arguments.get(argument).getDescription();
@@ -183,7 +202,6 @@ public class ArgumentParser {
           //argument is a flag
           if (arguments.get(sname) != null) {
             arguments.get(sname).setValue("true");
-            usedArguments++;
             isArgAFlag = true;
             continue;
           }
