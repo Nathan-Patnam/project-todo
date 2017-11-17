@@ -41,23 +41,22 @@ public class ArgumentParser {
   }
 
   public void addOptionalArgument(String argname, String defaultValue) {
-    arguments.put(argname, new OptionalArgument(argname, defaultValue));
+    addOptionalArgument(argname, defaultValue, Argument.DataType.STRING, "");
 
   }
 
   public void addOptionalArgument(String argname, String defaultValue, String description) {
-    arguments.put(argname, new OptionalArgument(argname, defaultValue, description));
+    addOptionalArgument(argname, defaultValue, Argument.DataType.STRING, description);
 
   }
 
   public void addOptionalArgument(String argname, String defaultValue, Argument.DataType dataType) {
-    arguments.put(argname, new OptionalArgument(argname, defaultValue, dataType));
+    addOptionalArgument(argname, defaultValue, dataType, "");
 
   }
 
   public void addOptionalArgument(String argname, String defaultValue, Argument.DataType dataType, String description) {
     arguments.put(argname, new OptionalArgument(argname, defaultValue, dataType, description));
-
   }
 
   public void setArgumentShortFormName(String argument, String shortFormName) {
@@ -194,7 +193,8 @@ public class ArgumentParser {
       if (args[i].equals("-h") || args[i].equals("--help")) {
         String message = getHelpMessage();
         throw new HelpException(message);
-      } else if (args[i].startsWith("-")) {
+      } 
+      else if (args[i].startsWith("-")) {
         if (args[i].startsWith("--")) {
           aname = args[i].substring(2);
           if(arguments.get(aname) == null){

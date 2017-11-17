@@ -1,32 +1,29 @@
 
 import edu.wofford.*;
 // javac -cp .:../build/libs/argparse-1.0.jar BoxVolumeCalculator.java  
-// java -cp .:../build/libs/argparse-1.0.jar BoxVolumeCalculator 7 --decimalPlaces 3 3 2  unique sides
-// java -cp .:../build/libs/argparse-1.0.jar BoxVolumeCalculator -m 7 --decimalPlaces 3 3 2  metric sides
-// java -cp .:../build/libs/argparse-1.0.jar BoxVolumeCalculator 7 --decimalPlaces 3 3 2  non-metric sides
+// java -cp .:../build/libs/argparse-1.0.jar BoxVolumeCalculator 7 --width 3 --height 2 (unique sides)
+// java -cp .:../build/libs/argparse-1.0.jar BoxVolumeCalculator -sp 7  flag exists, but p does not
+// java -cp .:../build/libs/argparse-1.0.jar BoxVolumeCalculator -s 7  same sides
 
 public class BoxVolumeCalculator {
     public static void main(String[] args) {
         ArgumentParser argchecker = new ArgumentParser("VolumeCalculator",
                 "a program that calculates the volume of a ellipsoid");
-        argchecker.addFlag("m");
+        argchecker.addFlag("s");
         argchecker.addArg("length", "length of the box", Argument.DataType.FLOAT);
-        argchecker.addOptionalArgument("decimalPlaces", "2", Argument.DataType.INT,
-                "desired accuracy of calculated volume");
-        argchecker.addArg("width", "width of the ellipsoid", Argument.DataType.FLOAT);
-        argchecker.addArg("height", "height of the ellipsoid", Argument.DataType.FLOAT);
+        argchecker.addOptionalArgument("width", "1", Argument.DataType.FLOAT);
+        argchecker.addOptionalArgument("height", "1", Argument.DataType.FLOAT);
         argchecker.parse(args);
 
         String desiredVolume;
         float length = Float.parseFloat(argchecker.getArgumentValue("length"));
-        String desiredDecimals = argchecker.getArgumentValue("decimalPlaces");
-        if (argchecker.getArgumentValue("m").equals("true")) {
-            desiredVolume = String.format("%." + desiredDecimals + "f", (length * length * length));
-            System.out.println("The volume of the cube is " + desiredVolume + " liters");
+        if (argchecker.getArgumentValue("s").equals("true")) {
+            desiredVolume = String.valueOf(length * length * length);
+            System.out.println("The volume of the cube is " + desiredVolume + " gallons");
         } else {
-            float height = Float.parseFloat(argchecker.getArgumentValue("length"));
-            float width = Float.parseFloat(argchecker.getArgumentValue("length"));
-            desiredVolume = String.format("%." + desiredDecimals + "f", (length * width * height));
+            float height = Float.parseFloat(argchecker.getArgumentValue("height"));
+            float width = Float.parseFloat(argchecker.getArgumentValue("width"));
+            desiredVolume = String.valueOf(length * height * width);
             System.out.println("The volume of the box is " + desiredVolume + " gallons");
         }
 

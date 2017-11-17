@@ -5,7 +5,7 @@ import edu.wofford.*;
 // java -cp .:../build/libs/argparse-1.0.jar EllipsoidCalculator 7 --decimalPlaces 3 3 -t ellipsoid 2 2     to many arguments
 // java -cp .:../build/libs/argparse-1.0.jar EllipsoidCalculator 7 --decimalPlaces 3 3 -t ellipsoid      to few arguments
 // java -cp .:../build/libs/argparse-1.0.jar EllipsoidCalculator 7 --decimalPlaces 3  3 -t ellipsoid two   bad datatypes
-// java -cp .:../build/libs/argparse-1.0.jar EllipsoidCalculator 7 --decimalPlaces 3  3 -tp ellipsoid 2    adding a flag that doesn't exist  
+// java -cp .:../build/libs/argparse-1.0.jar EllipsoidCalculator 7 --decimalPlaces 3 --someval 2 3 -tp ellipsoid 2    adding a argument that doesn't exist  
 // java -cp .:../build/libs/argparse-1.0.jar EllipsoidCalculator 7 --decimalPlaces 3  3 -t ellipsoid 2   one optional Argument is set/one is left as default value and a optional Argument is given a default value
 
 
