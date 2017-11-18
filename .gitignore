@@ -13,3 +13,13 @@ gradle-app.setting
 
 # # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
 # gradle/wrapper/gradle-wrapper.properties
+
+*.class
+
+*.class
+
+bin/edu/wofford/Argument.class
+
+*.class
+
+bin/edu/wofford/Argument$DataType.class
