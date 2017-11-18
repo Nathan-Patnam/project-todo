@@ -12,20 +12,20 @@ import edu.wofford.*;
 
 public class EllipsoidCalculator {
             public static void main(String[] args) {
-                ArgumentParser argchecker = new ArgumentParser("VolumeCalculator", "a program that calculates the volume of a ellipsoid");
-                argchecker.addArg("length", "length of the ellipsoid",Argument.DataType.FLOAT);
-                argchecker.addOptionalArgument("units", "gallons", Argument.DataType.STRING, "units that the measurements and volume will be given in" );
-                argchecker.addOptionalArgument("decimalPlaces", "2", Argument.DataType.INT, "desired accuracy of calculated volume");
-                argchecker.addArg("width", "width of the ellipsoid",Argument.DataType.FLOAT);
-                argchecker.addArg("type", "shape you want to calculate the volume of",Argument.DataType.STRING);
-                argchecker.setArgumentShortFormName("type", "t");
-                argchecker.addArg("height", "height of the ellipsoid",Argument.DataType.FLOAT);
+                ArgParser argchecker = new ArgParser("VolumeCalculator", "a program that calculates the volume of a ellipsoid");
+                argchecker.addArg("length", "length of the ellipsoid",Arg.DataType.FLOAT);
+                argchecker.addOptArg("units", "gallons", Arg.DataType.STRING, "units that the measurements and volume will be given in" );
+                argchecker.addOptArg("decimalPlaces", "2", Arg.DataType.INT, "desired accuracy of calculated volume");
+                argchecker.addArg("width", "width of the ellipsoid",Arg.DataType.FLOAT);
+                argchecker.addArg("type", "shape you want to calculate the volume of",Arg.DataType.STRING);
+                argchecker.setArgShortFormName("type", "t");
+                argchecker.addArg("height", "height of the ellipsoid",Arg.DataType.FLOAT);
                 argchecker.parse(args);
 
-                float length = Float.parseFloat(argchecker.getArgumentValue("length"));
-                float height = Float.parseFloat(argchecker.getArgumentValue("length"));
-                float width = Float.parseFloat(argchecker.getArgumentValue("length"));
-                String desiredDecimals= argchecker.getArgumentValue("decimalPlaces");
+                float length = Float.parseFloat(argchecker.getArgValue("length"));
+                float height = Float.parseFloat(argchecker.getArgValue("height"));
+                float width = Float.parseFloat(argchecker.getArgValue("width"));
+                String desiredDecimals= argchecker.getArgValue("decimalPlaces");
                 String desiredVolume= String.format("%." + desiredDecimals+ "f", (length *width*height * Math.PI * (4/3)));
                 System.out.println("The volume of the ellipsoid is " + desiredVolume +"." );
 

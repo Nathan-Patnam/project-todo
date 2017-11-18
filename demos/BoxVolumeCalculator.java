@@ -7,22 +7,22 @@ import edu.wofford.*;
 
 public class BoxVolumeCalculator {
     public static void main(String[] args) {
-        ArgumentParser argchecker = new ArgumentParser("VolumeCalculator",
+        ArgParser argchecker = new ArgParser("VolumeCalculator",
                 "a program that calculates the volume of a ellipsoid");
         argchecker.addFlag("s");
-        argchecker.addArg("length", "length of the box", Argument.DataType.FLOAT);
-        argchecker.addOptionalArgument("width", "1", Argument.DataType.FLOAT);
-        argchecker.addOptionalArgument("height", "1", Argument.DataType.FLOAT);
+        argchecker.addArg("length", "length of the box", Arg.DataType.FLOAT);
+        argchecker.addOptArg("width", "1", Arg.DataType.FLOAT);
+        argchecker.addOptArg("height", "1", Arg.DataType.FLOAT);
         argchecker.parse(args);
 
         String desiredVolume;
-        float length = Float.parseFloat(argchecker.getArgumentValue("length"));
-        if (argchecker.getArgumentValue("s").equals("true")) {
+        float length = Float.parseFloat(argchecker.getArgValue("length"));
+        if (argchecker.getArgValue("s").equals("true")) {
             desiredVolume = String.valueOf(length * length * length);
             System.out.println("The volume of the cube is " + desiredVolume + " gallons");
         } else {
-            float height = Float.parseFloat(argchecker.getArgumentValue("height"));
-            float width = Float.parseFloat(argchecker.getArgumentValue("width"));
+            float height = Float.parseFloat(argchecker.getArgValue("height"));
+            float width = Float.parseFloat(argchecker.getArgValue("width"));
             desiredVolume = String.valueOf(length * height * width);
             System.out.println("The volume of the box is " + desiredVolume + " gallons");
         }

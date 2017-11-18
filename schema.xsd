@@ -8,10 +8,10 @@ elementFormDefault="qualified">
 <!--Types of dataTypes arguments can be-->
 <simpleType name="DataType">
   <restriction base="xs:string">
-    <enumeration value="Argument.DataType.STRING"/>
-    <enumeration value="Argument.DataType.INT"/>
-    <enumeration value="Argument.DataType.FLOAT"/>
-    <enumeration value="Argument.DataType.BOOLEAN"/>
+    <enumeration value="STRING"/>
+    <enumeration value="INT"/>
+    <enumeration value="FLOAT"/>
+    <enumeration value="ABOOLEAN"/>
   </restriction>
 </simpleType>
 
@@ -59,7 +59,7 @@ elementFormDefault="qualified">
   <complexType>
     <xsequence>
       <element name="name" type="xs:string"/>
-      <element name="present" type="xs:boolean">
+      <element name="value" type="xs:boolean">
     </sequence>
   </complexType>
 </element>

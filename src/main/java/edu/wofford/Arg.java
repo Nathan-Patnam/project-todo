@@ -1,6 +1,6 @@
 package edu.wofford;
 
-public class Argument {
+public class Arg {
   public enum DataType {
     STRING("string"), 
     INT("int"), 
@@ -21,7 +21,7 @@ public class Argument {
 
 
 
-  public Argument(String name, String description, DataType dataType) {
+  public Arg(String name, String description, DataType dataType) {
     this.name = name;
     this.description = description;
     this.dataType = dataType;

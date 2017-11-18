@@ -2,19 +2,19 @@ package edu.wofford;
 
 import java.util.*;
 
-public class ArgumentParser {
+public class ArgParser {
   private String programName;
   private String programDescription;
   private Map<String, String> shortToLong;
  
-  private Map<String, Argument> arguments;
+  private Map<String, Arg> arguments;
   private ArrayList<String> argumentNames;
 
-  public ArgumentParser(String programName) {
+  public ArgParser(String programName) {
     this(programName, "");
   }
 
-  public ArgumentParser(String programName, String description) {
+  public ArgParser(String programName, String description) {
     this.programName = programName;
     this.programDescription = description;
     arguments = new LinkedHashMap<>();
@@ -24,42 +24,42 @@ public class ArgumentParser {
   }
 
   public void addArg(String argname) {
-    addArg(argname, "", Argument.DataType.STRING);
+    addArg(argname, "", Arg.DataType.STRING);
   }
 
   public void addArg(String argname, String description) {
-    addArg(argname, description, Argument.DataType.STRING);
+    addArg(argname, description, Arg.DataType.STRING);
   }
 
-  public void addArg(String argname, Argument.DataType dataType) {
+  public void addArg(String argname, Arg.DataType dataType) {
     addArg(argname, "", dataType);
   }
 
-  public void addArg(String argname, String description, Argument.DataType dataType) {
-    arguments.put(argname, new Argument(argname, description, dataType));
+  public void addArg(String argname, String description, Arg.DataType dataType) {
+    arguments.put(argname, new Arg(argname, description, dataType));
     argumentNames.add(argname);
   }
 
-  public void addOptionalArgument(String argname, String defaultValue) {
-    addOptionalArgument(argname, defaultValue, Argument.DataType.STRING, "");
+  public void addOptArg(String argname, String defaultValue) {
+    addOptArg(argname, defaultValue, Arg.DataType.STRING, "");
 
   }
 
-  public void addOptionalArgument(String argname, String defaultValue, String description) {
-    addOptionalArgument(argname, defaultValue, Argument.DataType.STRING, description);
+  public void addOptArg(String argname, String defaultValue, String description) {
+    addOptArg(argname, defaultValue, Arg.DataType.STRING, description);
 
   }
 
-  public void addOptionalArgument(String argname, String defaultValue, Argument.DataType dataType) {
-    addOptionalArgument(argname, defaultValue, dataType, "");
+  public void addOptArg(String argname, String defaultValue, Arg.DataType dataType) {
+    addOptArg(argname, defaultValue, dataType, "");
 
   }
 
-  public void addOptionalArgument(String argname, String defaultValue, Argument.DataType dataType, String description) {
-    arguments.put(argname, new OptionalArgument(argname, defaultValue, dataType, description));
+  public void addOptArg(String argname, String defaultValue, Arg.DataType dataType, String description) {
+    arguments.put(argname, new OptArg(argname, defaultValue, dataType, description));
   }
 
-  public void setArgumentShortFormName(String argument, String shortFormName) {
+  public void setArgShortFormName(String argument, String shortFormName) {
     arguments.get(argument).setShortFormName(shortFormName);
     if(shortToLong.get(shortFormName)!= null || shortFormName.equals("h")){
       throw new IllegalArgumentException("The short form name " + shortFormName +" is already in uses" );
@@ -73,10 +73,10 @@ public class ArgumentParser {
   }
 
   public void addFlag(String argname) {
-    arguments.put(argname, new OptionalArgument(argname, false, Argument.DataType.BOOLEAN));
+    arguments.put(argname, new OptArg( argname,false, Arg.DataType.BOOLEAN));
   }
 
-  private boolean checkType(String value, Argument.DataType type) {
+  private boolean checkType(String value, Arg.DataType type) {
     switch (type) {
     case BOOLEAN:
       return (value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false"));
@@ -102,7 +102,7 @@ public class ArgumentParser {
 
 
 
-  public Argument getArgument(String argument) {
+  public Arg getArgument(String argument) {
 
     return arguments.get(argument);
   }
@@ -115,7 +115,7 @@ public class ArgumentParser {
  * @return           the value associated with that argument
  * @throws  
  */
-  public String getArgumentValue(String argument) {
+  public String getArgValue(String argument) {
     return arguments.get(argument).getValue();
   }
 
@@ -127,17 +127,17 @@ public class ArgumentParser {
  * @param  argument  the name of the arugment you want the description of
  * @return           the value associated with that argument
  */
-  public String getArgumentDescription(String argument) {
+  public String getArgDescription(String argument) {
   
     return arguments.get(argument).getDescription();
   }
 
-  public Argument.DataType getArgumentDataType(String argument) {
+  public Arg.DataType getArgDataType(String argument) {
   
     return arguments.get(argument).getDataType();
   }
 
-  public String getArgumentDataTypeString(String argument) {
+  public String getArgDataTypeString(String argument) {
    
     return arguments.get(argument).getDataType().toString();
   }
@@ -150,7 +150,7 @@ public class ArgumentParser {
       if (argNameIterator.equals("help") || argNameIterator.equals("h")) {
         continue;
       } else {
-        Argument currentArgumentIterator = arguments.get(argNameIterator);
+        Arg currentArgumentIterator = arguments.get(argNameIterator);
         message += "\n   " + argNameIterator + " " + currentArgumentIterator.getDescription() + " ("
             + currentArgumentIterator.getDataType().toString() + ")";
       }
@@ -158,7 +158,7 @@ public class ArgumentParser {
     return message;
   }
 
-  public int getNumberArguments() {
+  public int getNumberArgs() {
     return arguments.size();
   }
 
@@ -233,8 +233,8 @@ public class ArgumentParser {
           }
         }
 
-        Argument a = arguments.get(aname);
-        if (a.getDataType() == Argument.DataType.BOOLEAN) {
+        Arg a = arguments.get(aname);
+        if (a.getDataType() == Arg.DataType.BOOLEAN) {
           a.setValue("true");
         } 
         else {
@@ -260,7 +260,7 @@ public class ArgumentParser {
           throw new TooManyArguments(message);
         } else {
           aname = argumentNames.get(usedArguments);
-          Argument a = arguments.get(aname);
+          Arg a = arguments.get(aname);
           if (checkType(args[i], a.getDataType())) {
             a.setValue(args[i]);
             usedArguments++;

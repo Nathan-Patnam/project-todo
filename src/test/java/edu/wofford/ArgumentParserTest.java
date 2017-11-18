@@ -4,13 +4,13 @@ import static org.junit.Assert.*;
 import org.junit.*;
 
 public class ArgumentParserTest {
-  private ArgumentParser argCheck;
-  private ArgumentParser arhCheckSimple;
+  private ArgParser argCheck;
+  private ArgParser arhCheckSimple;
 
   @Before
   public final void setup() {
-    argCheck = new ArgumentParser("VolumeCalculator", "Calculate the volume of a box.");
-    arhCheckSimple = new ArgumentParser("VolumeCalculator");
+    argCheck = new ArgParser("VolumeCalculator", "Calculate the volume of a box.");
+    arhCheckSimple = new ArgParser("VolumeCalculator");
 
   }
 
@@ -34,19 +34,19 @@ public class ArgumentParserTest {
   public final void testOneProgramArgument() {
     argCheck.addArg("length");
     argCheck.getArgument("length").setDescription("side of a box");
-    assertEquals("side of a box", argCheck.getArgumentDescription("length"));
+    assertEquals("side of a box", argCheck.getArgDescription("length"));
   }
 
   @Test
   public final void testGetNumArguments() {
-    assertEquals(0, argCheck.getNumberArguments());
+    assertEquals(0, argCheck.getNumberArgs());
   }
 
   @Test
   public final void testAddArgument() {
-    assertEquals(0, argCheck.getNumberArguments());
+    assertEquals(0, argCheck.getNumberArgs());
     argCheck.addArg("length");
-    assertEquals(1, argCheck.getNumberArguments());
+    assertEquals(1, argCheck.getNumberArgs());
   }
 
   @Test(expected = TooFewArguments.class)
@@ -123,40 +123,40 @@ public class ArgumentParserTest {
     argCheck.addArg("length");
     String[] cla = { "5" };
     argCheck.parse(cla);
-    assertEquals("5", argCheck.getArgumentValue("length"));
+    assertEquals("5", argCheck.getArgValue("length"));
   }
 
   @Test
   public void addDataType() {
     argCheck.addArg("length");
-    argCheck.getArgument("length").setDataType(Argument.DataType.FLOAT);
-    assertEquals(Argument.DataType.FLOAT, argCheck.getArgumentDataType("length"));
+    argCheck.getArgument("length").setDataType(Arg.DataType.FLOAT);
+    assertEquals(Arg.DataType.FLOAT, argCheck.getArgDataType("length"));
   }
 
   @Test
   public void TestgetDataType() {
-    argCheck.addArg("Length", "Length of the box.", Argument.DataType.FLOAT);
-    assertEquals("float", argCheck.getArgumentDataTypeString("Length"));
+    argCheck.addArg("Length", "Length of the box.", Arg.DataType.FLOAT);
+    assertEquals("float", argCheck.getArgDataTypeString("Length"));
   }
 
   @Test
   public void TestGetDefaultStringType() {
     argCheck.addArg("Length");
-    assertEquals(Argument.DataType.STRING, argCheck.getArgumentDataType("Length"));
+    assertEquals(Arg.DataType.STRING, argCheck.getArgDataType("Length"));
   }
 
   @Test
   public void Test2ParamConstructor() {
-    argCheck.addArg("Length", Argument.DataType.FLOAT);
-    assertEquals(Argument.DataType.FLOAT, argCheck.getArgumentDataType("Length"));
+    argCheck.addArg("Length", Arg.DataType.FLOAT);
+    assertEquals(Arg.DataType.FLOAT, argCheck.getArgDataType("Length"));
   }
 
   @Test
   public void TestValidDataTypes() {
     String[] cla = { "3", "something", "3.0" };
-    argCheck.addArg("length", "the length of the box", Argument.DataType.FLOAT);
-    argCheck.addArg("width", "the width of the box", Argument.DataType.FLOAT);
-    argCheck.addArg("height", "the height of the box", Argument.DataType.FLOAT);
+    argCheck.addArg("length", "the length of the box", Arg.DataType.FLOAT);
+    argCheck.addArg("width", "the width of the box", Arg.DataType.FLOAT);
+    argCheck.addArg("height", "the height of the box", Arg.DataType.FLOAT);
 
     String msg = "usage: java VolumeCalculator length width height\nVolumeCalculator.java: error: argument width: invalid float value: something";
     try {
@@ -170,7 +170,7 @@ public class ArgumentParserTest {
   @Test
   public void testSingleBadDataType() {
     String[] cla = { "--optionalArgOne", "true" };
-    argCheck.addOptionalArgument("optionalArgOne", "6", Argument.DataType.FLOAT);
+    argCheck.addOptArg("optionalArgOne", "6", Arg.DataType.FLOAT);
     String msg = "usage: java VolumeCalculator optionalArgOne\nVolumeCalculator.java: error: argument optionalArgOne: invalid float value: true";
     try {
       argCheck.parse(cla);
@@ -184,9 +184,9 @@ public class ArgumentParserTest {
   @Test
   public void TestMultipleBadDataTypes() {
     String[] cla = { "yup", "something", "one" };
-    argCheck.addArg("length", "the length of the box", Argument.DataType.FLOAT);
-    argCheck.addArg("width", "the width of the box", Argument.DataType.BOOLEAN);
-    argCheck.addArg("height", "the height of the box", Argument.DataType.INT);
+    argCheck.addArg("length", "the length of the box", Arg.DataType.FLOAT);
+    argCheck.addArg("width", "the width of the box", Arg.DataType.BOOLEAN);
+    argCheck.addArg("height", "the height of the box", Arg.DataType.INT);
 
     String msg = "usage: java VolumeCalculator length width height\nVolumeCalculator.java: error: argument length: invalid float value: yup";
     try {
@@ -200,9 +200,9 @@ public class ArgumentParserTest {
   @Test
   public void TestMultipleBadDataTypesBoolean() {
     String[] cla = { "yup", "something", "one" };
-    argCheck.addArg("length", "the length of the box", Argument.DataType.BOOLEAN);
-    argCheck.addArg("width", "the width of the box", Argument.DataType.BOOLEAN);
-    argCheck.addArg("height", "the height of the box", Argument.DataType.INT);
+    argCheck.addArg("length", "the length of the box", Arg.DataType.BOOLEAN);
+    argCheck.addArg("width", "the width of the box", Arg.DataType.BOOLEAN);
+    argCheck.addArg("height", "the height of the box", Arg.DataType.INT);
 
     String msg = "usage: java VolumeCalculator length width height\nVolumeCalculator.java: error: argument length: invalid boolean value: yup";
     try {
@@ -216,9 +216,9 @@ public class ArgumentParserTest {
   @Test
   public void TestMultipleBadDataTypesInt() {
     String[] cla = { "7", "something", "one" };
-    argCheck.addArg("length", "the length of the box", Argument.DataType.INT);
-    argCheck.addArg("width", "the width of the box", Argument.DataType.INT);
-    argCheck.addArg("height", "the height of the box", Argument.DataType.INT);
+    argCheck.addArg("length", "the length of the box", Arg.DataType.INT);
+    argCheck.addArg("width", "the width of the box", Arg.DataType.INT);
+    argCheck.addArg("height", "the height of the box", Arg.DataType.INT);
 
     String msg = "usage: java VolumeCalculator length width height\nVolumeCalculator.java: error: argument width: invalid int value: something";
     try {
@@ -232,9 +232,9 @@ public class ArgumentParserTest {
   @Test
   public void TestBadArguments() {
     String[] cla = { "yup", "something", "one" };
-    argCheck.addArg("length", "the length of the box", Argument.DataType.FLOAT);
-    argCheck.addArg("width", "the width of the box", Argument.DataType.BOOLEAN);
-    argCheck.addArg("height", "the height of the box", Argument.DataType.INT);
+    argCheck.addArg("length", "the length of the box", Arg.DataType.FLOAT);
+    argCheck.addArg("width", "the width of the box", Arg.DataType.BOOLEAN);
+    argCheck.addArg("height", "the height of the box", Arg.DataType.INT);
 
     String msg = "usage: java VolumeCalculator length width height\nVolumeCalculator.java: error: argument length: invalid float value: yup";
     try {
@@ -248,52 +248,65 @@ public class ArgumentParserTest {
   @Test
   public void testOptionalArgumentDefault() {
     String[] cla = {};
-    argCheck.addOptionalArgument("optionalArgOne", "optionalArgOneDefaultValue");
+    argCheck.addOptArg("optionalArgOne", "optionalArgOneDefaultValue");
     argCheck.parse(cla);
 
-    assertEquals("optionalArgOneDefaultValue", argCheck.getArgumentValue("optionalArgOne"));
+    assertEquals("optionalArgOneDefaultValue", argCheck.getArgValue("optionalArgOne"));
   }
 
   @Test
   public void testOptionalArgumentSetValue() {
     String[] cla = { "--optionalArgOne", "8" };
-    argCheck.addOptionalArgument("optionalArgOne", "optionalArgOneDefaultValue");
+    argCheck.addOptArg("optionalArgOne", "optionalArgOneDefaultValue");
     argCheck.parse(cla);
 
-    assertEquals("8", argCheck.getArgumentValue("optionalArgOne"));
+    assertEquals("8", argCheck.getArgValue("optionalArgOne"));
+  }
+
+  @Test
+  public void testOptionalArgumentAllConstructors() {
+    String[] cla = { "--length", "8" };
+    argCheck.addOptArg("length", "3");
+    argCheck.addOptArg("height", "4", "height of box");
+    argCheck.addOptArg("width", "5", Arg.DataType.FLOAT);
+    argCheck.parse(cla);
+
+    assertEquals("8", argCheck.getArgValue("length"));
+    assertEquals("height of box", argCheck.getArgDescription("height"));
+    assertEquals(Arg.DataType.FLOAT, argCheck.getArgDataType("width"));
   }
 
   @Test
   public void testOptionalArgument() {
     String[] cla = { "7" };
     argCheck.addArg("length");
-    argCheck.addOptionalArgument("optionalArgOne", "optionalArgOneDefaultValue");
+    argCheck.addOptArg("optionalArgOne", "optionalArgOneDefaultValue");
     argCheck.parse(cla);
 
-    assertEquals("7", argCheck.getArgumentValue("length"));
-    assertEquals("optionalArgOneDefaultValue", argCheck.getArgumentValue("optionalArgOne"));
+    assertEquals("7", argCheck.getArgValue("length"));
+    assertEquals("optionalArgOneDefaultValue", argCheck.getArgValue("optionalArgOne"));
   }
 
   @Test
   public void testOptionalArgumentWithDifferentConstructor() {
     String[] cla = { "7" };
     argCheck.addArg("length");
-    argCheck.addOptionalArgument("optionalArgOne", "optionalArgOneDefaultValue", "this is an optional argument");
+    argCheck.addOptArg("optionalArgOne", "optionalArgOneDefaultValue", "this is an optional argument");
     argCheck.parse(cla);
 
-    assertEquals("7", argCheck.getArgumentValue("length"));
-    assertEquals("optionalArgOneDefaultValue", argCheck.getArgumentValue("optionalArgOne"));
-    assertEquals("this is an optional argument", argCheck.getArgumentDescription("optionalArgOne"));
+    assertEquals("7", argCheck.getArgValue("length"));
+    assertEquals("optionalArgOneDefaultValue", argCheck.getArgValue("optionalArgOne"));
+    assertEquals("this is an optional argument", argCheck.getArgDescription("optionalArgOne"));
   }
 
   @Test
   public void getDataTypeOptionaArgument() {
     String[] cla = { "rip" };
     argCheck.addArg("length");
-    argCheck.addOptionalArgument("optionalArgOne", "optionalArgOneDefaultValue", Argument.DataType.STRING);
+    argCheck.addOptArg("optionalArgOne", "optionalArgOneDefaultValue", Arg.DataType.STRING);
     argCheck.parse(cla);
 
-    assertEquals(Argument.DataType.STRING, argCheck.getArgumentDataType("optionalArgOne"));
+    assertEquals(Arg.DataType.STRING, argCheck.getArgDataType("optionalArgOne"));
 
   }
 
@@ -301,22 +314,22 @@ public class ArgumentParserTest {
   public void addOptionalArgumentConstructorTests() {
     String[] cla = { "rip" };
     argCheck.addArg("length");
-    argCheck.addOptionalArgument("optionalArgOne", "optionalArgOneDefaultValue", Argument.DataType.STRING,
+    argCheck.addOptArg("optionalArgOne", "optionalArgOneDefaultValue", Arg.DataType.STRING,
         "my funeral");
-    argCheck.addOptionalArgument("type", "typevalue", Argument.DataType.STRING, "my funeral");
+    argCheck.addOptArg("type", "typevalue", Arg.DataType.STRING, "my funeral");
     argCheck.parse(cla);
-    assertEquals("optionalArgOneDefaultValue", argCheck.getArgumentValue("optionalArgOne"));
-    assertEquals("typevalue", argCheck.getArgumentValue("type"));
+    assertEquals("optionalArgOneDefaultValue", argCheck.getArgValue("optionalArgOne"));
+    assertEquals("typevalue", argCheck.getArgValue("type"));
 
   }
 
   @Test
   public void checkDifferentArgumentDataTypes() {
     String[] cla = { "true", "7" };
-    argCheck.addArg("isNumber", Argument.DataType.BOOLEAN);
-    argCheck.addArg("length", Argument.DataType.FLOAT);
-    assertEquals(Argument.DataType.BOOLEAN, argCheck.getArgumentDataType("isNumber"));
-    assertEquals(Argument.DataType.FLOAT, argCheck.getArgumentDataType("length"));
+    argCheck.addArg("isNumber", Arg.DataType.BOOLEAN);
+    argCheck.addArg("length", Arg.DataType.FLOAT);
+    assertEquals(Arg.DataType.BOOLEAN, argCheck.getArgDataType("isNumber"));
+    assertEquals(Arg.DataType.FLOAT, argCheck.getArgDataType("length"));
 
   }
 
@@ -325,7 +338,7 @@ public class ArgumentParserTest {
     String[] cla = { "-y" };
     argCheck.addFlag("y");
     argCheck.parse(cla);
-    assertEquals("true", argCheck.getArgumentValue("y"));
+    assertEquals("true", argCheck.getArgValue("y"));
   }
 
   @Test
@@ -334,8 +347,8 @@ public class ArgumentParserTest {
     argCheck.addFlag("y");
     argCheck.addArg("length");
     argCheck.parse(cla);
-    assertEquals("true", argCheck.getArgumentValue("y"));
-    assertEquals("7", argCheck.getArgumentValue("length"));
+    assertEquals("true", argCheck.getArgValue("y"));
+    assertEquals("7", argCheck.getArgValue("length"));
   }
 
   @Test
@@ -371,8 +384,8 @@ public class ArgumentParserTest {
     argCheck.addFlag("y");
     argCheck.addFlag("f");
     argCheck.parse(cla);
-    assertEquals("true", argCheck.getArgumentValue("y"));
-    assertEquals("true", argCheck.getArgumentValue("f"));
+    assertEquals("true", argCheck.getArgValue("y"));
+    assertEquals("true", argCheck.getArgValue("f"));
   }
 
   @Test
@@ -382,8 +395,8 @@ public class ArgumentParserTest {
     argCheck.addFlag("f");
     argCheck.parse(cla);
 
-    assertEquals("true", argCheck.getArgumentValue("y"));
-    assertEquals("true", argCheck.getArgumentValue("f"));
+    assertEquals("true", argCheck.getArgValue("y"));
+    assertEquals("true", argCheck.getArgValue("f"));
   }
 
   @Test
@@ -391,10 +404,10 @@ public class ArgumentParserTest {
     String[] cla = { "-f" };
     argCheck.addArg("yuh");
     argCheck.addArg("fun");
-    argCheck.setArgumentShortFormName("yuh", "d");
+    argCheck.setArgShortFormName("yuh", "d");
     String msg = "The short form name d is already in uses";
     try {
-      argCheck.setArgumentShortFormName("fun", "d");
+      argCheck.setArgShortFormName("fun", "d");
       fail("Should have thrown IllegalArgumentException but did not!");
     } catch (IllegalArgumentException expected) {
       assertEquals(msg, expected.getMessage());
@@ -406,21 +419,21 @@ public class ArgumentParserTest {
   public void usingAShortName() {
     String[] cla = { "-d" , "3" };
     argCheck.addArg("digits");
-    argCheck.setArgumentShortFormName("digits", "d");
+    argCheck.setArgShortFormName("digits", "d");
     argCheck.parse(cla);
-    assertEquals("3", argCheck.getArgumentValue("digits"));
+    assertEquals("3", argCheck.getArgValue("digits"));
   }
 
   @Test
   public void usingAShortNameForTwoArguments() {
     String[] cla = { "-d", "3","-f","1" };
     argCheck.addArg("digits");
-    argCheck.setArgumentShortFormName("digits", "d");
+    argCheck.setArgShortFormName("digits", "d");
     argCheck.addArg("fucksGiven");
-    argCheck.setArgumentShortFormName("fucksGiven", "f");
+    argCheck.setArgShortFormName("fucksGiven", "f");
     argCheck.parse(cla);
-    assertEquals("3", argCheck.getArgumentValue("digits"));
-    assertEquals("1", argCheck.getArgumentValue("fucksGiven"));
+    assertEquals("3", argCheck.getArgValue("digits"));
+    assertEquals("1", argCheck.getArgValue("fucksGiven"));
   }
 
   //time to throw errors like it's the Oprah Show
