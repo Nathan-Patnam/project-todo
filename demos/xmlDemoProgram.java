@@ -10,6 +10,6 @@ public class xmlDemoProgram {
     argchecker.addArg("length");
     argchecker.addArg("width");
     argchecker.addArg("height");
-    argchecker.getArgInfoAsXML();
+    argchecker.getArgInfoAsXML("yourXML.xml");
     }
   }

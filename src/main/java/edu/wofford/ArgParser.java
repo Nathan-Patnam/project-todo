@@ -15,7 +15,6 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 import java.io.FileWriter;
 
-
 public class ArgParser {
   private String programName;
   private String programDescription;
@@ -314,17 +313,12 @@ public class ArgParser {
 
   }
 
-  public void getArgInfoAsXML() {
+  public void getArgInfoAsXML(String fileName) {
     try {
-      String fileName = "yourXML.xml";
       XMLOutputFactory xof = XMLOutputFactory.newInstance();
       XMLStreamWriter xMLStreamWriter = null;
       xMLStreamWriter = xof.createXMLStreamWriter(new FileWriter(fileName));
-      /** 
-      StringWriter stringWriter = new StringWriter();
-      XMLOutputFactory xMLOutputFactory = XMLOutputFactory.newInstance();
-      XMLStreamWriter xMLStreamWriter = xMLOutputFactory.createXMLStreamWriter(stringWriter);
-*/
+
       int argumentPositionCounter = 1;
       xMLStreamWriter.writeStartDocument();
       xMLStreamWriter.writeStartElement("arguments");
@@ -388,22 +382,13 @@ public class ArgParser {
           }
           //close flag or optional tag
           xMLStreamWriter.writeEndElement();
-
         }
-
       }
-
       //close arguments tag
       xMLStreamWriter.writeEndElement();
       xMLStreamWriter.writeEndDocument();
       xMLStreamWriter.flush();
       xMLStreamWriter.close();
-
-      /** 
-      String xmlString = stringWriter.getBuffer().toString();
-      stringWriter.close();
-      System.out.println(xmlString);
-      */
 
     } catch (XMLStreamException e) {
       e.printStackTrace();
