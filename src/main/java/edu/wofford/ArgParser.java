@@ -2,13 +2,23 @@ package edu.wofford;
 
 import java.util.*;
 
+import org.xml.sax.helpers.DefaultHandler;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+import java.io.File;
+import java.io.IOException;
+import java.io.StringWriter;
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
+
 public class ArgParser {
   private String programName;
   private String programDescription;
   private Map<String, String> shortToLong;
- 
   private Map<String, Arg> arguments;
   private ArrayList<String> argumentNames;
+  private HashSet<String> flagNames;
 
   public ArgParser(String programName) {
     this(programName, "");
@@ -20,6 +30,7 @@ public class ArgParser {
     arguments = new LinkedHashMap<>();
     argumentNames = new ArrayList<>();
     shortToLong = new HashMap<>();
+    flagNames = new HashSet<>();
 
   }
 
@@ -61,19 +72,19 @@ public class ArgParser {
 
   public void setArgShortFormName(String argument, String shortFormName) {
     arguments.get(argument).setShortFormName(shortFormName);
-    if(shortToLong.get(shortFormName)!= null || shortFormName.equals("h")){
-      throw new IllegalArgumentException("The short form name " + shortFormName +" is already in uses" );
+    if (shortToLong.get(shortFormName) != null || shortFormName.equals("h")) {
+      throw new IllegalArgumentException("The short form name " + shortFormName + " is already in uses");
     }
 
     //idea is to put in shortForName and argument, so we can do reverse lookups in O(1) time.
     // two caveats, all values  have to be unique and values cant be used on top of another another 
     shortToLong.put(shortFormName, argument);
 
-
   }
 
   public void addFlag(String argname) {
-    arguments.put(argname, new OptArg( argname,false, Arg.DataType.BOOLEAN));
+    arguments.put(argname, new OptArg(argname, false, Arg.DataType.BOOLEAN));
+    flagNames.add(argname);
   }
 
   private boolean checkType(String value, Arg.DataType type) {
@@ -99,46 +110,40 @@ public class ArgParser {
     }
   }
 
-
-
-
   public Arg getArgument(String argument) {
 
     return arguments.get(argument);
   }
 
-
   /**
- * Returns the value that the argument holds. If no value has been set for the argument then it will return null
- * and if the argument doesn't exist then an error will be thrown.
- * @param  argument  the name of the arugment you want the value of
- * @return           the value associated with that argument
- * @throws  
- */
+  * Returns the value that the argument holds. If no value has been set for the argument then it will return null
+  * and if the argument doesn't exist then an error will be thrown.
+  * @param  argument  the name of the arugment you want the value of
+  * @return           the value associated with that argument
+  * @throws  
+  */
   public String getArgValue(String argument) {
     return arguments.get(argument).getValue();
   }
 
-
-
   /**
- * Returns the description of the argument. If no description has been set for the argument then it will
- * return a empty string. If the arugment doesn't exists and error will be thrown.
- * @param  argument  the name of the arugment you want the description of
- * @return           the value associated with that argument
- */
+  * Returns the description of the argument. If no description has been set for the argument then it will
+  * return a empty string. If the arugment doesn't exists and error will be thrown.
+  * @param  argument  the name of the arugment you want the description of
+  * @return           the value associated with that argument
+  */
   public String getArgDescription(String argument) {
-  
+
     return arguments.get(argument).getDescription();
   }
 
   public Arg.DataType getArgDataType(String argument) {
-  
+
     return arguments.get(argument).getDataType();
   }
 
   public String getArgDataTypeString(String argument) {
-   
+
     return arguments.get(argument).getDataType().toString();
   }
 
@@ -185,7 +190,27 @@ public class ArgParser {
     return programDescription;
   }
 
+  /** 
+  public SaxHandler handler;
+  public ArgParser loadArgs(String fileName){
+    SAXParserFactory factory = SAXParserFactory.newInstance();
+    try {
+      File xmlInput = new File (fileName); 
+      SAXParser saxParser = factory.newSAXParser();
+      handler = new SaxHandler();
+      saxParser.parse(xmlInput, handler);
+      return handler.getArgParser();
+    } 
+    catch (Throwable err) {
+        err.printStackTrace ();
+    }
+    return handler.getArgParser();
+  }
+  
+  */
+
   public void parse(String[] args) {
+
     int usedArguments = 0;
     for (int i = 0; i < args.length; i++) {
       boolean isArgAFlag = false;
@@ -193,11 +218,10 @@ public class ArgParser {
       if (args[i].equals("-h") || args[i].equals("--help")) {
         String message = getHelpMessage();
         throw new HelpException(message);
-      } 
-      else if (args[i].startsWith("-")) {
+      } else if (args[i].startsWith("-")) {
         if (args[i].startsWith("--")) {
           aname = args[i].substring(2);
-          if(arguments.get(aname) == null){
+          if (arguments.get(aname) == null) {
             throw new IllegalArgumentException("argument " + args[i].substring(2) + " does not exist");
           }
 
@@ -227,8 +251,7 @@ public class ArgParser {
           aname = shortToLong.get(sname);
           if (aname == null && !isArgAFlag) {
             throw new IllegalArgumentException("argument " + args[i].substring(1) + " does not exist");
-          }
-          else{
+          } else {
             usedArguments++;
           }
         }
@@ -236,8 +259,7 @@ public class ArgParser {
         Arg a = arguments.get(aname);
         if (a.getDataType() == Arg.DataType.BOOLEAN) {
           a.setValue("true");
-        } 
-        else {
+        } else {
           if (checkType(args[i + 1], a.getDataType())) {
             a.setValue(args[i + 1]);
             i++;
@@ -286,6 +308,100 @@ public class ArgParser {
       throw new TooFewArguments(message);
     }
 
+  }
+
+  public void getArgInfoAsXML() {
+    try {
+      StringWriter stringWriter = new StringWriter();
+      XMLOutputFactory xMLOutputFactory = XMLOutputFactory.newInstance();
+      XMLStreamWriter xMLStreamWriter = xMLOutputFactory.createXMLStreamWriter(stringWriter);
+
+      int argumentPositionCounter = 1;
+      xMLStreamWriter.writeStartDocument();
+      xMLStreamWriter.writeStartElement("arguments");
+      for (String argNameIterator : arguments.keySet()) {
+        Arg argumentIteator = getArgument(argNameIterator);
+        //adding a flag
+        if (flagNames.contains(argNameIterator)) {
+          xMLStreamWriter.writeStartElement("flag");
+
+          xMLStreamWriter.writeStartElement("name");
+          xMLStreamWriter.writeCharacters(argNameIterator);
+          xMLStreamWriter.writeEndElement();
+
+          xMLStreamWriter.writeStartElement("present");
+          xMLStreamWriter.writeCharacters(argumentIteator.getValue());
+          xMLStreamWriter.writeEndElement();
+          //close flag tag
+          xMLStreamWriter.writeEndElement();
+
+        } else {
+          //argument is a positional argument
+          if (argumentIteator instanceof Arg) {
+            xMLStreamWriter.writeStartElement("positional");
+
+            xMLStreamWriter.writeStartElement("name");
+            xMLStreamWriter.writeCharacters(argNameIterator);
+            xMLStreamWriter.writeEndElement();
+
+            xMLStreamWriter.writeStartElement("position");
+            xMLStreamWriter.writeCharacters(String.valueOf(argumentPositionCounter));
+            xMLStreamWriter.writeEndElement();
+
+            argumentPositionCounter++;
+          } else {
+            xMLStreamWriter.writeStartElement("optional");
+
+            xMLStreamWriter.writeStartElement("name");
+            xMLStreamWriter.writeCharacters(argNameIterator);
+            xMLStreamWriter.writeEndElement();
+
+            xMLStreamWriter.writeStartElement("value");
+            xMLStreamWriter.writeCharacters(argumentIteator.getValue());
+            xMLStreamWriter.writeEndElement();
+
+          }
+
+          xMLStreamWriter.writeStartElement("datatype");
+          xMLStreamWriter.writeCharacters(argumentIteator.getDataType().toString());
+          xMLStreamWriter.writeEndElement();
+
+          if (argumentIteator.getShortFormName() != null) {
+            xMLStreamWriter.writeStartElement("shortname");
+            xMLStreamWriter.writeCharacters(argumentIteator.getShortFormName());
+            xMLStreamWriter.writeEndElement();
+          }
+
+          if (argumentIteator.getDescription() != null) {
+            xMLStreamWriter.writeStartElement("description");
+            xMLStreamWriter.writeCharacters(argumentIteator.getDescription());
+            xMLStreamWriter.writeEndElement();
+          }
+          //close flag or optional tag
+          xMLStreamWriter.writeEndElement();
+
+        }
+
+      }
+
+      //close arguments tag
+      xMLStreamWriter.writeEndElement();
+      xMLStreamWriter.writeEndDocument();
+      xMLStreamWriter.flush();
+      xMLStreamWriter.close();
+
+      String xmlString = stringWriter.getBuffer().toString();
+
+      stringWriter.close();
+
+      System.out.println(xmlString);
+
+    } catch (XMLStreamException e) {
+      e.printStackTrace();
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
   }
 
 }

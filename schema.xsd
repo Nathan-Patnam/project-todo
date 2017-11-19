@@ -1,67 +1,69 @@
 <?xml version="1.0"?>
-<schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
 targetNamespace="https://www.w3schools.com"
 xmlns="https://www.w3schools.com"
 elementFormDefault="qualified">
 
 
 <!--Types of dataTypes arguments can be-->
-<simpleType name="DataType">
-  <restriction base="xs:string">
-    <enumeration value="STRING"/>
-    <enumeration value="INT"/>
-    <enumeration value="FLOAT"/>
-    <enumeration value="ABOOLEAN"/>
+<xs:simpleType name="DataType" final="restriction" >
+  <xs:restriction base="xs:string">
+    <xs:enumeration value="string"/>
+    <xs:enumeration value="int"/>
+    <xs:enumeration value="float"/>
+    <xs:enumeration value="boolean"/>
   </restriction>
 </simpleType>
 
 <!-- schema for the Argument Parser-->
-<element name="arguments">
-  <complexType>
-    <xsequence>
-      <element ref="positional"/>
-      <element ref="flag"/>
-      <element ref="optional"/>
+<!--Using maxOccurs="unbounded" because maxOccurs is by default set to one when inside a group element -->
+<xs:element name="arguments">
+  <xs:complexType>
+    <xs:sequence>
+      <xs:element ref="positional" maxOccurs="unbounded"/>
+      <xs:element ref="flag" maxOccurs="unbounded"/>
+      <xs:element ref="optional" maxOccurs="unbounded"/>
     </sequence>
   </complexType>
 </element>
 
 
 <!-- schema for an Argument-->
-<element name="positional">
-  <complexType>
-    <xsequence>
-      <element name="name" type="xs:string"/>
-      <element name="datatype" type="DataType"/>
-      <element name="position" type="xs:integer"/>
-      <element name="shortname" type="xs:string"/>
-      <element name="description" type="xs:string"/>
+<!--minOccurs and maxOccurs have a defaul  value of1 -->
+<xs:element name="positional">
+  <xs:complexType>
+    <xs:xsequence>
+      <xs:element name="name" type="xs:string"/>
+       <xs:element name="position" type="xs:integer"/>
+      <xs:element name="datatype" type="DataType" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="shortname" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="description" type="xs:string" minOccurs="0" maxOccurs="1"/>
     </sequence>
   </complexType>
 </element>
 
 <!-- schema for an optional Argument-->
-<element name="optional">
-  <complexType>
-    <xsequence>
-      <element name="name" type="xs:string"/>
-      <element name="datatype" type="DataType"/>
-      <element name="position" type="xs:integer"/>
-      <element name="shortname" type="xs:string"/>
-       <element name="value" type="xs:string"/>
-      <element name="description" type="xs:string"/>
+<xs:element name="optional">
+  <xs:complexType>
+    <xs:xsequence>
+      <xs:element name="name" type="xs:string"/>
+      <xs:element name="value" type="xs:string"/>
+      <xs:element name="datatype" type="DataType" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="shortname" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="description" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="required" type="xs:boolean"/>
     </sequence>
   </complexType>
 </element>
 
 <!-- schema for a Flag-->
-<element name="flag">
-  <complexType>
-    <xsequence>
-      <element name="name" type="xs:string"/>
-      <element name="value" type="xs:boolean">
+<xs:element name="flag">
+  <xs:complexType>
+    <xs:xsequence>
+      <xs:element name="name" type="xs:string"/>
+      <xs:element name="present" type="xs:boolean"/>
     </sequence>
   </complexType>
 </element>
 
-</schema>
+</xs:schema>

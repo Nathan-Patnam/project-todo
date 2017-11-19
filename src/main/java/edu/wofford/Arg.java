@@ -27,6 +27,8 @@ public class Arg {
     this.dataType = dataType;
   }
 
+  
+
   public void setDescription(String description) {
     this.description = description;
   }
@@ -46,7 +48,7 @@ public class Arg {
 
 
   public String getDescription() {
-    return description;
+    return this.description;
   }
 
   public DataType getDataType() {
@@ -54,7 +56,12 @@ public class Arg {
   }
 
   public String getValue() {
-    return value;
+    return this.value;
+  }
+  public String getShortFormName(){
+    return this.shortFormName;
+
+
   }
 
 }

@@ -4,9 +4,9 @@ import edu.wofford.*;
 // java -cp .:../build/libs/argparse-1.0.jar Test 7 --myarg mval 3 2
 
 
-public class Test {
+public class Feature08 {
     public static void main(String[] args) {
-    ArgumentParser argchecker = new ArgumentParser("VolumeCalculator", 
+    ArgParser argchecker = new ArgParser("VolumeCalculator", 
     "a program that calculates the volume of a ellipsoid");
     argchecker.addArg("length");
     argchecker.addArg("width");

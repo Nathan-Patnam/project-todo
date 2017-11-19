@@ -5,29 +5,30 @@
 <arguments>
     <positional>
         <name>length</name>
-        <type>float</type>
+        <datatype>float</type>
         <position>1</position>
     </positional>
     <positional>
         <name>width</name>
-        <type>float</type>
+        <datatype>float</type>
         <position>2</position>
     </positional>
     <positional>
         <name>height</name>
-        <type>float</type>
+        <datatype>float</type>
         <position>3</position>
     </positional>
-    <named>
+
+    <optional>
         <name>type</name>
         <shortname>t</shortname>
-        <type>string</type>
+        <datatype>string</type>
         <default>box</default>
-    </named>
-    <named>
+    </optional>
+    <optional>
         <name>digits</name>
         <shortname>d</shortname>
-        <type>integer</type>
+        <datatype>integer</type>
         <default>4</default>
-    </named>
+    </optional>
 </arguments>
