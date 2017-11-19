@@ -1,16 +1,20 @@
 package edu.wofford;
 
 import java.util.*;
-
+/** 
 import org.xml.sax.helpers.DefaultHandler;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import java.io.File;
-import java.io.IOException;
 import java.io.StringWriter;
+import java.io.File;
+*/
+
+import java.io.IOException;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
+import java.io.FileWriter;
+
 
 public class ArgParser {
   private String programName;
@@ -312,15 +316,20 @@ public class ArgParser {
 
   public void getArgInfoAsXML() {
     try {
+      String fileName = "yourXML.xml";
+      XMLOutputFactory xof = XMLOutputFactory.newInstance();
+      XMLStreamWriter xMLStreamWriter = null;
+      xMLStreamWriter = xof.createXMLStreamWriter(new FileWriter(fileName));
+      /** 
       StringWriter stringWriter = new StringWriter();
       XMLOutputFactory xMLOutputFactory = XMLOutputFactory.newInstance();
       XMLStreamWriter xMLStreamWriter = xMLOutputFactory.createXMLStreamWriter(stringWriter);
-
+*/
       int argumentPositionCounter = 1;
       xMLStreamWriter.writeStartDocument();
       xMLStreamWriter.writeStartElement("arguments");
       for (String argNameIterator : arguments.keySet()) {
-        Arg argumentIteator = getArgument(argNameIterator);
+        Arg argumentIterator = getArgument(argNameIterator);
         //adding a flag
         if (flagNames.contains(argNameIterator)) {
           xMLStreamWriter.writeStartElement("flag");
@@ -330,14 +339,14 @@ public class ArgParser {
           xMLStreamWriter.writeEndElement();
 
           xMLStreamWriter.writeStartElement("present");
-          xMLStreamWriter.writeCharacters(argumentIteator.getValue());
+          xMLStreamWriter.writeCharacters(argumentIterator.getValue());
           xMLStreamWriter.writeEndElement();
           //close flag tag
           xMLStreamWriter.writeEndElement();
 
         } else {
           //argument is a positional argument
-          if (argumentIteator instanceof Arg) {
+          if (argumentIterator instanceof Arg) {
             xMLStreamWriter.writeStartElement("positional");
 
             xMLStreamWriter.writeStartElement("name");
@@ -357,24 +366,24 @@ public class ArgParser {
             xMLStreamWriter.writeEndElement();
 
             xMLStreamWriter.writeStartElement("value");
-            xMLStreamWriter.writeCharacters(argumentIteator.getValue());
+            xMLStreamWriter.writeCharacters(argumentIterator.getValue());
             xMLStreamWriter.writeEndElement();
 
           }
 
           xMLStreamWriter.writeStartElement("datatype");
-          xMLStreamWriter.writeCharacters(argumentIteator.getDataType().toString());
+          xMLStreamWriter.writeCharacters(argumentIterator.getDataType().toString());
           xMLStreamWriter.writeEndElement();
 
-          if (argumentIteator.getShortFormName() != null) {
+          if (argumentIterator.getShortFormName() != null) {
             xMLStreamWriter.writeStartElement("shortname");
-            xMLStreamWriter.writeCharacters(argumentIteator.getShortFormName());
+            xMLStreamWriter.writeCharacters(argumentIterator.getShortFormName());
             xMLStreamWriter.writeEndElement();
           }
 
-          if (argumentIteator.getDescription() != null) {
+          if (argumentIterator.getDescription() != null && argumentIterator.getDescription().length() > 0) {
             xMLStreamWriter.writeStartElement("description");
-            xMLStreamWriter.writeCharacters(argumentIteator.getDescription());
+            xMLStreamWriter.writeCharacters(argumentIterator.getDescription());
             xMLStreamWriter.writeEndElement();
           }
           //close flag or optional tag
@@ -390,11 +399,11 @@ public class ArgParser {
       xMLStreamWriter.flush();
       xMLStreamWriter.close();
 
+      /** 
       String xmlString = stringWriter.getBuffer().toString();
-
       stringWriter.close();
-
       System.out.println(xmlString);
+      */
 
     } catch (XMLStreamException e) {
       e.printStackTrace();
