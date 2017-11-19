@@ -1,5 +1,5 @@
 package edu.wofford;
-
+import java.util.*;
 public class Arg {
   public enum DataType {
     STRING("string"), 
@@ -18,6 +18,8 @@ public class Arg {
   protected DataType dataType;
   protected String value;
   protected String shortFormName;
+  protected HashSet<String> restrictedValues;
+  protected String allRestrictedValuesString;
 
 
 
@@ -41,6 +43,11 @@ public class Arg {
     this.dataType = dataType;
   }
 
+  public void setRestrictedValues(HashSet<String> restrictedValues){
+    this.restrictedValues=restrictedValues;
+
+  }
+
   public void setValue(String value) {
     this.value = value;
   }
@@ -61,7 +68,18 @@ public class Arg {
   public String getShortFormName(){
     return this.shortFormName;
 
+  }
 
+  public HashSet<String> getRestrictedValues(){
+    return this.restrictedValues;
+  }
+
+  public String getRestrictedValuesString(){
+    this.allRestrictedValuesString="";
+    for (String restrictedValue : restrictedValues) {
+      this.allRestrictedValuesString+= restrictedValue;
+    }
+    return this.allRestrictedValuesString;
   }
 
 }

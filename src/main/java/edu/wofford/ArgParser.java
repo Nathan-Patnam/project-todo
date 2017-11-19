@@ -213,7 +213,7 @@ public class ArgParser {
   */
 
   public void parse(String[] args) {
-
+    HashSet<String> argRestrictedValues;
     int usedArguments = 0;
     for (int i = 0; i < args.length; i++) {
       boolean isArgAFlag = false;
@@ -264,8 +264,23 @@ public class ArgParser {
           a.setValue("true");
         } else {
           if (checkType(args[i + 1], a.getDataType())) {
+          
+            if(a.getRestrictedValues() != null){
+              argRestrictedValues=a.getRestrictedValues();
+              if(argRestrictedValues.contains(args[i+1])) {
+                a.setValue(args[i + 1]);
+                i++;
+              }
+              else{
+                throw new IllegalArgumentException(args[i+1] + "is not an allowed value for" + aname);
+              }
+          }  
+          else{
             a.setValue(args[i + 1]);
             i++;
+          }
+
+            
           } else {
             // Throw some exception
             String message = "";
@@ -380,7 +395,13 @@ public class ArgParser {
             xMLStreamWriter.writeCharacters(argumentIterator.getDescription());
             xMLStreamWriter.writeEndElement();
           }
-          //close flag or optional tag
+
+          if(argumentIterator.getRestrictedValuesString() != null && argumentIterator.getRestrictedValuesString().length() >0){
+            xMLStreamWriter.writeStartElement("restricted values");
+            xMLStreamWriter.writeCharacters(argumentIterator.getRestrictedValuesString());
+            xMLStreamWriter.writeEndElement();
+          }
+          //close positional and optional tag
           xMLStreamWriter.writeEndElement();
         }
       }

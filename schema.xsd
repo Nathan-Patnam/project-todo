@@ -38,6 +38,7 @@ elementFormDefault="qualified">
       <xs:element name="datatype" type="DataType" minOccurs="0" maxOccurs="1"/>
       <xs:element name="shortname" type="xs:string" minOccurs="0" maxOccurs="1"/>
       <xs:element name="description" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="restricted values" type="xs:string"/>
     </sequence>
   </complexType>
 </element>
@@ -51,7 +52,8 @@ elementFormDefault="qualified">
       <xs:element name="datatype" type="DataType" minOccurs="0" maxOccurs="1"/>
       <xs:element name="shortname" type="xs:string" minOccurs="0" maxOccurs="1"/>
       <xs:element name="description" type="xs:string" minOccurs="0" maxOccurs="1"/>
-      <xs:element name="required" type="xs:boolean"/>
+      <xs:element name="restricted values" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="required" type="xs:boolean">
     </sequence>
   </complexType>
 </element>
