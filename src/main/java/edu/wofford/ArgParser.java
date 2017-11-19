@@ -264,23 +264,20 @@ public class ArgParser {
           a.setValue("true");
         } else {
           if (checkType(args[i + 1], a.getDataType())) {
-          
-            if(a.getRestrictedValues() != null){
-              argRestrictedValues=a.getRestrictedValues();
-              if(argRestrictedValues.contains(args[i+1])) {
+
+            if (a.getRestrictedValues() != null) {
+              argRestrictedValues = a.getRestrictedValues();
+              if (argRestrictedValues.contains(args[i + 1])) {
                 a.setValue(args[i + 1]);
                 i++;
+              } else {
+                throw new IllegalArgumentException(args[i + 1] + "is not an allowed value for" + aname);
               }
-              else{
-                throw new IllegalArgumentException(args[i+1] + "is not an allowed value for" + aname);
-              }
-          }  
-          else{
-            a.setValue(args[i + 1]);
-            i++;
-          }
+            } else {
+              a.setValue(args[i + 1]);
+              i++;
+            }
 
-            
           } else {
             // Throw some exception
             String message = "";
@@ -354,8 +351,20 @@ public class ArgParser {
           xMLStreamWriter.writeEndElement();
 
         } else {
-          //argument is a positional argument
-          if (argumentIterator instanceof Arg) {
+          //argument is a optional argument
+          if (argumentIterator instanceof OptArg) {
+
+            xMLStreamWriter.writeStartElement("optional");
+
+            xMLStreamWriter.writeStartElement("name");
+            xMLStreamWriter.writeCharacters(argNameIterator);
+            xMLStreamWriter.writeEndElement();
+
+            xMLStreamWriter.writeStartElement("value");
+            xMLStreamWriter.writeCharacters(argumentIterator.getValue());
+            xMLStreamWriter.writeEndElement();
+          } else {
+
             xMLStreamWriter.writeStartElement("positional");
 
             xMLStreamWriter.writeStartElement("name");
@@ -367,16 +376,6 @@ public class ArgParser {
             xMLStreamWriter.writeEndElement();
 
             argumentPositionCounter++;
-          } else {
-            xMLStreamWriter.writeStartElement("optional");
-
-            xMLStreamWriter.writeStartElement("name");
-            xMLStreamWriter.writeCharacters(argNameIterator);
-            xMLStreamWriter.writeEndElement();
-
-            xMLStreamWriter.writeStartElement("value");
-            xMLStreamWriter.writeCharacters(argumentIterator.getValue());
-            xMLStreamWriter.writeEndElement();
 
           }
 
@@ -396,7 +395,8 @@ public class ArgParser {
             xMLStreamWriter.writeEndElement();
           }
 
-          if(argumentIterator.getRestrictedValuesString() != null && argumentIterator.getRestrictedValuesString().length() >0){
+          if (argumentIterator.getRestrictedValuesString() != null
+              && argumentIterator.getRestrictedValuesString().length() > 0) {
             xMLStreamWriter.writeStartElement("restricted values");
             xMLStreamWriter.writeCharacters(argumentIterator.getRestrictedValuesString());
             xMLStreamWriter.writeEndElement();

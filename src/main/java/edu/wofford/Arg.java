@@ -76,10 +76,15 @@ public class Arg {
 
   public String getRestrictedValuesString(){
     this.allRestrictedValuesString="";
+    /** 
+    if(restrictedValues.size()>0){
     for (String restrictedValue : restrictedValues) {
       this.allRestrictedValuesString+= restrictedValue;
     }
+  }
+  */
     return this.allRestrictedValuesString;
   }
+  
 
 }
