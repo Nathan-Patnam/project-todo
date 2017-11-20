@@ -78,9 +78,6 @@ public class ArgParser {
     if (shortToLong.get(shortFormName) != null || shortFormName.equals("h")) {
       throw new IllegalArgumentException("The short form name " + shortFormName + " is already in uses");
     }
-
-    //idea is to put in shortForName and argument, so we can do reverse lookups in O(1) time.
-    // two caveats, all values  have to be unique and values cant be used on top of another another 
     shortToLong.put(shortFormName, argument);
 
   }
@@ -265,7 +262,8 @@ public class ArgParser {
         } else {
           if (checkType(args[i + 1], a.getDataType())) {
 
-            if (a.getRestrictedValues() != null) {
+            if (a.getRestrictedValuesString() != null
+            && a.getRestrictedValuesString().length() > 0) {
               argRestrictedValues = a.getRestrictedValues();
               if (argRestrictedValues.contains(args[i + 1])) {
                 a.setValue(args[i + 1]);
@@ -344,7 +342,7 @@ public class ArgParser {
           xMLStreamWriter.writeCharacters(argNameIterator);
           xMLStreamWriter.writeEndElement();
 
-          xMLStreamWriter.writeStartElement("present");
+          xMLStreamWriter.writeStartElement("value");
           xMLStreamWriter.writeCharacters(argumentIterator.getValue());
           xMLStreamWriter.writeEndElement();
           //close flag tag
