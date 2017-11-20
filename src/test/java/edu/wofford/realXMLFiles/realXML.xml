@@ -1,0 +1,28 @@
+<?xml version="1.0" ?>
+<arguments>
+<positional>
+<name>length</name>
+<position>1</position>
+<datatype>float</datatype>
+<shortname>l</shortname>
+<description>length of the box</description>
+</positional>
+<positional>
+<name>width</name>
+<position>2</position>
+<datatype>float</datatype>
+<shortname>w</shortname>
+<description>width of the box</description>
+</positional>
+<optional>
+<name>height</name>
+<value>1738</value>
+<datatype>float</datatype>
+<shortname>g</shortname>
+<description>height of the box</description>
+</optional>
+<flag>
+<name>s</name>
+<value>false</value>
+</flag>
+</arguments>

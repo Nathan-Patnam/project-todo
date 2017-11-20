@@ -2,21 +2,24 @@ package edu.wofford;
 
 import static org.junit.Assert.*;
 import org.junit.*;
+import java.io.File;
+import java.io.IOException;
+//import org.apache.commons.io.FileUtils;
 
 public class ArgumentParserTest {
   private ArgParser argCheck;
-  private ArgParser arhCheckSimple;
+  private ArgParser argCheckSimple;
 
   @Before
   public final void setup() {
     argCheck = new ArgParser("VolumeCalculator", "Calculate the volume of a box.");
-    arhCheckSimple = new ArgParser("VolumeCalculator");
+    argCheckSimple = new ArgParser("VolumeCalculator");
 
   }
 
   @Test
   public final void setProgramName() {
-    arhCheckSimple.setProgramName("Calculate the volume of a box.");
+    argCheckSimple.setProgramName("Calculate the volume of a box.");
     assertEquals("Calculate the volume of a box.", argCheck.getProgramDescription());
   }
 
@@ -454,6 +457,43 @@ public class ArgumentParserTest {
 
   }
   
+
+
+
+    /** check if saving to a XML file works by comparing the two files with one another
+    @Test
+    public void testSaveArgsAsXML(){
+    
+      argCheck.addArg("length", "length of the box", Arg.DataType.FLOAT);
+      argCheck.setArgShortFormName("length","l");
+      argCheck.addArg("width", "width of the box", Arg.DataType.FLOAT);
+      argCheck.setArgShortFormName("width","w");
+      argCheck.addOptArg("height", "1738",Arg.DataType.FLOAT, "height of the box" );
+      argCheck.setArgShortFormName("height","g");
+      argCheck.addFlag("s");
+      argCheck.getArgInfoAsXML("testXMLFiles/yourXML.xml");
+      File file1 = new File("testXMLFiles/yourXML.xml");
+      File file2 = new File("realXMLFiles/realXML.xml");
+      boolean isTwoEqual = FileUtils.contentEquals(file1, file2);
+  
+    }
+    */
+    @Test
+    public void testLoadArgsAsXML(){
+      try{
+        //brainstorming how a product owner would load in the arguments    
+        ArgParser argchecker = new StaxParser("/Users/Patnamnv/Desktop/practice-project-todo/src/test/java/edu/wofford/realXMLFiles/realXML.xml").getArgParser();
+        argchecker.setProgramName("volume calculator");
+        argchecker.setProgramDescription("calculates the volume of a object");
+
+        assertEquals("length of the box", argchecker.getArgDescription("length"));
+        assertEquals("1738", argchecker.getArgValue("height"));
+        }
+        catch(Exception e){
+          e.printStackTrace();
+    
+        }
+}
 
 
 }

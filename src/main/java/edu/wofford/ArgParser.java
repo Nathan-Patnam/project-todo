@@ -182,6 +182,10 @@ public class ArgParser {
     return this.programName = programName;
   }
 
+  public String setProgramDescription(String programDescription) {
+    return this.programDescription = programDescription;
+  }
+
   public String getProgramName() {
     return programName;
   }

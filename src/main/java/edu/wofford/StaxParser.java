@@ -15,7 +15,7 @@ public class StaxParser {
     private Stack<String> currentArgAccessed;
     private Arg.DataType argumentDataType;
 
-    StaxParser(String fileName) throws Exception {
+    public StaxParser(String fileName) throws Exception {
 
         this.argChecker = null;
         this.tagContent = null;
@@ -29,15 +29,16 @@ public class StaxParser {
             switch (event) {
             case XMLStreamConstants.START_ELEMENT:
                 String startElement = reader.getLocalName();
-
+                //creat  argument parser at first element, product owner will add name/description later
                 if ("arguments".equals(startElement)) {
                     this.argChecker = new ArgParser("", "");
-                } else if ("employee".equals(startElement) || "positional".equals(startElement)
+                } 
+                //record what type of argument that is being parsed
+                else if ("employee".equals(startElement) || "positional".equals(startElement)
                         || "flag".equals(startElement)) {
 
                     argNames.push(startElement);
                 }
-
                 break;
 
             case XMLStreamConstants.CHARACTERS:
@@ -47,16 +48,18 @@ public class StaxParser {
             case XMLStreamConstants.END_ELEMENT:
                 String typeOfArgument = argNames.peek();
                 String endElement = reader.getLocalName();
+                //done with parsing
                 if ("arguments".equals(endElement)) {
                     break;
                 }
-
+                //done using current argument
                 else if ("optional".equals(endElement) || "flag".equals(endElement)
                         || "positional".equals(endElement)) {
                     argNames.pop();
                     currentArgAccessed.pop();
                     break;
-                } else {
+                } else {   
+                    //encountered some type of attribute for some argument
                     String currentArgumentAccessed = currentArgAccessed.peek();
                     if ("optional".equals(typeOfArgument)) {
                         if ("name".equals(endElement)) {
@@ -91,7 +94,8 @@ public class StaxParser {
                             this.currentArgAccessed.push(tagContent);
                         }
 
-                    } else if ("positional".equals(typeOfArgument)) {
+                    } 
+                    else if ("positional".equals(typeOfArgument)) {
                         if ("name".equals(endElement)) {
                             argChecker.addArg(tagContent);
                             this.currentArgAccessed.push(tagContent);
@@ -120,7 +124,7 @@ public class StaxParser {
 
                     }
                 }
-
+            
             case XMLStreamConstants.START_DOCUMENT:
                 this.argNames = new Stack<>();
                 this.currentArgAccessed = new Stack<>();
@@ -129,4 +133,10 @@ public class StaxParser {
             }
         }
     }
+
+    public ArgParser getArgParser(){
+        return this.argChecker;
+
+    }
+
 }
