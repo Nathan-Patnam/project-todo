@@ -8,7 +8,12 @@ public class xmlDemoProgram {
     ArgParser argchecker = new ArgParser("VolumeCalculator", 
     "a program that calculates the volume of a ellipsoid");
     argchecker.addArg("length", "length of the box", Arg.DataType.FLOAT);
-    argchecker.addOptArg("width", "1738",Arg.DataType.FLOAT, "width of the box" );
+    argchecker.setArgShortFormName("length","l");
+    argchecker.addArg("width", "width of the box", Arg.DataType.FLOAT);
+    argchecker.setArgShortFormName("width","w");
+    argchecker.addOptArg("height", "1738",Arg.DataType.FLOAT, "height of the box" );
+    argchecker.setArgShortFormName("height","g");
+    argchecker.addFlag("s");
     argchecker.getArgInfoAsXML("yourXML.xml");
     }
   }
