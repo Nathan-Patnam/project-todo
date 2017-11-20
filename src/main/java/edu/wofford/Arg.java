@@ -1,16 +1,19 @@
 package edu.wofford;
+
 import java.util.*;
+
 public class Arg {
   public enum DataType {
-    STRING("string"), 
-    INT("int"), 
-    BOOLEAN("boolean"), 
-    FLOAT("float");
+    STRING("string"), INT("int"), BOOLEAN("boolean"), FLOAT("float");
     private DataType(String s) {
       description = s;
     }
+
     private String description;
-    public String toString() { return description; }
+
+    public String toString() {
+      return description;
+    }
   }
 
   protected String name;
@@ -21,8 +24,6 @@ public class Arg {
   protected HashSet<String> restrictedValues;
   protected String allRestrictedValuesString;
 
-
-
   public Arg(String name, String description, DataType dataType) {
     this.name = name;
     this.description = description;
@@ -30,30 +31,26 @@ public class Arg {
     this.restrictedValues = new HashSet<>();
   }
 
-  
-
   public void setDescription(String description) {
     this.description = description;
   }
 
-  public void setShortFormName(String shortFormName){
-    this.shortFormName= shortFormName;
+  public void setShortFormName(String shortFormName) {
+    this.shortFormName = shortFormName;
   }
 
   public void setDataType(DataType dataType) {
     this.dataType = dataType;
   }
 
-  public void setRestrictedValues(HashSet<String> restrictedValues){
-    this.restrictedValues=restrictedValues;
+  public void setRestrictedValues(HashSet<String> restrictedValues) {
+    this.restrictedValues = restrictedValues;
 
   }
 
   public void setValue(String value) {
     this.value = value;
   }
-
-
 
   public String getDescription() {
     return this.description;
@@ -66,26 +63,26 @@ public class Arg {
   public String getValue() {
     return this.value;
   }
-  public String getShortFormName(){
+
+  public String getShortFormName() {
     return this.shortFormName;
 
   }
 
-  public HashSet<String> getRestrictedValues(){
+  public HashSet<String> getRestrictedValues() {
     return this.restrictedValues;
   }
 
-  public String getRestrictedValuesString(){
-    this.allRestrictedValuesString="";
-    
-    if(restrictedValues.size()>0){
-    for (String restrictedValue : restrictedValues) {
-      this.allRestrictedValuesString+= restrictedValue +" ";
+  public String getRestrictedValuesString() {
+    this.allRestrictedValuesString = "";
+
+    if (restrictedValues.size() > 0) {
+      for (String restrictedValue : restrictedValues) {
+        this.allRestrictedValuesString += restrictedValue + " ";
+      }
     }
-  }
 
     return this.allRestrictedValuesString;
   }
-  
 
 }

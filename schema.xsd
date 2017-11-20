@@ -6,7 +6,7 @@ elementFormDefault="qualified">
 
 
 <!--Types of dataTypes arguments can be-->
-<xs:simpleType name="DataType" final="restriction" >
+<xs:simpleType name="datatype" final="restriction" >
   <xs:restriction base="xs:string">
     <xs:enumeration value="string"/>
     <xs:enumeration value="int"/>
@@ -35,7 +35,7 @@ elementFormDefault="qualified">
     <xs:xsequence>
       <xs:element name="name" type="xs:string"/>
        <xs:element name="position" type="xs:integer"/>
-      <xs:element name="datatype" type="DataType" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="datatype" type="datatype" minOccurs="0" maxOccurs="1"/>
       <xs:element name="shortname" type="xs:string" minOccurs="0" maxOccurs="1"/>
       <xs:element name="description" type="xs:string" minOccurs="0" maxOccurs="1"/>
       <xs:element name="restricted values" type="xs:string"/>
@@ -49,7 +49,7 @@ elementFormDefault="qualified">
     <xs:xsequence>
       <xs:element name="name" type="xs:string"/>
       <xs:element name="value" type="xs:string"/>
-      <xs:element name="datatype" type="DataType" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="datatype" type="datatype" minOccurs="0" maxOccurs="1"/>
       <xs:element name="shortname" type="xs:string" minOccurs="0" maxOccurs="1"/>
       <xs:element name="description" type="xs:string" minOccurs="0" maxOccurs="1"/>
       <xs:element name="restricted values" type="xs:string" minOccurs="0" maxOccurs="1"/>
