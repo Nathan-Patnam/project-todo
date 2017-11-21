@@ -259,7 +259,7 @@ public class ArgParser {
                 a.setValue(args[i + 1]);
                 i++;
               } else {
-                throw new IllegalArgumentException(args[i + 1] + "is not an allowed value for" + aname);
+                throw new IllegalArgumentException(args[i + 1] + " is not an allowed value for " + aname);
               }
             } else {
               a.setValue(args[i + 1]);

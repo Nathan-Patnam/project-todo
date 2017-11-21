@@ -464,12 +464,14 @@ public class ArgumentParserTest {
     @Test
     public void testSaveArgsAsXML(){
     
-      argCheck.addArg("length", "length of the box", Arg.DataType.FLOAT);
+      argCheck.addArg("length", "length of the box", Arg.DataType.STRING);
       argCheck.setArgShortFormName("length","l");
       argCheck.addArg("width", "width of the box", Arg.DataType.FLOAT);
       argCheck.setArgShortFormName("width","w");
       argCheck.addOptArg("height", "1738",Arg.DataType.FLOAT, "height of the box" );
       argCheck.setArgShortFormName("height","g");
+      argCheck.addOptArg("precision", "3",Arg.DataType.INT, "degrees of precision of answer" );
+      argCheck.addOptArg("metric", "false",Arg.DataType.BOOLEAN, "do you want the answer in gallons" );
       argCheck.addFlag("s");
       argCheck.getArgInfoAsXML("testXMLFiles/yourXML.xml");
       File file1 = new File("testXMLFiles/yourXML.xml");
@@ -517,6 +519,25 @@ public void argGivenValueNotInRestricted(){
     argCheck.addArg("length");
     argCheck.setArgRestricedValues("length", "5 8 9");
     String msg = "7 " + "is not an allowed value for" + " length";
+    try {
+      argCheck.parse(cla);
+      fail("Should have thrown IllegalArgumentException but did not!");
+    } catch (IllegalArgumentException expected) {
+      assertEquals(msg, expected.getMessage());
+    }
+  
+}
+
+
+@Test
+public void argGivenValueNotInRestrictedOptional(){
+
+  String[] cla = { "--optionalArgOne", "7","--optionalArgTwo", "7"  };
+  argCheck.addOptArg("optionalArgOne", "6", Arg.DataType.FLOAT);
+  argCheck.addOptArg("optionalArgTwo", "10", Arg.DataType.FLOAT);
+  argCheck.setArgRestricedValues("optionalArgOne", "5 7 9");
+  argCheck.setArgRestricedValues("optionalArgTwo", "5 8 9");
+    String msg = "7 " + "is not an allowed value for " + "optionalArgTwo";
     try {
       argCheck.parse(cla);
       fail("Should have thrown IllegalArgumentException but did not!");
