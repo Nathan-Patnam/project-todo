@@ -22,6 +22,7 @@ public class ArgParser {
   private Map<String, Arg> arguments;
   private ArrayList<String> argumentNames;
   private HashSet<String> flagNames;
+  private HashSet<String> requiredArgs;
 
   public ArgParser(String programName) {
     this(programName, "");
@@ -34,6 +35,7 @@ public class ArgParser {
     argumentNames = new ArrayList<>();
     shortToLong = new HashMap<>();
     flagNames = new HashSet<>();
+    requiredArgs= new HashSet<>();
 
   }
 
@@ -84,6 +86,12 @@ public class ArgParser {
 
   public void setArgRestricedValues(String argument, String restrictedValues) {
     arguments.get(argument).setRestrictedValues(restrictedValues);
+
+  }
+
+  public void setArgAsRequired(String argument) {
+    ((OptArg) arguments.get(argument)).makeArgRequired();
+    requiredArgs.add(argument);
 
   }
 
@@ -256,6 +264,10 @@ public class ArgParser {
             && a.getRestrictedValuesString().length() > 0) {
               argRestrictedValues = a.getRestrictedValues();
               if (argRestrictedValues.contains(args[i + 1])) {
+                if(requiredArgs.contains(aname)){
+                  requiredArgs.remove(aname);
+                }
+                
                 a.setValue(args[i + 1]);
                 i++;
               } else {
@@ -323,6 +335,15 @@ public class ArgParser {
       throw new TooFewArguments(message);
     }
 
+    if(requiredArgs.size()>0){
+      String requiredArgString="";
+      for (String requiredArgs : requiredArgs) {
+        requiredArgString+=requiredArgs + " ";
+      }
+
+      throw new IllegalArgumentException("The argument(s) " + requiredArgString +"are required");
+    }
+
   }
 
 
@@ -373,6 +394,13 @@ public class ArgParser {
             xMLStreamWriter.writeStartElement("value");
             xMLStreamWriter.writeCharacters(argumentIterator.getValue());
             xMLStreamWriter.writeEndElement();
+
+            xMLStreamWriter.writeCharacters("\n\t\t");
+            xMLStreamWriter.writeStartElement("required");
+            xMLStreamWriter.writeCharacters( String.valueOf(((OptArg)argumentIterator).isArgRequired()));
+            xMLStreamWriter.writeEndElement();
+
+
     
           } else {
             xMLStreamWriter.writeCharacters("\n\t");

@@ -1,6 +1,7 @@
 package edu.wofford;
 
 public class OptArg extends Arg {
+    private boolean required;
 
     OptArg(String name, String defaultValue) {
         this(name, defaultValue, Arg.DataType.STRING, "");
@@ -23,7 +24,15 @@ public class OptArg extends Arg {
     OptArg(String optionalArgumentName, String defaultValue, Arg.DataType datatype, String description) {
         super("--" + optionalArgumentName, description, datatype);
         this.value = defaultValue;
+        this.required=false;
 
+    }
+
+    public void makeArgRequired(){
+        this.required=true;
+    }
+    public boolean isArgRequired(){
+        return this.required;
     }
 
 }

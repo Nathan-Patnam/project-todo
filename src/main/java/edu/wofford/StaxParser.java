@@ -87,7 +87,15 @@ public class StaxParser {
     
                             } else if ("description".equals(endElement)) {
                                 argChecker.getArgument(currentArgAccessed.peek()).setDescription(tagContent);
-    
+                            }
+                            else if ("restrictedValues".equals(endElement)) {
+                                argChecker.getArgument(currentArgAccessed.peek()).setRestrictedValues(tagContent);
+                            }
+                            else if ("required".equals(endElement)) {
+                                if(tagContent.equals("true")){
+                                    argChecker.setArgAsRequired(currentArgAccessed.peek());
+                                }
+                               
                             }
                         } else if ("flag".equals(typeOfArgument)) {
                             if ("name".equals(endElement)) {
@@ -121,6 +129,9 @@ public class StaxParser {
                                 argChecker.setArgShortFormName(currentArgAccessed.peek(), tagContent);
                             } else if ("description".equals(endElement)) {
                                 argChecker.getArgument(currentArgAccessed.peek()).setDescription(tagContent);
+                            }
+                            else if ("restrictedValues".equals(endElement)) {
+                                argChecker.getArgument(currentArgAccessed.peek()).setRestrictedValues(tagContent);
                             }
     
                         }

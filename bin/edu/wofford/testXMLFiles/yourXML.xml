@@ -13,12 +13,10 @@
 		<datatype>float</datatype>
 		<shortname>w</shortname>
 		<description>width of the box</description>
-		<restrictedValues>3 4 5</restrictedValues>
 	</positional>
 	<optional>
 		<name>height</name>
 		<value>1738</value>
-		<required>false</required>
 		<datatype>float</datatype>
 		<shortname>g</shortname>
 		<description>height of the box</description>
@@ -26,15 +24,12 @@
 	<optional>
 		<name>precision</name>
 		<value>3</value>
-		<required>false</required>
 		<datatype>int</datatype>
 		<description>degrees of precision of answer</description>
-		<restrictedValues>3 4 5</restrictedValues>
 	</optional>
 	<optional>
 		<name>metric</name>
 		<value>false</value>
-		<required>false</required>
 		<datatype>boolean</datatype>
 		<description>do you want answer in gallons</description>
 	</optional>

@@ -539,4 +539,23 @@ public void argGivenValueNotInRestrictedOptional(){
   
 }
 
+
+@Test
+public void argRequiredButNotGiven(){
+
+  String[] cla = {"7" };
+  argCheck.addArg("length",Arg.DataType.FLOAT);
+  argCheck.addOptArg("optionalArgTwo", "10", Arg.DataType.FLOAT);
+  argCheck.setArgAsRequired("optionalArgTwo");
+  
+    String msg = "The argument(s) optionalArgTwo are required";
+    try {
+      argCheck.parse(cla);
+      fail("Should have thrown IllegalArgumentException but did not!");
+    } catch (IllegalArgumentException expected) {
+      assertEquals(msg, expected.getMessage());
+    }
+  
+}
+
 }
