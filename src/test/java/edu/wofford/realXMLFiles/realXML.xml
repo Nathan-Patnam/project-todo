@@ -13,6 +13,7 @@
         <datatype>float</datatype>
         <shortname>w</shortname>
         <description>width of the box</description>
+        <restrictedValues>3 4 5</restrictedValues>
     </positional>
     <optional>
         <name>height</name>
@@ -26,6 +27,7 @@
         <value>3</value>
         <datatype>int</datatype>
         <description>degrees of precision of answer</description>
+        <restrictedValues>3 4 5</restrictedValues>
     </optional>
     <optional>
         <name>metric</name>

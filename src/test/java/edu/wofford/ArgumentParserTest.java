@@ -4,7 +4,9 @@ import static org.junit.Assert.*;
 import org.junit.*;
 import java.io.File;
 import java.io.IOException;
-//import org.apache.commons.io.FileUtils;
+import java.util.Arrays;
+
+
 
 public class ArgumentParserTest {
   private ArgParser argCheck;
@@ -460,30 +462,20 @@ public class ArgumentParserTest {
 
 
 
-    /** check if saving to a XML file works by comparing the two files with one another
+    // check if saving to a XML file works by comparing the two files with one another
     @Test
     public void testSaveArgsAsXML(){
-    
-      argCheck.addArg("length", "length of the box", Arg.DataType.STRING);
-      argCheck.setArgShortFormName("length","l");
-      argCheck.addArg("width", "width of the box", Arg.DataType.FLOAT);
-      argCheck.setArgShortFormName("width","w");
-      argCheck.addOptArg("height", "1738",Arg.DataType.FLOAT, "height of the box" );
-      argCheck.setArgShortFormName("height","g");
-      argCheck.addOptArg("precision", "3",Arg.DataType.INT, "degrees of precision of answer" );
-      argCheck.addOptArg("metric", "false",Arg.DataType.BOOLEAN, "do you want the answer in gallons" );
-      argCheck.addFlag("s");
-      argCheck.getArgInfoAsXML("testXMLFiles/yourXML.xml");
-      File file1 = new File("testXMLFiles/yourXML.xml");
-      File file2 = new File("realXMLFiles/realXML.xml");
-      boolean isTwoEqual = FileUtils.contentEquals(file1, file2);
+      ArgParser argcheckerOne =  StaxParser.createParserFromXML("/Users/Patnamnv/Desktop/practice-project-todo/src/test/java/edu/wofford/realXMLFiles/realXML.xml");
+      argcheckerOne.getArgInfoAsXML("/Users/Patnamnv/Desktop/practice-project-todo/src/test/java/edu/wofford/testXMLFiles/yourXML.xml");
+      ArgParser argcheckerTwo =  StaxParser.createParserFromXML("/Users/Patnamnv/Desktop/practice-project-todo/src/test/java/edu/wofford/testXMLFiles/yourXML.xml");
+      assertEquals(argcheckerOne.getArgValue("height"), argcheckerTwo.getArgValue("height"));
+      assertEquals(argcheckerOne.getArgument("height").getRestrictedValuesString(), argcheckerTwo.getArgument("height").getRestrictedValuesString());
   
     }
-    */
+    
     @Test
     public void testLoadArgsAsXML(){
       try{
-        //brainstorming how a product owner would load in the arguments   
         //ClassLoader.getSystemResourceAsStream( 
         ArgParser argchecker =  StaxParser.createParserFromXML("/Users/Patnamnv/Desktop/practice-project-todo/src/test/java/edu/wofford/realXMLFiles/realXML.xml");
         argchecker.setProgramName("volume calculator");
