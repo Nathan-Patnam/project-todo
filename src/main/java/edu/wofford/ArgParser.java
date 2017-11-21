@@ -82,6 +82,11 @@ public class ArgParser {
 
   }
 
+  public void setArgRestricedValues(String argument, String restrictedValues) {
+    arguments.get(argument).setRestrictedValues(restrictedValues);
+
+  }
+
   public void addFlag(String argname) {
     arguments.put(argname, new OptArg(argname, false, Arg.DataType.BOOLEAN));
     flagNames.add(argname);
@@ -120,7 +125,7 @@ public class ArgParser {
   * and if the argument doesn't exist then an error will be thrown.
   * @param  argument  the name of the arugment you want the value of
   * @return           the value associated with that argument
-  * @throws  
+  * 
   */
   public String getArgValue(String argument) {
     return arguments.get(argument).getValue();
@@ -193,25 +198,6 @@ public class ArgParser {
   public String getProgramDescription() {
     return programDescription;
   }
-
-  /** 
-  public SaxHandler handler;
-  public ArgParser loadArgs(String fileName){
-    SAXParserFactory factory = SAXParserFactory.newInstance();
-    try {
-      File xmlInput = new File (fileName); 
-      SAXParser saxParser = factory.newSAXParser();
-      handler = new SaxHandler();
-      saxParser.parse(xmlInput, handler);
-      return handler.getArgParser();
-    } 
-    catch (Throwable err) {
-        err.printStackTrace ();
-    }
-    return handler.getArgParser();
-  }
-  
-  */
 
   public void parse(String[] args) {
     HashSet<String> argRestrictedValues;
@@ -327,52 +313,65 @@ public class ArgParser {
 
   }
 
+
+
+ 
+
   public void getArgInfoAsXML(String fileName) {
     try {
       XMLOutputFactory xof = XMLOutputFactory.newInstance();
-      XMLStreamWriter xMLStreamWriter = null;
-      xMLStreamWriter = xof.createXMLStreamWriter(new FileWriter(fileName));
-
+      XMLStreamWriter xMLStreamWriter = xof.createXMLStreamWriter(new FileWriter(fileName));
+    
       int argumentPositionCounter = 1;
       xMLStreamWriter.writeStartDocument();
+      xMLStreamWriter.writeCharacters("\n");
       xMLStreamWriter.writeStartElement("arguments");
       for (String argNameIterator : arguments.keySet()) {
+        
         Arg argumentIterator = getArgument(argNameIterator);
         //adding a flag
         if (flagNames.contains(argNameIterator)) {
+          xMLStreamWriter.writeCharacters("\n\t");
           xMLStreamWriter.writeStartElement("flag");
+          
 
+          xMLStreamWriter.writeCharacters("\n\t\t");
           xMLStreamWriter.writeStartElement("name");
           xMLStreamWriter.writeCharacters(argNameIterator);
           xMLStreamWriter.writeEndElement();
+    
 
-          xMLStreamWriter.writeStartElement("value");
-          xMLStreamWriter.writeCharacters(argumentIterator.getValue());
-          xMLStreamWriter.writeEndElement();
           //close flag tag
+          xMLStreamWriter.writeCharacters("\n\t");
           xMLStreamWriter.writeEndElement();
+         
 
         } else {
           //argument is a optional argument
           if (argumentIterator instanceof OptArg) {
-
+            xMLStreamWriter.writeCharacters("\n\t");
             xMLStreamWriter.writeStartElement("optional");
 
+            xMLStreamWriter.writeCharacters("\n\t\t");
             xMLStreamWriter.writeStartElement("name");
             xMLStreamWriter.writeCharacters(argNameIterator);
             xMLStreamWriter.writeEndElement();
 
+            xMLStreamWriter.writeCharacters("\n\t\t");
             xMLStreamWriter.writeStartElement("value");
             xMLStreamWriter.writeCharacters(argumentIterator.getValue());
             xMLStreamWriter.writeEndElement();
+    
           } else {
-
+            xMLStreamWriter.writeCharacters("\n\t");
             xMLStreamWriter.writeStartElement("positional");
 
+            xMLStreamWriter.writeCharacters("\n\t\t");
             xMLStreamWriter.writeStartElement("name");
             xMLStreamWriter.writeCharacters(argNameIterator);
             xMLStreamWriter.writeEndElement();
 
+            xMLStreamWriter.writeCharacters("\n\t\t");
             xMLStreamWriter.writeStartElement("position");
             xMLStreamWriter.writeCharacters(String.valueOf(argumentPositionCounter));
             xMLStreamWriter.writeEndElement();
@@ -380,34 +379,42 @@ public class ArgParser {
             argumentPositionCounter++;
 
           }
-
+          xMLStreamWriter.writeCharacters("\n\t\t");
           xMLStreamWriter.writeStartElement("datatype");
           xMLStreamWriter.writeCharacters(argumentIterator.getDataType().toString());
           xMLStreamWriter.writeEndElement();
+  
 
           if (argumentIterator.getShortFormName() != null) {
+            xMLStreamWriter.writeCharacters("\n\t\t");
             xMLStreamWriter.writeStartElement("shortname");
             xMLStreamWriter.writeCharacters(argumentIterator.getShortFormName());
             xMLStreamWriter.writeEndElement();
           }
 
           if (argumentIterator.getDescription() != null && argumentIterator.getDescription().length() > 0) {
+            xMLStreamWriter.writeCharacters("\n\t\t");
             xMLStreamWriter.writeStartElement("description");
             xMLStreamWriter.writeCharacters(argumentIterator.getDescription());
             xMLStreamWriter.writeEndElement();
+            
           }
 
           if (argumentIterator.getRestrictedValuesString() != null
               && argumentIterator.getRestrictedValuesString().length() > 0) {
-            xMLStreamWriter.writeStartElement("restricted values");
+            xMLStreamWriter.writeCharacters("\n\t\t");
+            xMLStreamWriter.writeStartElement("restrictedValues");
             xMLStreamWriter.writeCharacters(argumentIterator.getRestrictedValuesString());
             xMLStreamWriter.writeEndElement();
+            
           }
           //close positional and optional tag
+          xMLStreamWriter.writeCharacters("\n\t");
           xMLStreamWriter.writeEndElement();
         }
       }
       //close arguments tag
+      xMLStreamWriter.writeCharacters("\n");
       xMLStreamWriter.writeEndElement();
       xMLStreamWriter.writeEndDocument();
       xMLStreamWriter.flush();

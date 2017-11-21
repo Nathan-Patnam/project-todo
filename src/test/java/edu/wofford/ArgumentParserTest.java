@@ -481,19 +481,49 @@ public class ArgumentParserTest {
     @Test
     public void testLoadArgsAsXML(){
       try{
-        //brainstorming how a product owner would load in the arguments    
-        ArgParser argchecker = new StaxParser("/Users/Patnamnv/Desktop/practice-project-todo/src/test/java/edu/wofford/realXMLFiles/realXML.xml").getArgParser();
+        //brainstorming how a product owner would load in the arguments   
+        //ClassLoader.getSystemResourceAsStream( 
+        ArgParser argchecker =  StaxParser.createParserFromXML("/Users/Patnamnv/Desktop/practice-project-todo/src/test/java/edu/wofford/realXMLFiles/realXML.xml");
         argchecker.setProgramName("volume calculator");
         argchecker.setProgramDescription("calculates the volume of a object");
 
         assertEquals("length of the box", argchecker.getArgDescription("length"));
         assertEquals("1738", argchecker.getArgValue("height"));
+        assertEquals("3", argchecker.getArgValue("precision"));
+        assertEquals("false", argchecker.getArgValue("metric"));
         }
         catch(Exception e){
           e.printStackTrace();
-    
+          assertTrue(false);
         }
 }
 
+@Test
+public void argGivenValueNotRestricted(){
 
+    String[] cla = { "7"};  
+    argCheck.addArg("length");
+    argCheck.setArgRestricedValues("length", "7 8 9");
+    argCheck.parse(cla);
+    assertEquals("7", argCheck.getArgValue("length"));
+  
+}
+
+/** 
+@Test
+public void argGivenValueNotInRestricted(){
+
+    String[] cla = { "7"};  
+    argCheck.addArg("length");
+    argCheck.setArgRestricedValues("length", "5 8 9");
+    String msg = "7 " + "is not an allowed value for" + " length";
+    try {
+      argCheck.parse(cla);
+      fail("Should have thrown IllegalArgumentException but did not!");
+    } catch (IllegalArgumentException expected) {
+      assertEquals(msg, expected.getMessage());
+    }
+  
+}
+*/
 }

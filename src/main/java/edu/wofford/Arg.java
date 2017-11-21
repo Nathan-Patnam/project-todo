@@ -43,8 +43,10 @@ public class Arg {
     this.dataType = dataType;
   }
 
-  public void setRestrictedValues(HashSet<String> restrictedValues) {
-    this.restrictedValues = restrictedValues;
+  public void setRestrictedValues(String restrictedValues) {
+    for (String value : restrictedValues.split(" ")) {
+    this.restrictedValues.add(value);
+    }
 
   }
 
@@ -80,6 +82,8 @@ public class Arg {
       for (String restrictedValue : restrictedValues) {
         this.allRestrictedValuesString += restrictedValue + " ";
       }
+      this.allRestrictedValuesString= this.allRestrictedValuesString.trim();
+
     }
 
     return this.allRestrictedValuesString;

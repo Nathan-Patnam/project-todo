@@ -1,5 +1,6 @@
 package edu.wofford;
 
+import java.io.*;
 import java.util.*;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
@@ -7,136 +8,138 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
 public class StaxParser {
-    private ArgParser argChecker;
-    private String tagContent;
-    private XMLInputFactory factory;
-    private XMLStreamReader reader;
-    private Stack<String> argNames;
-    private Stack<String> currentArgAccessed;
-    private Arg.DataType argumentDataType;
-
-    public StaxParser(String fileName) throws Exception {
-
-        this.argChecker = null;
-        this.tagContent = null;
-
-        this.factory = XMLInputFactory.newInstance();
-        this.reader = factory.createXMLStreamReader(ClassLoader.getSystemResourceAsStream(fileName));
-
-        while (reader.hasNext()) {
-            int event = reader.next();
-
-            switch (event) {
-            case XMLStreamConstants.START_ELEMENT:
-                String startElement = reader.getLocalName();
-                //creat  argument parser at first element, product owner will add name/description later
-                if ("arguments".equals(startElement)) {
-                    this.argChecker = new ArgParser("", "");
-                } 
-                //record what type of argument that is being parsed
-                else if ("employee".equals(startElement) || "positional".equals(startElement)
-                        || "flag".equals(startElement)) {
-
-                    argNames.push(startElement);
-                }
-                break;
-
-            case XMLStreamConstants.CHARACTERS:
-                tagContent = reader.getText().trim();
-                break;
-
-            case XMLStreamConstants.END_ELEMENT:
-                String typeOfArgument = argNames.peek();
-                String endElement = reader.getLocalName();
-                //done with parsing
-                if ("arguments".equals(endElement)) {
-                    break;
-                }
-                //done using current argument
-                else if ("optional".equals(endElement) || "flag".equals(endElement)
-                        || "positional".equals(endElement)) {
-                    argNames.pop();
-                    currentArgAccessed.pop();
-                    break;
-                } else {   
-                    //encountered some type of attribute for some argument
-                    String currentArgumentAccessed = currentArgAccessed.peek();
-                    if ("optional".equals(typeOfArgument)) {
-                        if ("name".equals(endElement)) {
-                            this.currentArgAccessed.push(tagContent);
-                            break;
-                        } else if ("value".equals(endElement)) {
-                            argChecker.addOptArg(currentArgumentAccessed, tagContent);
-
-                        } else if ("datatype".equals(endElement)) {
-                            if (tagContent.equals("string")) {
-                                this.argumentDataType = Arg.DataType.STRING;
-                            } else if (tagContent.equals("float")) {
-                                this.argumentDataType = Arg.DataType.FLOAT;
-                            } else if (tagContent.equals("boolean")) {
-                                this.argumentDataType = Arg.DataType.BOOLEAN;
-                            } else if (tagContent.equals("int")) {
-                                this.argumentDataType = Arg.DataType.INT;
-                            }
-
-                            argChecker.getArgument(currentArgumentAccessed).setDataType(this.argumentDataType);
-
-                        } else if ("shortname".equals(endElement)) {
-                            argChecker.setArgShortFormName(currentArgumentAccessed, tagContent);
-
-                        } else if ("description".equals(endElement)) {
-                            argChecker.getArgument(currentArgumentAccessed).setDescription(tagContent);
-
-                        }
-                    } else if ("flag".equals(typeOfArgument)) {
-                        if ("name".equals(endElement)) {
-                            argChecker.addFlag(tagContent);
-                            this.currentArgAccessed.push(tagContent);
-                        }
-
+    public static ArgParser createParserFromXML(String xmlFilename) {
+        ArgParser argChecker;
+        String tagContent;
+        XMLInputFactory factory;
+        XMLStreamReader reader;
+        Stack<String> argNames = new Stack<>();;
+        Stack<String> currentArgAccessed = new Stack<>();;
+        Arg.DataType argumentDataType = Arg.DataType.STRING;
+        try {
+            argChecker = null;
+            tagContent = null;
+            factory = XMLInputFactory.newInstance();
+            FileReader fileReader = new FileReader(xmlFilename);
+            reader = factory.createXMLStreamReader(fileReader);
+    
+            while (reader.hasNext()) {
+                int event = reader.next();
+    
+                switch (event) {
+                case XMLStreamConstants.START_ELEMENT:
+                    String startElement = reader.getLocalName();
+                    //creat  argument parser at first element, product owner will add name/description later
+                    if ("arguments".equals(startElement)) {
+                        argChecker = new ArgParser("", "");
                     } 
-                    else if ("positional".equals(typeOfArgument)) {
-                        if ("name".equals(endElement)) {
-                            argChecker.addArg(tagContent);
-                            this.currentArgAccessed.push(tagContent);
-                        }
-                        //TODO
-                        //gotta figure this one out, maybe make a argument stack and then add them all at the end TODO
-                        else if ("position".equals(endElement)) {
-
-                        } else if ("datatype".equals(endElement)) {
-
-                            if (tagContent.equals("string")) {
-                                this.argumentDataType = Arg.DataType.STRING;
-                            } else if (tagContent.equals("float")) {
-                                this.argumentDataType = Arg.DataType.FLOAT;
-                            } else if (tagContent.equals("boolean")) {
-                                this.argumentDataType = Arg.DataType.BOOLEAN;
-                            } else if (tagContent.equals("int")) {
-                                this.argumentDataType = Arg.DataType.INT;
-                            }
-                            argChecker.getArgument(currentArgumentAccessed).setDataType(this.argumentDataType);
-                        } else if ("shortname".equals(endElement)) {
-                            argChecker.setArgShortFormName(currentArgumentAccessed, tagContent);
-                        } else if ("description".equals(endElement)) {
-                            argChecker.getArgument(currentArgumentAccessed).setDescription(tagContent);
-                        }
-
+                    //record what type of argument that is being parsed
+                    else if ("optional".equals(startElement) || "positional".equals(startElement)
+                            || "flag".equals(startElement)) {
+                        argNames.push(startElement);
                     }
-                }
+                    break;
+    
+                case XMLStreamConstants.CHARACTERS:
+                    tagContent = reader.getText().trim();
+                    break;
+    
+                case XMLStreamConstants.END_ELEMENT:
+                    
+                    String endElement = reader.getLocalName();
+                    //done with parsing
+                    if ("arguments".equals(endElement)) {
             
-            case XMLStreamConstants.START_DOCUMENT:
-                this.argNames = new Stack<>();
-                this.currentArgAccessed = new Stack<>();
-                break;
-
-            }
+                        break;
+                    }
+                    //done using current argument
+                    else if ("optional".equals(endElement) || "flag".equals(endElement)
+                            || "positional".equals(endElement)) {
+                        argNames.pop();
+                        currentArgAccessed.pop();
+                        break;
+                    } else {   
+                        String typeOfArgument = argNames.peek();
+                        //encountered some type of attribute for some argument
+    
+                        if ("optional".equals(typeOfArgument)) {
+                            if ("name".equals(endElement)) {
+                                currentArgAccessed.push(tagContent);
+                            
+                            } else if ("value".equals(endElement)) {
+                                argChecker.addOptArg(currentArgAccessed.peek(), tagContent);
+    
+                            } else if ("datatype".equals(endElement)) {
+                                if (tagContent.equals("string")) {
+                                    argumentDataType = Arg.DataType.STRING;
+                                } else if (tagContent.equals("float")) {
+                                    argumentDataType = Arg.DataType.FLOAT;
+                                } else if (tagContent.equals("boolean")) {
+                                    argumentDataType = Arg.DataType.BOOLEAN;
+                                } else if (tagContent.equals("int")) {
+                                    argumentDataType = Arg.DataType.INT;
+                                }
+    
+                                argChecker.getArgument(currentArgAccessed.peek()).setDataType(argumentDataType);
+    
+                            } else if ("shortname".equals(endElement)) {
+                                argChecker.setArgShortFormName(currentArgAccessed.peek(), tagContent);
+    
+                            } else if ("description".equals(endElement)) {
+                                argChecker.getArgument(currentArgAccessed.peek()).setDescription(tagContent);
+    
+                            }
+                        } else if ("flag".equals(typeOfArgument)) {
+                            if ("name".equals(endElement)) {
+                                argChecker.addFlag(tagContent);
+                                currentArgAccessed.push(tagContent);
+                            }
+    
+                        } 
+                        else if ("positional".equals(typeOfArgument)) {
+                            if ("name".equals(endElement)) {
+                                argChecker.addArg(tagContent);
+                                currentArgAccessed.push(tagContent);
+                            }
+                            //TODO
+                            //gotta figure one out, maybe make a argument stack and then add them all at the end TODO
+                            else if ("position".equals(endElement)) {
+    
+                            } else if ("datatype".equals(endElement)) {
+    
+                                if (tagContent.equals("string")) {
+                                    argumentDataType = Arg.DataType.STRING;
+                                } else if (tagContent.equals("float")) {
+                                    argumentDataType = Arg.DataType.FLOAT;
+                                } else if (tagContent.equals("boolean")) {
+                                    argumentDataType = Arg.DataType.BOOLEAN;
+                                } else if (tagContent.equals("int")) {
+                                    argumentDataType = Arg.DataType.INT;
+                                }
+                                argChecker.getArgument(currentArgAccessed.peek()).setDataType(argumentDataType);
+                            } else if ("shortname".equals(endElement)) {
+                                argChecker.setArgShortFormName(currentArgAccessed.peek(), tagContent);
+                            } else if ("description".equals(endElement)) {
+                                argChecker.getArgument(currentArgAccessed.peek()).setDescription(tagContent);
+                            }
+    
+                        }
+                         break;
+                    }
+                
         }
     }
-
-    public ArgParser getArgParser(){
-        return this.argChecker;
+    return argChecker;
+}
+        catch(Exception e) {
+            System.out.println(e);
+            return new ArgParser("");
+        }
 
     }
 
-}
+
+
+
+    }
+
