@@ -558,4 +558,18 @@ public void argRequiredButNotGiven(){
   
 }
 
+@Test
+public void argRequiredAndGiven(){
+
+  String[] cla = {"7","--optionalArgTwo", "9" };
+  argCheck.addArg("length",Arg.DataType.FLOAT);
+  argCheck.addOptArg("optionalArgTwo", "10", Arg.DataType.FLOAT);
+  argCheck.setArgAsRequired("optionalArgTwo");
+  argCheck.parse(cla);
+  assertEquals("7",argCheck.getArgValue("length"));
+  assertEquals("9", argCheck.getArgValue("optionalArgTwo"));
+  
+  
+}
+
 }

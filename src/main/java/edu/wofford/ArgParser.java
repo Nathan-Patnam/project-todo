@@ -274,6 +274,9 @@ public class ArgParser {
                 throw new IllegalArgumentException(args[i + 1] + " is not an allowed value for " + aname);
               }
             } else {
+              if(requiredArgs.contains(aname)){
+                requiredArgs.remove(aname);
+              }
               a.setValue(args[i + 1]);
               i++;
             }
