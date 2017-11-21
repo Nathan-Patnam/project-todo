@@ -287,8 +287,20 @@ public class ArgParser {
           aname = argumentNames.get(usedArguments);
           Arg a = arguments.get(aname);
           if (checkType(args[i], a.getDataType())) {
-            a.setValue(args[i]);
-            usedArguments++;
+          
+            if (a.getRestrictedValuesString() != null
+            && a.getRestrictedValuesString().length() > 0) {
+              argRestrictedValues = a.getRestrictedValues();
+              if (argRestrictedValues.contains(args[i])) {
+                a.setValue(args[i]);
+                usedArguments++;
+              } else {
+                throw new IllegalArgumentException(args[i] + " is not an allowed value for " + aname);
+              }
+            } else {
+              a.setValue(args[i]);
+              usedArguments++;
+            }
           } else {
             String message = "";
             message = "usage: java " + programName + getParameterString() + "\n" + programName + ".java: error: "
