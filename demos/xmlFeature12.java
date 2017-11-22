@@ -15,6 +15,10 @@ public class xmlFeature12 {
     argchecker.addOptArg("height", "1738",Arg.DataType.FLOAT, "height of the box" );
     argchecker.setArgShortFormName("height","g");
     argchecker.setArgRestricedValues("height","7 8 9");
+    argchecker.addOptArg("type", "pyramid",Arg.DataType.STRING, "shape of the box" );
+    argchecker.setArgShortFormName("type","t");
+    argchecker.setArgRestricedValues("type","cube ellipsoid sphere");
+    argchecker.setArgAsRequired("type");
     argchecker.addFlag("s");
     argchecker.getArgInfoAsXML("feature12.xml");
     }

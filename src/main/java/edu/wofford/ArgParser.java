@@ -1,13 +1,6 @@
 package edu.wofford;
 
 import java.util.*;
-/** 
-import org.xml.sax.helpers.DefaultHandler;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-import java.io.StringWriter;
-import java.io.File;
-*/
 
 import java.io.IOException;
 import javax.xml.stream.XMLOutputFactory;
@@ -35,7 +28,7 @@ public class ArgParser {
     argumentNames = new ArrayList<>();
     shortToLong = new HashMap<>();
     flagNames = new HashSet<>();
-    requiredArgs= new HashSet<>();
+    requiredArgs = new HashSet<>();
 
   }
 
@@ -165,9 +158,7 @@ public class ArgParser {
     message = "usage: java " + programName + getParameterString() + "\n" + programDescription + "\n"
         + "positional arguments:";
     for (String argNameIterator : arguments.keySet()) {
-      if (argNameIterator.equals("help") || argNameIterator.equals("h")) {
-        continue;
-      } else {
+      if (!argNameIterator.equals("help") && !argNameIterator.equals("h")) {
         Arg currentArgumentIterator = arguments.get(argNameIterator);
         message += "\n   " + argNameIterator + " " + currentArgumentIterator.getDescription() + " ("
             + currentArgumentIterator.getDataType().toString() + ")";
@@ -183,10 +174,9 @@ public class ArgParser {
   private String getParameterString() {
     String key_string = "";
     for (String argNameIterator : arguments.keySet()) {
-      if (argNameIterator.equals("help") || argNameIterator.equals("h")) {
-        continue;
-      }
+      if (!argNameIterator.equals("help") && !argNameIterator.equals("h")) {
       key_string += " " + argNameIterator;
+      }
     }
     return key_string;
   }
@@ -260,21 +250,20 @@ public class ArgParser {
         } else {
           if (checkType(args[i + 1], a.getDataType())) {
 
-            if (a.getRestrictedValuesString() != null
-            && a.getRestrictedValuesString().length() > 0) {
+            if (a.getRestrictedValuesString() != null && a.getRestrictedValuesString().length() > 0) {
               argRestrictedValues = a.getRestrictedValues();
               if (argRestrictedValues.contains(args[i + 1])) {
-                if(requiredArgs.contains(aname)){
+                if (requiredArgs.contains(aname)) {
                   requiredArgs.remove(aname);
                 }
-                
+
                 a.setValue(args[i + 1]);
                 i++;
               } else {
                 throw new IllegalArgumentException(args[i + 1] + " is not an allowed value for " + aname);
               }
             } else {
-              if(requiredArgs.contains(aname)){
+              if (requiredArgs.contains(aname)) {
                 requiredArgs.remove(aname);
               }
               a.setValue(args[i + 1]);
@@ -302,9 +291,8 @@ public class ArgParser {
           aname = argumentNames.get(usedArguments);
           Arg a = arguments.get(aname);
           if (checkType(args[i], a.getDataType())) {
-          
-            if (a.getRestrictedValuesString() != null
-            && a.getRestrictedValuesString().length() > 0) {
+
+            if (a.getRestrictedValuesString() != null && a.getRestrictedValuesString().length() > 0) {
               argRestrictedValues = a.getRestrictedValues();
               if (argRestrictedValues.contains(args[i])) {
                 a.setValue(args[i]);
@@ -338,49 +326,41 @@ public class ArgParser {
       throw new TooFewArguments(message);
     }
 
-    if(requiredArgs.size()>0){
-      String requiredArgString="";
+    if (requiredArgs.size() > 0) {
+      String requiredArgString = "";
       for (String requiredArgs : requiredArgs) {
-        requiredArgString+=requiredArgs + " ";
+        requiredArgString += requiredArgs + " ";
       }
 
-      throw new IllegalArgumentException("The argument(s) " + requiredArgString +"are required");
+      throw new IllegalArgumentException("The argument(s) " + requiredArgString + "are required");
     }
 
   }
-
-
-
- 
 
   public void getArgInfoAsXML(String fileName) {
     try {
       XMLOutputFactory xof = XMLOutputFactory.newInstance();
       XMLStreamWriter xMLStreamWriter = xof.createXMLStreamWriter(new FileWriter(fileName));
-    
       int argumentPositionCounter = 1;
       xMLStreamWriter.writeStartDocument();
       xMLStreamWriter.writeCharacters("\n");
       xMLStreamWriter.writeStartElement("arguments");
       for (String argNameIterator : arguments.keySet()) {
-        
+
         Arg argumentIterator = getArgument(argNameIterator);
         //adding a flag
         if (flagNames.contains(argNameIterator)) {
           xMLStreamWriter.writeCharacters("\n\t");
           xMLStreamWriter.writeStartElement("flag");
-          
 
           xMLStreamWriter.writeCharacters("\n\t\t");
           xMLStreamWriter.writeStartElement("name");
           xMLStreamWriter.writeCharacters(argNameIterator);
           xMLStreamWriter.writeEndElement();
-    
 
           //close flag tag
           xMLStreamWriter.writeCharacters("\n\t");
           xMLStreamWriter.writeEndElement();
-         
 
         } else {
           //argument is a optional argument
@@ -400,11 +380,9 @@ public class ArgParser {
 
             xMLStreamWriter.writeCharacters("\n\t\t");
             xMLStreamWriter.writeStartElement("required");
-            xMLStreamWriter.writeCharacters( String.valueOf(((OptArg)argumentIterator).isArgRequired()));
+            xMLStreamWriter.writeCharacters(String.valueOf(((OptArg) argumentIterator).isArgRequired()));
             xMLStreamWriter.writeEndElement();
 
-
-    
           } else {
             xMLStreamWriter.writeCharacters("\n\t");
             xMLStreamWriter.writeStartElement("positional");
@@ -426,7 +404,6 @@ public class ArgParser {
           xMLStreamWriter.writeStartElement("datatype");
           xMLStreamWriter.writeCharacters(argumentIterator.getDataType().toString());
           xMLStreamWriter.writeEndElement();
-  
 
           if (argumentIterator.getShortFormName() != null) {
             xMLStreamWriter.writeCharacters("\n\t\t");
@@ -440,7 +417,7 @@ public class ArgParser {
             xMLStreamWriter.writeStartElement("description");
             xMLStreamWriter.writeCharacters(argumentIterator.getDescription());
             xMLStreamWriter.writeEndElement();
-            
+
           }
 
           if (argumentIterator.getRestrictedValuesString() != null
@@ -449,7 +426,7 @@ public class ArgParser {
             xMLStreamWriter.writeStartElement("restrictedValues");
             xMLStreamWriter.writeCharacters(argumentIterator.getRestrictedValuesString());
             xMLStreamWriter.writeEndElement();
-            
+
           }
           //close positional and optional tag
           xMLStreamWriter.writeCharacters("\n\t");

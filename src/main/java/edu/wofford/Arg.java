@@ -2,7 +2,8 @@ package edu.wofford;
 
 import java.util.*;
 
-public class Arg {
+public class Arg{
+
   public enum DataType {
     STRING("string"), INT("int"), BOOLEAN("boolean"), FLOAT("float");
     private DataType(String s) {
@@ -23,12 +24,22 @@ public class Arg {
   protected String shortFormName;
   protected HashSet<String> restrictedValues;
   protected String allRestrictedValuesString;
+  private static int argumentPosition=1;
+
+  public Arg(String name){
+    this(name, "", DataType.STRING);
+  }
+  public Arg(String name, String description){
+    this(name, description, DataType.STRING);
+  }
 
   public Arg(String name, String description, DataType dataType) {
     this.name = name;
     this.description = description;
     this.dataType = dataType;
     this.restrictedValues = new HashSet<>();
+    argumentPosition++;
+
   }
 
   public void setDescription(String description) {
@@ -88,5 +99,7 @@ public class Arg {
 
     return this.allRestrictedValuesString;
   }
+
+
 
 }

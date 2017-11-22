@@ -18,10 +18,20 @@
 	<optional>
 		<name>height</name>
 		<value>1738</value>
+		<required>false</required>
 		<datatype>float</datatype>
 		<shortname>g</shortname>
 		<description>height of the box</description>
 		<restrictedValues>7 8 9</restrictedValues>
+	</optional>
+	<optional>
+		<name>type</name>
+		<value>pyramid</value>
+		<required>true</required>
+		<datatype>string</datatype>
+		<shortname>t</shortname>
+		<description>shape of the box</description>
+		<restrictedValues>sphere cube ellipsoid</restrictedValues>
 	</optional>
 	<flag>
 		<name>s</name>

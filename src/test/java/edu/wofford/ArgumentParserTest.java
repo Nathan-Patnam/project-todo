@@ -1,3 +1,4 @@
+
 package edu.wofford;
 
 import static org.junit.Assert.*;
@@ -14,16 +15,18 @@ public class ArgumentParserTest {
 
   @Before
   public final void setup() {
-    argCheck = new ArgParser("VolumeCalculator", "Calculate the volume of a box.");
     argCheckSimple = new ArgParser("VolumeCalculator");
+    argCheck = new ArgParser("VolumeCalculator", "Calculate the volume of a box.");
+    
 
   }
 
   @Test
-  public final void setProgramName() {
+  public final void setThenTestProgramDescription() {
     argCheckSimple.setProgramName("Calculate the volume of a box.");
     assertEquals("Calculate the volume of a box.", argCheck.getProgramDescription());
   }
+
 
   @Test
   public final void testProgramName() {

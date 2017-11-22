@@ -13,6 +13,7 @@ public class StaxParser {
         String tagContent;
         XMLInputFactory factory;
         XMLStreamReader reader;
+        ArrayList<Arg> listPositionalArguments = new ArrayList<>();
         Stack<String> argNames = new Stack<>();;
         Stack<String> currentArgAccessed = new Stack<>();;
         Arg.DataType argumentDataType = Arg.DataType.STRING;
@@ -105,6 +106,8 @@ public class StaxParser {
     
                         } 
                         else if ("positional".equals(typeOfArgument)) {
+                    
+                            
                             if ("name".equals(endElement)) {
                                 argChecker.addArg(tagContent);
                                 currentArgAccessed.push(tagContent);
@@ -112,6 +115,7 @@ public class StaxParser {
                             //TODO
                             //gotta figure one out, maybe make a argument stack and then add them all at the end TODO
                             else if ("position".equals(endElement)) {
+                             
     
                             } else if ("datatype".equals(endElement)) {
     
