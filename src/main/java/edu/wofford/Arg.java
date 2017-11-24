@@ -24,7 +24,7 @@ public class Arg{
   protected String shortFormName;
   protected HashSet<String> restrictedValues;
   protected String allRestrictedValuesString;
-  private static int argumentPosition=1;
+  protected boolean required;
 
   public Arg(String name){
     this(name, "", DataType.STRING);
@@ -38,7 +38,7 @@ public class Arg{
     this.description = description;
     this.dataType = dataType;
     this.restrictedValues = new HashSet<>();
-    argumentPosition++;
+    this.required=true;
 
   }
 
@@ -64,6 +64,10 @@ public class Arg{
   public void setValue(String value) {
     this.value = value;
   }
+
+  public void makeArgRequired(){
+    this.required=true;
+}
 
   public String getDescription() {
     return this.description;
@@ -99,6 +103,10 @@ public class Arg{
 
     return this.allRestrictedValuesString;
   }
+
+  public boolean isArgRequired(){
+    return this.required;
+}
 
 
 

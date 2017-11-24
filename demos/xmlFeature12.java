@@ -20,6 +20,6 @@ public class xmlFeature12 {
     argchecker.setArgRestricedValues("type","cube ellipsoid sphere");
     argchecker.setArgAsRequired("type");
     argchecker.addFlag("s");
-    argchecker.getArgInfoAsXML("feature12.xml");
+    XML.saveToFile("feature12.xml", argchecker);
     }
   }

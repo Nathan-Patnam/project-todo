@@ -2,20 +2,15 @@ package edu.wofford;
 
 import java.util.*;
 
-import java.io.IOException;
-import javax.xml.stream.XMLOutputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
-import java.io.FileWriter;
 
 public class ArgParser {
   private String programName;
   private String programDescription;
   private Map<String, String> shortToLong;
-  private Map<String, Arg> arguments;
   private ArrayList<String> argumentNames;
-  private HashSet<String> flagNames;
   private HashSet<String> requiredArgs;
+  private  HashSet<String> flagNames;
+  private Map<String, Arg> arguments;
 
   public ArgParser(String programName) {
     this(programName, "");
@@ -68,28 +63,13 @@ public class ArgParser {
     arguments.put(argname, new OptArg(argname, defaultValue, dataType, description));
   }
 
-  public void setArgShortFormName(String argument, String shortFormName) {
-    arguments.get(argument).setShortFormName(shortFormName);
-    if (shortToLong.get(shortFormName) != null || shortFormName.equals("h")) {
-      throw new IllegalArgumentException("The short form name " + shortFormName + " is already in uses");
-    }
-    shortToLong.put(shortFormName, argument);
-
-  }
-
-  public void setArgRestricedValues(String argument, String restrictedValues) {
-    arguments.get(argument).setRestrictedValues(restrictedValues);
-
-  }
-
-  public void setArgAsRequired(String argument) {
-    ((OptArg) arguments.get(argument)).makeArgRequired();
-    requiredArgs.add(argument);
-
-  }
-
   public void addFlag(String argname) {
     arguments.put(argname, new OptArg(argname, false, Arg.DataType.BOOLEAN));
+    flagNames.add(argname);
+  }
+
+  public void addFlag(String argname, String description) {
+    arguments.put(argname, new OptArg(argname, false, Arg.DataType.BOOLEAN, description));
     flagNames.add(argname);
   }
 
@@ -119,6 +99,14 @@ public class ArgParser {
   public Arg getArgument(String argument) {
 
     return arguments.get(argument);
+  }
+
+  public Map<String, Arg> getAllArgs() {
+    return this.arguments;
+  }
+
+  public HashSet<String> getFlagNames() {
+    return this.flagNames;
   }
 
   /**
@@ -175,7 +163,7 @@ public class ArgParser {
     String key_string = "";
     for (String argNameIterator : arguments.keySet()) {
       if (!argNameIterator.equals("help") && !argNameIterator.equals("h")) {
-      key_string += " " + argNameIterator;
+        key_string += " " + argNameIterator;
       }
     }
     return key_string;
@@ -197,6 +185,26 @@ public class ArgParser {
     return programDescription;
   }
 
+  private void tooManyInputsGiven(){
+    String requiredArgString = "";
+    for (String requiredArgs : requiredArgs) {
+      requiredArgString += requiredArgs + " ";
+    }
+    throw new IllegalArgumentException("The argument(s) " + requiredArgString + "are required");
+  }
+
+
+  private void tooFewInputsGiven(int usedArguments){
+    String missingArguements = "";
+    for (int i = usedArguments; i < argumentNames.size(); i++) {
+      missingArguements += " " + argumentNames.get(i);
+    }
+    String message = "usage: java " + programName + getParameterString() + "\n" + programName
+        + ".java: error: the following arguments are required:" + missingArguements;
+    throw new TooFewArguments(message);
+    }
+
+
   public void parse(String[] args) {
     HashSet<String> argRestrictedValues;
     int usedArguments = 0;
@@ -206,7 +214,9 @@ public class ArgParser {
       if (args[i].equals("-h") || args[i].equals("--help")) {
         String message = getHelpMessage();
         throw new HelpException(message);
-      } else if (args[i].startsWith("-")) {
+      }
+
+      else if (args[i].startsWith("-")) {
         if (args[i].startsWith("--")) {
           aname = args[i].substring(2);
           if (arguments.get(aname) == null) {
@@ -317,135 +327,37 @@ public class ArgParser {
     }
 
     if (usedArguments < argumentNames.size()) {
-      String missingArguements = "";
-      for (int i = usedArguments; i < argumentNames.size(); i++) {
-        missingArguements += " " + argumentNames.get(i);
-      }
-      String message = "usage: java " + programName + getParameterString() + "\n" + programName
-          + ".java: error: the following arguments are required:" + missingArguements;
-      throw new TooFewArguments(message);
-    }
+      tooFewInputsGiven(usedArguments);
 
-    if (requiredArgs.size() > 0) {
-      String requiredArgString = "";
-      for (String requiredArgs : requiredArgs) {
-        requiredArgString += requiredArgs + " ";
-      }
-
-      throw new IllegalArgumentException("The argument(s) " + requiredArgString + "are required");
     }
+    else if (requiredArgs.size() > 0) {
+      tooManyInputsGiven();
+
 
   }
 
-  public void getArgInfoAsXML(String fileName) {
-    try {
-      XMLOutputFactory xof = XMLOutputFactory.newInstance();
-      XMLStreamWriter xMLStreamWriter = xof.createXMLStreamWriter(new FileWriter(fileName));
-      int argumentPositionCounter = 1;
-      xMLStreamWriter.writeStartDocument();
-      xMLStreamWriter.writeCharacters("\n");
-      xMLStreamWriter.writeStartElement("arguments");
-      for (String argNameIterator : arguments.keySet()) {
+  
+}
 
-        Arg argumentIterator = getArgument(argNameIterator);
-        //adding a flag
-        if (flagNames.contains(argNameIterator)) {
-          xMLStreamWriter.writeCharacters("\n\t");
-          xMLStreamWriter.writeStartElement("flag");
 
-          xMLStreamWriter.writeCharacters("\n\t\t");
-          xMLStreamWriter.writeStartElement("name");
-          xMLStreamWriter.writeCharacters(argNameIterator);
-          xMLStreamWriter.writeEndElement();
 
-          //close flag tag
-          xMLStreamWriter.writeCharacters("\n\t");
-          xMLStreamWriter.writeEndElement();
-
-        } else {
-          //argument is a optional argument
-          if (argumentIterator instanceof OptArg) {
-            xMLStreamWriter.writeCharacters("\n\t");
-            xMLStreamWriter.writeStartElement("optional");
-
-            xMLStreamWriter.writeCharacters("\n\t\t");
-            xMLStreamWriter.writeStartElement("name");
-            xMLStreamWriter.writeCharacters(argNameIterator);
-            xMLStreamWriter.writeEndElement();
-
-            xMLStreamWriter.writeCharacters("\n\t\t");
-            xMLStreamWriter.writeStartElement("value");
-            xMLStreamWriter.writeCharacters(argumentIterator.getValue());
-            xMLStreamWriter.writeEndElement();
-
-            xMLStreamWriter.writeCharacters("\n\t\t");
-            xMLStreamWriter.writeStartElement("required");
-            xMLStreamWriter.writeCharacters(String.valueOf(((OptArg) argumentIterator).isArgRequired()));
-            xMLStreamWriter.writeEndElement();
-
-          } else {
-            xMLStreamWriter.writeCharacters("\n\t");
-            xMLStreamWriter.writeStartElement("positional");
-
-            xMLStreamWriter.writeCharacters("\n\t\t");
-            xMLStreamWriter.writeStartElement("name");
-            xMLStreamWriter.writeCharacters(argNameIterator);
-            xMLStreamWriter.writeEndElement();
-
-            xMLStreamWriter.writeCharacters("\n\t\t");
-            xMLStreamWriter.writeStartElement("position");
-            xMLStreamWriter.writeCharacters(String.valueOf(argumentPositionCounter));
-            xMLStreamWriter.writeEndElement();
-
-            argumentPositionCounter++;
-
-          }
-          xMLStreamWriter.writeCharacters("\n\t\t");
-          xMLStreamWriter.writeStartElement("datatype");
-          xMLStreamWriter.writeCharacters(argumentIterator.getDataType().toString());
-          xMLStreamWriter.writeEndElement();
-
-          if (argumentIterator.getShortFormName() != null) {
-            xMLStreamWriter.writeCharacters("\n\t\t");
-            xMLStreamWriter.writeStartElement("shortname");
-            xMLStreamWriter.writeCharacters(argumentIterator.getShortFormName());
-            xMLStreamWriter.writeEndElement();
-          }
-
-          if (argumentIterator.getDescription() != null && argumentIterator.getDescription().length() > 0) {
-            xMLStreamWriter.writeCharacters("\n\t\t");
-            xMLStreamWriter.writeStartElement("description");
-            xMLStreamWriter.writeCharacters(argumentIterator.getDescription());
-            xMLStreamWriter.writeEndElement();
-
-          }
-
-          if (argumentIterator.getRestrictedValuesString() != null
-              && argumentIterator.getRestrictedValuesString().length() > 0) {
-            xMLStreamWriter.writeCharacters("\n\t\t");
-            xMLStreamWriter.writeStartElement("restrictedValues");
-            xMLStreamWriter.writeCharacters(argumentIterator.getRestrictedValuesString());
-            xMLStreamWriter.writeEndElement();
-
-          }
-          //close positional and optional tag
-          xMLStreamWriter.writeCharacters("\n\t");
-          xMLStreamWriter.writeEndElement();
-        }
-      }
-      //close arguments tag
-      xMLStreamWriter.writeCharacters("\n");
-      xMLStreamWriter.writeEndElement();
-      xMLStreamWriter.writeEndDocument();
-      xMLStreamWriter.flush();
-      xMLStreamWriter.close();
-
-    } catch (XMLStreamException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
+public void setArgShortFormName(String argument, String shortFormName) {
+  arguments.get(argument).setShortFormName(shortFormName);
+  if (shortToLong.get(shortFormName) != null || shortFormName.equals("h")) {
+    throw new IllegalArgumentException("The short form name " + shortFormName + " is already in uses");
   }
+  shortToLong.put(shortFormName, argument);
+}
 
+public void setArgRestricedValues(String argument, String restrictedValues) {
+  arguments.get(argument).setRestrictedValues(restrictedValues);
+
+}
+
+public void setArgAsRequired(String argument) {
+  if(arguments.get(argument).isArgRequired()==false){
+    arguments.get(argument).makeArgRequired();
+    requiredArgs.add(argument);
+  }
+}
 }

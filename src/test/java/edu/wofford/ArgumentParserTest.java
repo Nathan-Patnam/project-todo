@@ -465,22 +465,23 @@ public class ArgumentParserTest {
 
 
 
-    // check if saving to a XML file works by comparing the two files with one another
+    /** check if saving to a XML file works by comparing the two files with one another
     @Test
     public void testSaveArgsAsXML(){
       ArgParser argcheckerOne =  StaxParser.createParserFromXML("/Users/Patnamnv/Desktop/practice-project-todo/src/test/java/edu/wofford/realXMLFiles/realXML.xml");
-      argcheckerOne.getArgInfoAsXML("/Users/Patnamnv/Desktop/practice-project-todo/src/test/java/edu/wofford/testXMLFiles/yourXML.xml");
+      ArgParser.SaveArgsAsXML saveArgParser = new ArgParser.SaveArgsAsXML("/Users/Patnamnv/Desktop/practice-project-todo/src/test/java/edu/wofford/testXMLFiles/yourXML.xml", argcheckerOne);
       ArgParser argcheckerTwo =  StaxParser.createParserFromXML("/Users/Patnamnv/Desktop/practice-project-todo/src/test/java/edu/wofford/testXMLFiles/yourXML.xml");
       assertEquals(argcheckerOne.getArgValue("height"), argcheckerTwo.getArgValue("height"));
       assertEquals(argcheckerOne.getArgument("height").getRestrictedValuesString(), argcheckerTwo.getArgument("height").getRestrictedValuesString());
   
     }
+    **/
     
     @Test
     public void testLoadArgsAsXML(){
       try{
         //ClassLoader.getSystemResourceAsStream( 
-        ArgParser argchecker =  StaxParser.createParserFromXML("/Users/Patnamnv/Desktop/practice-project-todo/src/test/java/edu/wofford/realXMLFiles/realXML.xml");
+        ArgParser argchecker =  XML.loadFromFile("/Users/Patnamnv/Desktop/practice-project-todo/src/test/java/edu/wofford/realXMLFiles/realXML.xml");
         argchecker.setProgramName("volume calculator");
         argchecker.setProgramDescription("calculates the volume of a object");
 
