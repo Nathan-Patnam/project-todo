@@ -50,4 +50,10 @@ public final void TestCreateFlag(){
     OptArg flag =  new OptArg("metric", false , Arg.DataType.FLOAT);
     assertEquals("false", flag.getValue());
 }
+
+@Test
+public final void TestCreateFlagWithDescription(){
+    OptArg flag =  new OptArg("metric", false , Arg.DataType.FLOAT, "units that measurement and volume will be given in");
+    assertEquals("units that measurement and volume will be given in", flag.getDescription());
+}
 }

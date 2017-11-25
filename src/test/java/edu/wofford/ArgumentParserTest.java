@@ -350,6 +350,14 @@ public class ArgumentParserTest {
   }
 
   @Test
+  public void addOneFlagWithDescription() {
+    String[] cla = { "-m" };
+    argCheck.addFlag("m", "if true units will be given in liters, if false will be given in gallons");
+    argCheck.parse(cla);
+    assertEquals("true", argCheck.getArgValue("m"));
+  }
+
+  @Test
   public void addOneFlagSetValue() {
     String[] cla = { "-y", "7" };
     argCheck.addFlag("y");
@@ -465,36 +473,8 @@ public class ArgumentParserTest {
 
 
 
-    /** check if saving to a XML file works by comparing the two files with one another
-    @Test
-    public void testSaveArgsAsXML(){
-      ArgParser argcheckerOne =  StaxParser.createParserFromXML("/Users/Patnamnv/Desktop/practice-project-todo/src/test/java/edu/wofford/realXMLFiles/realXML.xml");
-      ArgParser.SaveArgsAsXML saveArgParser = new ArgParser.SaveArgsAsXML("/Users/Patnamnv/Desktop/practice-project-todo/src/test/java/edu/wofford/testXMLFiles/yourXML.xml", argcheckerOne);
-      ArgParser argcheckerTwo =  StaxParser.createParserFromXML("/Users/Patnamnv/Desktop/practice-project-todo/src/test/java/edu/wofford/testXMLFiles/yourXML.xml");
-      assertEquals(argcheckerOne.getArgValue("height"), argcheckerTwo.getArgValue("height"));
-      assertEquals(argcheckerOne.getArgument("height").getRestrictedValuesString(), argcheckerTwo.getArgument("height").getRestrictedValuesString());
-  
-    }
-    **/
-    
-    @Test
-    public void testLoadArgsAsXML(){
-      try{
-        //ClassLoader.getSystemResourceAsStream( 
-        ArgParser argchecker =  XML.loadFromFile("/Users/Patnamnv/Desktop/practice-project-todo/src/test/java/edu/wofford/realXMLFiles/realXML.xml");
-        argchecker.setProgramName("volume calculator");
-        argchecker.setProgramDescription("calculates the volume of a object");
 
-        assertEquals("length of the box", argchecker.getArgDescription("length"));
-        assertEquals("1738", argchecker.getArgValue("height"));
-        assertEquals("3", argchecker.getArgValue("precision"));
-        assertEquals("false", argchecker.getArgValue("metric"));
-        }
-        catch(Exception e){
-          e.printStackTrace();
-          assertTrue(false);
-        }
-}
+   
 
 @Test
 public void argGivenValueNotRestricted(){
