@@ -30,7 +30,7 @@ public class XML {
             switch (event) {
             case XMLStreamConstants.START_ELEMENT:
                 String startElement = reader.getLocalName();
-                //creat  argument parser at first element, product owner will add name/description later
+                //create  argument parser at first element, product owner will add name/description later
                 if ("arguments".equals(startElement)) {
                     argChecker = new ArgParser("", "");
                 } 
@@ -50,7 +50,6 @@ public class XML {
                 String endElement = reader.getLocalName();
                 //done with parsing
                 if ("arguments".equals(endElement)) {
-        
                     break;
                 }
                 //done using current argument
@@ -261,7 +260,7 @@ return argChecker;
             xMLStreamWriter.writeCharacters("\n\t");
             xMLStreamWriter.writeEndElement();
           }
-          
+
         }
         //close arguments tag
         xMLStreamWriter.writeCharacters("\n");
