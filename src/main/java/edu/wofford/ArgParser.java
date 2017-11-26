@@ -44,6 +44,12 @@ public class ArgParser {
     argumentNames.add(argname);
   }
 
+  public void addArg(Arg arg){
+    arguments.put(arg.getName(), arg);
+    argumentNames.add(arg.getName());
+
+  }
+
   public void addOptArg(String argname, String defaultValue) {
     addOptArg(argname, defaultValue, Arg.DataType.STRING, "");
 
@@ -327,6 +333,8 @@ public class ArgParser {
     }
 
     if (usedArguments < argumentNames.size()) {
+      System.out.println(usedArguments);
+  
       tooFewInputsGiven(usedArguments);
 
     }

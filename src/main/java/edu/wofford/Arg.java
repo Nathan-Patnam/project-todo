@@ -41,13 +41,31 @@ public class Arg{
     this.required=true;
 
   }
+  public void setName(String argName){
+    this.name=argName;
+  }
+
+  public String getName(){
+    return this.name;
+  }
 
   public void setDescription(String description) {
     this.description = description;
   }
 
+  public String getDescription() {
+    return this.description;
+  }
+
+
+
   public void setShortFormName(String shortFormName) {
     this.shortFormName = shortFormName;
+  }
+
+  public String getShortFormName() {
+    return this.shortFormName;
+
   }
 
   public void setDataType(DataType dataType) {
@@ -65,26 +83,25 @@ public class Arg{
     this.value = value;
   }
 
+  public String getValue() {
+    return this.value;
+  }
+
   public void makeArgRequired(){
     this.required=true;
 }
 
-  public String getDescription() {
-    return this.description;
-  }
+public boolean isArgRequired(){
+  return this.required;
+}
+
+
+ 
 
   public DataType getDataType() {
     return this.dataType;
   }
 
-  public String getValue() {
-    return this.value;
-  }
-
-  public String getShortFormName() {
-    return this.shortFormName;
-
-  }
 
   public HashSet<String> getRestrictedValues() {
     return this.restrictedValues;
@@ -104,9 +121,10 @@ public class Arg{
     return this.allRestrictedValuesString;
   }
 
-  public boolean isArgRequired(){
-    return this.required;
-}
+  public boolean isArgOptional(){
+    return false;
+  }
+
 
 
 
