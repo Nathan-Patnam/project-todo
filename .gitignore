@@ -23,3 +23,5 @@ bin/edu/wofford/Argument.class
 *.class
 
 bin/edu/wofford/Argument$DataType.class
+
+*.class
