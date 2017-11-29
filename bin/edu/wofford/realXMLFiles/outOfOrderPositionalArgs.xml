@@ -2,7 +2,7 @@
 <arguments>
     <positional>
         <name>height</name>
-        <datatype>string</datatype>
+        <datatype>float</datatype>
         <shortname>l</shortname>
         <description>length of the box</description>
         <position>2</position>
@@ -17,7 +17,6 @@
        <positional>
         <name>width</name>
         <datatype>float</datatype>
-        <shortname>w</shortname>
         <description>width of the box</description>
         <position>1</position>
     </positional>
