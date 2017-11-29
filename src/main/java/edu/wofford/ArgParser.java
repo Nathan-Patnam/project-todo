@@ -79,6 +79,10 @@ public class ArgParser {
     flagNames.add(argname);
   }
 
+
+  public void addFlagToList(String flagName){
+    flagNames.add(flagName);
+  }
   private boolean checkType(String value, Arg.DataType type) {
     switch (type) {
     case BOOLEAN:
@@ -218,8 +222,7 @@ public class ArgParser {
       boolean isArgAFlag = false;
       String aname = "";
       if (args[i].equals("-h") || args[i].equals("--help")) {
-        String message = getHelpMessage();
-        throw new HelpException(message);
+        throw new HelpException(getHelpMessage());
       }
 
       else if (args[i].startsWith("-")) {

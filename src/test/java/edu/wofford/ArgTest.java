@@ -96,4 +96,13 @@ public final void TestSetThenGetEachTypeArgDataType(){
     assertEquals("int", regArg.getDataType().toString());
 }
 
+/** 
+@Test
+public final void testBooleanValue() {
+    Arg a = new Arg("something", "", Arg.DataType.BOOLEAN);
+    a.setValue("true");
+    assertTrue(a.getVal());
+}
+*/
+
 }

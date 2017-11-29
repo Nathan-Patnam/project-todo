@@ -13,7 +13,6 @@
 		<datatype>float</datatype>
 		<shortname>w</shortname>
 		<description>width of the box</description>
-		<restrictedValues>3 4 5</restrictedValues>
 	</positional>
 	<optional>
 		<name>height</name>
@@ -21,8 +20,6 @@
 		<required>false</required>
 		<datatype>float</datatype>
 		<shortname>g</shortname>
-		<description>height of the box</description>
-		<restrictedValues>7 8 9</restrictedValues>
 	</optional>
 	<optional>
 		<name>type</name>
@@ -30,10 +27,11 @@
 		<required>true</required>
 		<datatype>string</datatype>
 		<shortname>t</shortname>
-		<description>shape of the box</description>
-		<restrictedValues>sphere cube ellipsoid</restrictedValues>
 	</optional>
-	<flag>
+	<optional>
 		<name>s</name>
-	</flag>
+		<value>false</value>
+		<required>true</required>
+		<datatype>boolean</datatype>
+	</optional>
 </arguments>

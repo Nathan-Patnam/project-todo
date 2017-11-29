@@ -1,5 +1,8 @@
 package edu.wofford;
 
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
+
 public class OptArg extends Arg {
 
     OptArg(String name, String defaultValue) {
@@ -32,8 +35,59 @@ public class OptArg extends Arg {
         this.value = "false";
     }
 
-    public boolean isArgOptional(){
-        return true;
-      }
+    public XMLStreamWriter writeArgXML(XMLStreamWriter xMLStreamWriter) {
+        try{ 
+
+        xMLStreamWriter.writeCharacters("\n\t");
+        xMLStreamWriter.writeStartElement("optional");
+
+        xMLStreamWriter.writeCharacters("\n\t\t");
+        xMLStreamWriter.writeStartElement("name");
+        xMLStreamWriter.writeCharacters(this.name.replace("-", ""));
+        xMLStreamWriter.writeEndElement();
+
+        xMLStreamWriter.writeCharacters("\n\t\t");
+        xMLStreamWriter.writeStartElement("value");
+        xMLStreamWriter.writeCharacters(this.value);
+        xMLStreamWriter.writeEndElement();
+
+        xMLStreamWriter.writeCharacters("\n\t\t");
+        xMLStreamWriter.writeStartElement("required");
+        xMLStreamWriter.writeCharacters(String.valueOf(this.required));
+        xMLStreamWriter.writeEndElement();
+
+
+
+    
+    xMLStreamWriter.writeCharacters("\n\t\t");
+    xMLStreamWriter.writeStartElement("datatype");
+    xMLStreamWriter.writeCharacters(this.getDataType().toString());
+    xMLStreamWriter.writeEndElement();
+
+    if (this.shortFormName != null) {
+        xMLStreamWriter.writeCharacters("\n\t\t");
+        xMLStreamWriter.writeStartElement("shortname");
+        xMLStreamWriter.writeCharacters(this.shortFormName);
+        xMLStreamWriter.writeEndElement();
+    }
+
+    if (this.allRestrictedValuesString != null
+            && this.allRestrictedValuesString.length() > 0) {
+        xMLStreamWriter.writeCharacters("\n\t\t");
+        xMLStreamWriter.writeStartElement("restrictedValues");
+        xMLStreamWriter.writeCharacters(this.allRestrictedValuesString);
+        xMLStreamWriter.writeEndElement();
+
+    }
+    //close positional and optional tag
+    xMLStreamWriter.writeCharacters("\n\t");
+    xMLStreamWriter.writeEndElement();
+}
+
+    catch (XMLStreamException e) {
+        e.printStackTrace();
+      } 
+    return xMLStreamWriter;
+}
 
 }

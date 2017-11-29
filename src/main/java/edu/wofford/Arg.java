@@ -1,8 +1,12 @@
 package edu.wofford;
 
 import java.util.*;
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
+import java.io.*;
 
-public class Arg{
+public class Arg {
 
   public enum DataType {
     STRING("string"), INT("int"), BOOLEAN("boolean"), FLOAT("float");
@@ -25,11 +29,13 @@ public class Arg{
   protected HashSet<String> restrictedValues;
   protected String allRestrictedValuesString;
   protected boolean required;
+  private static int position =1;
 
-  public Arg(String name){
+  public Arg(String name) {
     this(name, "", DataType.STRING);
   }
-  public Arg(String name, String description){
+
+  public Arg(String name, String description) {
     this(name, description, DataType.STRING);
   }
 
@@ -38,26 +44,26 @@ public class Arg{
     this.description = description;
     this.dataType = dataType;
     this.restrictedValues = new HashSet<>();
-    this.required=true;
+    this.required = true ;
 
   }
-  public void setName(String argName){
-    this.name=argName;
+
+  public void setName(String argName) {
+    this.name = argName;
   }
 
-  public String getName(){
+  public String getName() {
     return this.name;
   }
 
   public void setDescription(String description) {
+
     this.description = description;
   }
 
   public String getDescription() {
     return this.description;
   }
-
-
 
   public void setShortFormName(String shortFormName) {
     this.shortFormName = shortFormName;
@@ -74,7 +80,7 @@ public class Arg{
 
   public void setRestrictedValues(String restrictedValues) {
     for (String value : restrictedValues.split(" ")) {
-    this.restrictedValues.add(value);
+      this.restrictedValues.add(value);
     }
 
   }
@@ -87,21 +93,25 @@ public class Arg{
     return this.value;
   }
 
-  public void makeArgRequired(){
-    this.required=true;
-}
+  /** 
+  public <T> T getVal() {
+    if (this.dataType == DataType.BOOLEAN) {
+      return Boolean.parseBoolean(this.value);
+    }
+  }
+  */
 
-public boolean isArgRequired(){
-  return this.required;
-}
+  public void makeArgRequired() {
+    this.required = true;
+  }
 
-
- 
+  public boolean isArgRequired() {
+    return this.required;
+  }
 
   public DataType getDataType() {
     return this.dataType;
   }
-
 
   public HashSet<String> getRestrictedValues() {
     return this.restrictedValues;
@@ -114,18 +124,73 @@ public boolean isArgRequired(){
       for (String restrictedValue : restrictedValues) {
         this.allRestrictedValuesString += restrictedValue + " ";
       }
-      this.allRestrictedValuesString= this.allRestrictedValuesString.trim();
+      this.allRestrictedValuesString = this.allRestrictedValuesString.trim();
 
     }
 
     return this.allRestrictedValuesString;
   }
 
-  public boolean isArgOptional(){
-    return false;
+  
+
+
+  private static int getPosition() {
+    return position;
   }
 
+  public XMLStreamWriter writeArgXML(XMLStreamWriter streamWriter) {
+    try {
+      streamWriter.writeCharacters("\n\t");
+      streamWriter.writeStartElement("positional");
 
+      streamWriter.writeCharacters("\n\t\t");
+      streamWriter.writeStartElement("name");
+      streamWriter.writeCharacters(name);
+      streamWriter.writeEndElement();
 
+      streamWriter.writeCharacters("\n\t\t");
+      streamWriter.writeStartElement("position");
+      streamWriter.writeCharacters(String.valueOf(getPosition()));
+      streamWriter.writeEndElement();
+
+      streamWriter.writeCharacters("\n\t\t");
+      streamWriter.writeStartElement("datatype");
+      streamWriter.writeCharacters(this.dataType.toString());
+      streamWriter.writeEndElement();
+
+      if (this.shortFormName != null) {
+        streamWriter.writeCharacters("\n\t\t");
+        streamWriter.writeStartElement("shortname");
+        streamWriter.writeCharacters(this.shortFormName);
+        streamWriter.writeEndElement();
+      }
+
+      if (this.description != null && this.description.length() > 0) {
+        streamWriter.writeCharacters("\n\t\t");
+        streamWriter.writeStartElement("description");
+        streamWriter.writeCharacters(this.description);
+        streamWriter.writeEndElement();
+
+      }
+
+      if (this.allRestrictedValuesString != null && this.allRestrictedValuesString.length() > 0) {
+        streamWriter.writeCharacters("\n\t\t");
+        streamWriter.writeStartElement("restrictedValues");
+        streamWriter.writeCharacters(allRestrictedValuesString);
+        streamWriter.writeEndElement();
+
+      }
+
+      streamWriter.writeCharacters("\n\t");
+      streamWriter.writeEndElement();
+      position++;
+    }
+    catch (XMLStreamException e) {
+      e.printStackTrace();
+    } 
+
+    return streamWriter;
+
+  }
 
 }

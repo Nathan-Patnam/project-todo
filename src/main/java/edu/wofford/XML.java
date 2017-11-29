@@ -10,13 +10,32 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamReader;
 
 public class XML {
+    private static class ArgPositionPair implements Comparable<ArgPositionPair> {
+        private int position;
+        private Arg argument;
+
+        public ArgPositionPair(int position, Arg argument) {
+            this.position = position;
+            this.argument = argument;
+        }
+
+        public Arg getArg() {
+            return this.argument;
+        }
+
+        @Override
+        public int compareTo(ArgPositionPair o) {
+            return position < o.position ? -1 : position > o.position ? 1 : 0;
+        }
+    }
+
     public static ArgParser loadFromFile(String fileName) {
         ArgParser argChecker;
         String tagContent;
         Stack<String> argNames = new Stack<>();
-        
+
         Stack<String> currentArgAccessed = new Stack<>();
-        
+
         List<ArgPositionPair> argPosition = new ArrayList<ArgPositionPair>();
 
         Arg.DataType argumentDataType = Arg.DataType.STRING;
@@ -27,7 +46,6 @@ public class XML {
             FileReader fileReader = new FileReader(fileName);
             XMLStreamReader reader = factory.createXMLStreamReader(fileReader);
             Arg tempPositionalArg = new Arg("");
-            
 
             while (reader.hasNext()) {
                 int event = reader.next();
@@ -40,18 +58,16 @@ public class XML {
                         argChecker = new ArgParser("", "");
                     }
                     //record what type of argument that is being parsed
-                    else if ("optional".equals(startElement)
-                            || "flag".equals(startElement)) {
-                                
+                    else if ("optional".equals(startElement)) {
+
                         argNames.push(startElement);
                     }
 
-                    else if("positional".equals(startElement)){
+                    else if ("positional".equals(startElement)) {
                         tempPositionalArg = new Arg("");
                         argNames.push(startElement);
                     }
 
-                    
                     break;
 
                 case XMLStreamConstants.CHARACTERS:
@@ -65,7 +81,7 @@ public class XML {
                     if ("arguments".equals(endElement)) {
                         if (argPosition.size() > 0) {
                             Collections.sort(argPosition);
-                            for (int i = 0; i <argPosition.size(); i++) {
+                            for (int i = 0; i < argPosition.size(); i++) {
                                 argChecker.addArg(argPosition.get(i).getArg());
                             }
 
@@ -74,8 +90,7 @@ public class XML {
                         break;
                     }
                     //done using current argument
-                    else if ("optional".equals(endElement) || "flag".equals(endElement)
-                            || "positional".equals(endElement)) {
+                    else if ("optional".equals(endElement) || "positional".equals(endElement)) {
                         argNames.pop();
                         currentArgAccessed.pop();
                         break;
@@ -96,6 +111,9 @@ public class XML {
                                 } else if (tagContent.equals("float")) {
                                     argumentDataType = Arg.DataType.FLOAT;
                                 } else if (tagContent.equals("boolean")) {
+                                    //add flag to flagNames
+                                    argChecker
+                                            .addFlagToList(argChecker.getArgument(currentArgAccessed.peek()).getName());
                                     argumentDataType = Arg.DataType.BOOLEAN;
                                 } else if (tagContent.equals("int")) {
                                     argumentDataType = Arg.DataType.INT;
@@ -116,15 +134,6 @@ public class XML {
                                 }
 
                             }
-                        } else if ("flag".equals(typeOfArgument)) {
-                            if ("name".equals(endElement)) {
-                                argChecker.addFlag(tagContent);
-                                currentArgAccessed.push(tagContent);
-                            }
-                            else if ("description".equals(endElement)) {
-                                argChecker.getArgument(currentArgAccessed.peek()).setDescription(tagContent);
-                            } 
-
                         } else if ("positional".equals(typeOfArgument)) {
 
                             if ("name".equals(endElement)) {
@@ -148,12 +157,9 @@ public class XML {
                                 tempPositionalArg.setDescription(tagContent);
                             } else if ("restrictedValues".equals(endElement)) {
                                 tempPositionalArg.setRestrictedValues(tagContent);
-                            }
-                            else if ("position".equals(endElement)) {
+                            } else if ("position".equals(endElement)) {
                                 argPosition.add(new ArgPositionPair(Integer.parseInt(tagContent), tempPositionalArg));
                             }
-
-                            
 
                         }
                         break;
@@ -173,8 +179,6 @@ public class XML {
         try {
             XMLOutputFactory xof = XMLOutputFactory.newInstance();
             XMLStreamWriter xMLStreamWriter = xof.createXMLStreamWriter(new FileWriter(fileName));
-            int argumentPositionCounter = 1;
-            HashSet<String> flagNames = argparser.getFlagNames();
             Map<String, Arg> arguments = argparser.getAllArgs();
 
             xMLStreamWriter.writeStartDocument();
@@ -182,101 +186,8 @@ public class XML {
             xMLStreamWriter.writeStartElement("arguments");
 
             for (String argNameIterator : arguments.keySet()) {
-
                 Arg argumentIterator = argparser.getArgument(argNameIterator);
-                //adding a flag
-                if (flagNames.contains(argNameIterator)) {
-                    xMLStreamWriter.writeCharacters("\n\t");
-                    xMLStreamWriter.writeStartElement("flag");
-
-                    xMLStreamWriter.writeCharacters("\n\t\t");
-                    xMLStreamWriter.writeStartElement("name");
-                    xMLStreamWriter.writeCharacters(argNameIterator);
-                    xMLStreamWriter.writeEndElement();
-
-                    if (argumentIterator.getDescription() != null && argumentIterator.getDescription().length() > 0) {
-                        xMLStreamWriter.writeCharacters("\n\t\t");
-                        xMLStreamWriter.writeStartElement("description");
-                        xMLStreamWriter.writeCharacters(argumentIterator.getDescription());
-                        xMLStreamWriter.writeEndElement();
-
-                    }
-
-                    //close flag tag
-                    xMLStreamWriter.writeCharacters("\n\t");
-                    xMLStreamWriter.writeEndElement();
-
-                } else {
-                    //argument is a optional argument
-                    if (argumentIterator instanceof OptArg ) {
-                        xMLStreamWriter.writeCharacters("\n\t");
-                        xMLStreamWriter.writeStartElement("optional");
-
-                        xMLStreamWriter.writeCharacters("\n\t\t");
-                        xMLStreamWriter.writeStartElement("name");
-                        xMLStreamWriter.writeCharacters(argNameIterator);
-                        xMLStreamWriter.writeEndElement();
-
-                        xMLStreamWriter.writeCharacters("\n\t\t");
-                        xMLStreamWriter.writeStartElement("value");
-                        xMLStreamWriter.writeCharacters(argumentIterator.getValue());
-                        xMLStreamWriter.writeEndElement();
-
-                        xMLStreamWriter.writeCharacters("\n\t\t");
-                        xMLStreamWriter.writeStartElement("required");
-                        xMLStreamWriter.writeCharacters(String.valueOf(argumentIterator.isArgRequired()));
-                        xMLStreamWriter.writeEndElement();
-
-                    } else {
-                        xMLStreamWriter.writeCharacters("\n\t");
-                        xMLStreamWriter.writeStartElement("positional");
-
-                        xMLStreamWriter.writeCharacters("\n\t\t");
-                        xMLStreamWriter.writeStartElement("name");
-                        xMLStreamWriter.writeCharacters(argNameIterator);
-                        xMLStreamWriter.writeEndElement();
-
-                        xMLStreamWriter.writeCharacters("\n\t\t");
-                        xMLStreamWriter.writeStartElement("position");
-                        xMLStreamWriter.writeCharacters(String.valueOf(argumentPositionCounter));
-                        xMLStreamWriter.writeEndElement();
-
-                        argumentPositionCounter++;
-
-                    }
-                    xMLStreamWriter.writeCharacters("\n\t\t");
-                    xMLStreamWriter.writeStartElement("datatype");
-                    xMLStreamWriter.writeCharacters(argumentIterator.getDataType().toString());
-                    xMLStreamWriter.writeEndElement();
-
-                    if (argumentIterator.getShortFormName() != null) {
-                        xMLStreamWriter.writeCharacters("\n\t\t");
-                        xMLStreamWriter.writeStartElement("shortname");
-                        xMLStreamWriter.writeCharacters(argumentIterator.getShortFormName());
-                        xMLStreamWriter.writeEndElement();
-                    }
-
-                    if (argumentIterator.getDescription() != null && argumentIterator.getDescription().length() > 0) {
-                        xMLStreamWriter.writeCharacters("\n\t\t");
-                        xMLStreamWriter.writeStartElement("description");
-                        xMLStreamWriter.writeCharacters(argumentIterator.getDescription());
-                        xMLStreamWriter.writeEndElement();
-
-                    }
-
-                    if (argumentIterator.getRestrictedValuesString() != null
-                            && argumentIterator.getRestrictedValuesString().length() > 0) {
-                        xMLStreamWriter.writeCharacters("\n\t\t");
-                        xMLStreamWriter.writeStartElement("restrictedValues");
-                        xMLStreamWriter.writeCharacters(argumentIterator.getRestrictedValuesString());
-                        xMLStreamWriter.writeEndElement();
-
-                    }
-                    //close positional and optional tag
-                    xMLStreamWriter.writeCharacters("\n\t");
-                    xMLStreamWriter.writeEndElement();
-                }
-
+                argumentIterator.writeArgXML(xMLStreamWriter);
             }
             //close arguments tag
             xMLStreamWriter.writeCharacters("\n");
