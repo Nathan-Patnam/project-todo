@@ -292,7 +292,7 @@ public class ArgParser {
             message = "usage: java " + programName + getParameterString() + "\n" + programName + ".java: error: "
                 + "argument " + aname + ":" + " invalid " + a.getDataType().toString() + " value: " + args[i + 1];
 
-            throw new HelpException(message);
+            throw new BadDataType(message);
           }
         }
       }
@@ -325,7 +325,7 @@ public class ArgParser {
             message = "usage: java " + programName + getParameterString() + "\n" + programName + ".java: error: "
                 + "argument " + aname + ":" + " invalid " + a.getDataType().toString() + " value: " + args[i];
 
-            throw new HelpException(message);
+            throw new BadDataType(message);
           }
         }
       }
