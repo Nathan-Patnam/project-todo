@@ -12,10 +12,21 @@ public class ArgParser {
   private  HashSet<String> flagNames;
   private Map<String, Arg> arguments;
 
+  /**
+  * Constructor for an ArgParse object given a program name 
+  * @param  programName, the String value that is the name of the program 
+  * @return nothing 
+  */
   public ArgParser(String programName) {
     this(programName, "");
   }
 
+  /**
+  * Constructor for an ArgParser object given a program name and a description
+  * @param  programName, the String value that is the name of the program 
+  *			description, the String value that is the description 
+  * @return nothing 
+  */
   public ArgParser(String programName, String description) {
     this.programName = programName;
     this.programDescription = description;
@@ -27,62 +38,135 @@ public class ArgParser {
 
   }
 
+  /**
+  * Adds an argument with the given name. 
+  * @param  argname, the String value that is the name of the argument to be added 
+  * @return nothing 
+  */
   public void addArg(String argname) {
     addArg(argname, "", Arg.DataType.STRING);
   }
 
+  /**
+  * Adds an argument with the given name and the given description. 
+  * @param argname, the String value that is the name of the argument to be added
+  *		  description, the String value that is the description of the argument to be added
+  * @return nothing 
+  */
   public void addArg(String argname, String description) {
     addArg(argname, description, Arg.DataType.STRING);
   }
 
+  /**
+  * Adds an argument with the given name and the given data type. 
+  * @param argname, the String value that is the name of the argument to be added
+  *		   dataType, the DataType value that is the data type of the argument to be added
+  * @return nothing 
+  */
   public void addArg(String argname, Arg.DataType dataType) {
     addArg(argname, "", dataType);
   }
 
+  /**
+  * Adds an argument with the given name, the given description, and the given data type. 
+  * @param argname, the String value that is the name of the argument to be added
+  *		  description, the String value that is the description of the argument to be added
+  *		  dataType, the DataType value that is the data type of the argument to be added
+  * @return nothing 
+  */
   public void addArg(String argname, String description, Arg.DataType dataType) {
     arguments.put(argname, new Arg(argname, description, dataType));
     argumentNames.add(argname);
   }
 
+  /**
+  * Adds an argument that has already been created. 
+  * @param  arg, an argument object
+  * @return nothing 
+  */
   public void addArg(Arg arg){
     arguments.put(arg.getName(), arg);
     argumentNames.add(arg.getName());
 
   }
 
+  /**
+  * Adds an optional argument with given name and default value. 
+  * @param  argname, the String value that is the name of the optional argument being added
+  *         defaultValue, the string value taht is the value of the optional argument being added.
+  * @return nothing 
+  */  
   public void addOptArg(String argname, String defaultValue) {
     addOptArg(argname, defaultValue, Arg.DataType.STRING, "");
 
   }
 
+  /**
+  * Adds an optional argument with given name, default value, and description. 
+  * @param  argname, the String value that is the name of the optional argument being added
+  *         defaultValue, the string value taht is the value of the optional argument being added.
+  *		    description, the String value that is the description of the optional argument to be added
+  * @return nothing 
+  */  
   public void addOptArg(String argname, String defaultValue, String description) {
     addOptArg(argname, defaultValue, Arg.DataType.STRING, description);
 
   }
 
+  /**
+  * Adds an optional argument with given name, default value, and data type. 
+  * @param  argname, the String value that is the name of the optional argument being added
+  *         defaultValue, the string value taht is the value of the optional argument being added.
+  *		    dataType, the String value that is the data type of the optional argument to be added
+  * @return nothing 
+  */  
   public void addOptArg(String argname, String defaultValue, Arg.DataType dataType) {
     addOptArg(argname, defaultValue, dataType, "");
 
   }
 
+  /**
+  * Adds an optional argument with given name, default value, data type, and description. 
+  * @param  argname, the String value that is the name of the optional argument being added
+  *         defaultValue, the string value taht is the value of the optional argument being added.
+  *		    dataType, the String value that is the data type of the optional argument to be added
+  *			description, the String value that is the description of the optional argument to be added
+  * @return nothing 
+  */  
   public void addOptArg(String argname, String defaultValue, Arg.DataType dataType, String description) {
     arguments.put(argname, new OptArg(argname, defaultValue, dataType, description));
   }
 
+  /**
+  * Add a flag, which is a boolean optional argument.
+  * @param  argname, the string value that is the name of the flag
+  * @return nnothing 
+  */
   public void addFlag(String argname) {
     arguments.put(argname, new OptArg(argname, false, Arg.DataType.BOOLEAN));
     flagNames.add(argname);
   }
 
+  /**
+  * Add a flag, which is a boolean optional argument with a name and description. 
+  * @param  argname, the string value that is the name of the flag
+  *			description, the String value that is the description of teh flag 
+  * @return nnothing 
+  */
   public void addFlag(String argname, String description) {
     arguments.put(argname, new OptArg(argname, false, Arg.DataType.BOOLEAN, description));
     flagNames.add(argname);
   }
 
-
+  /**
+  * Adds a flag to the list of flag names 
+  * @param  flagName, the String value that is the name  of the flag 
+  * @return nothing 
+  */
   public void addFlagToList(String flagName){
     flagNames.add(flagName);
   }
+  
   private boolean checkType(String value, Arg.DataType type) {
     switch (type) {
     case BOOLEAN:
@@ -106,15 +190,29 @@ public class ArgParser {
     }
   }
 
+  /**
+  *Returns the argument object that is specified by the given argument name 
+  *@param  argument, the String value that is the ame of the argument object you want to return 
+  *@return the object argument associated with the argument name 
+  */
   public Arg getArgument(String argument) {
-
     return arguments.get(argument);
   }
 
+  /**
+  * Returns the map of argument names and argument objects 
+  * @param  none 
+  * @return map of argument names and argument objects 
+  */
   public Map<String, Arg> getAllArgs() {
     return this.arguments;
   }
 
+  /**
+  * Returns all of the flag names 
+  * @param  none 
+  * @return HashSet of all of the flag names 
+  */
   public HashSet<String> getFlagNames() {
     return this.flagNames;
   }
@@ -122,9 +220,8 @@ public class ArgParser {
   /**
   * Returns the value that the argument holds. If no value has been set for the argument then it will return null
   * and if the argument doesn't exist then an error will be thrown.
-  * @param  argument  the name of the arugment you want the value of
-  * @return           the value associated with that argument
-  * 
+  * @param  argument, the name of the arugment you want the value of
+  * @return the value associated with that argument
   */
   public String getArgValue(String argument) {
     return arguments.get(argument).getValue();
@@ -132,22 +229,31 @@ public class ArgParser {
 
   /**
   * Returns the description of the argument. If no description has been set for the argument then it will
-  * return a empty string. If the arugment doesn't exists and error will be thrown.
-  * @param  argument  the name of the arugment you want the description of
-  * @return           the value associated with that argument
+  * return an empty string. If the arugment doesn't exists an error will be thrown.
+  * @param  argument, the name of the arugment you want the description of
+  * @return the value associated with that argument
   */
   public String getArgDescription(String argument) {
-
     return arguments.get(argument).getDescription();
   }
 
+  /**
+  * Returns the data type of the argument. If no data type has been set for the argument then it will
+  * return an empty string. If the argument doesn't exists an error will be thrown.
+  * @param   argument  the name of the arugment you want the data type of
+  * @return  the value associated with that argument
+  */
   public Arg.DataType getArgDataType(String argument) {
-
     return arguments.get(argument).getDataType();
   }
 
+  /**
+  * Returns the string form of the data type of the argument. If no data type has been set for the argument then it will
+  * return an empty string. If the argument doesn't exists and error will be thrown.
+  * @param   argument  the name of the arugment you want the data type of
+  * @return  the String form of the value associated with that argument
+  */
   public String getArgDataTypeString(String argument) {
-
     return arguments.get(argument).getDataType().toString();
   }
 
@@ -165,6 +271,12 @@ public class ArgParser {
     return message;
   }
 
+  /**
+  * Returns the number of arguments that have been given.
+  * If no arguments have been given then it should return 0.
+  * @param   none
+  * @return  an int value specifying the number of given arguments
+  */
   public int getNumberArgs() {
     return arguments.size();
   }
@@ -179,18 +291,39 @@ public class ArgParser {
     return key_string;
   }
 
+  /**
+  * Sets the value for the name of the program. 
+  * @param  programName, the String value that is the name of the program 
+  * @return nothing 
+  */
   public String setProgramName(String programName) {
     return this.programName = programName;
   }
 
+  /**
+  * Sets the value for the description of the program. 
+  * @param  programDescription, the String value that is the description of the program 
+  * @return nothing 
+  */
   public String setProgramDescription(String programDescription) {
     return this.programDescription = programDescription;
   }
 
+  
+  /**
+  * Returns the value for the name of the program. 
+  * @param  none
+  * @return the String value that is the name of the program
+  */
   public String getProgramName() {
     return programName;
   }
 
+  /**
+  * Returns the value for the description of the program. 
+  * @param  none
+  * @return the String description of the program 
+  */
   public String getProgramDescription() {
     return programDescription;
   }
@@ -214,7 +347,11 @@ public class ArgParser {
     throw new TooFewArguments(message);
     }
 
-
+  /**
+  * Parses the values passed in  
+  * @param  args, a String array of argument values
+  * @return nothing 
+  */
   public void parse(String[] args) {
     HashSet<String> argRestrictedValues;
     int usedArguments = 0;
@@ -351,7 +488,12 @@ public class ArgParser {
 }
 
 
-
+/**
+* Sets a short form name for the given argument 
+* @param argument, the String value that is the the argument to which you want to set a short form name 
+*		 shortFormName, String value that is the short form of the argument name 
+* @return nothing 
+*/
 public void setArgShortFormName(String argument, String shortFormName) {
   arguments.get(argument).setShortFormName(shortFormName);
   if (shortToLong.get(shortFormName) != null || shortFormName.equals("h")) {
@@ -360,11 +502,22 @@ public void setArgShortFormName(String argument, String shortFormName) {
   shortToLong.put(shortFormName, argument);
 }
 
+/**
+* Sets restricted values for this argument
+* @param  argument, the String value for which you want to set restricted values 
+*		  restrictedValues, the String that contains the restricted values, separated by spaces
+* @return nothing 
+*/
 public void setArgRestricedValues(String argument, String restrictedValues) {
   arguments.get(argument).setRestrictedValues(restrictedValues);
 
 }
 
+/**
+*Makes an argument a required argument
+*@param  argument, the String value that is the argument that you want to make required
+*@return nothing 
+*/
 public void setArgAsRequired(String argument) {
   if(arguments.get(argument).isArgRequired()==false){
     arguments.get(argument).makeArgRequired();
