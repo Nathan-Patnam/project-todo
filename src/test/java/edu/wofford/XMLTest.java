@@ -15,6 +15,7 @@ public class XMLTest {
     argCheckSimple = new ArgParser("VolumeCalculator");
 }
 
+
 @Test
 public void testSaveArgsAsXML(){
   ArgParser argcheckerOne =  XML.loadFromFile("/Users/Patnamnv/Desktop/practice-project-todo/src/test/java/edu/wofford/realXMLFiles/realXML.xml");
@@ -49,15 +50,19 @@ public void testLoadArgsAsXML(){
 public void testLoadPositionalArgsInDifferentOrder(){
   try{
     //ClassLoader.getSystemResourceAsStream( 
-    String[] cla = {"7","8", "9" };
+    String[] cla = {"1","2", "3","4","5","6","7" };
     ArgParser argchecker =  XML.loadFromFile("/Users/Patnamnv/Desktop/practice-project-todo/src/test/java/edu/wofford/realXMLFiles/outOfOrderPositionalArgs.xml");
     argchecker.setProgramName("volume calculator");
     argchecker.setProgramDescription("calculates the volume of a object");
     argchecker.parse(cla);
 
-    assertEquals("7", argchecker.getArgValue("width"));
-    assertEquals("8", argchecker.getArgValue("height"));
-    assertEquals("9", argchecker.getArgValue("length"));
+    assertEquals("6", argchecker.getArgValue("argOne"));
+    assertEquals("5", argchecker.getArgValue("argTwo"));
+    assertEquals("4", argchecker.getArgValue("argThree"));
+    assertEquals("1", argchecker.getArgValue("argFour"));
+    assertEquals("2", argchecker.getArgValue("argFive"));
+    assertEquals("3", argchecker.getArgValue("argSix"));
+    assertEquals("7", argchecker.getArgValue("argSeven"));
   }
     catch(Exception e){
       e.printStackTrace();

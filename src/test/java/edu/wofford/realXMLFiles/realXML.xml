@@ -35,7 +35,4 @@
         <datatype>boolean</datatype>
         <description>do you want answer in gallons</description>
     </optional>
-    <flag>
-        <name>s</name>
-    </flag>
 </arguments>
