@@ -5,18 +5,48 @@ import javax.xml.stream.XMLStreamWriter;
 
 public class OptArg extends Arg {
 
+    /**
+    * Constructor for an OptArg object with the given name and default value. By default, its data type 
+	* is String.
+    * @param  name, the String value that is the name of the OptArg 
+    *		  defaultValue, the String value that is the default value of the OptArg 
+    * @return nothing
+    */
     OptArg(String name, String defaultValue) {
         this(name, defaultValue, Arg.DataType.STRING, "");
     }
 
+	/**
+    * Constructor for an OptArg object with the given name, default value, and description. By default, 
+	* its data type is String.
+    * @param  name, the String value that is the name of the OptArg 
+    *		  defaultValue, the String value that is the default value of the OptArg 
+	*		  description, the String value that is the description of the OptArg
+    * @return nothing
+    */
     OptArg(String name, String defaultValue, String description) {
         this(name, defaultValue, Arg.DataType.STRING, description);
     }
 
+	/**
+    * Constructor for an OptArg object with the given name, default value, and data type. 
+    * @param  name, the String value that is the name of the OptArg 
+    *		  defaultValue, the String value that is the default value of the OptArg 
+	*		  dataType, the DataType value that is the data type of the OptArg
+    * @return nothing
+    */
     OptArg(String optionalArgumentName, String defaultValue, Arg.DataType dataType) {
         this(optionalArgumentName, defaultValue, dataType, "");
     }
 
+	/**
+    * Constructor for an OptArg object with the given name, default value, data type, and description. 
+    * @param  name, the String value that is the name of the OptArg 
+    *		  defaultValue, the String value that is the default value of the OptArg 
+	*		  dataType, the DataType value that is the data type of the OptArg
+	*		  description, the String value that is teh description of the OptArg
+    * @return nothing
+    */
     OptArg(String optionalArgumentName, String defaultValue, Arg.DataType datatype, String description) {
         super("--" + optionalArgumentName, description, datatype);
         this.value = defaultValue;
@@ -24,17 +54,36 @@ public class OptArg extends Arg {
 
     }
 
-    //flag constructors
+    /**
+    * Constructor for an OptArg flag object with the given name, and data type. 
+    * @param  optionalArgumentName, the String value that is the name of the OptArg flag
+	*		  turnedOff, a Boolean value 		???
+	*		  dataType, the DataType value that is the data type of the OptArg flag
+    * @return nothing
+    */
     OptArg(String optionalArgumentName, boolean turnedOff, Arg.DataType dataType) {
         super("-" + optionalArgumentName, "", Arg.DataType.BOOLEAN);
         this.value = "false";
     }
 
+	/**
+    * Constructor for an OptArg flag object with the given name, data type, and description. 
+    * @param  optionalArgumentName, the String value that is the name of the OptArg flag
+	*		  turnedOff, a Boolean value 		???
+	*		  dataType, the DataType value that is the data type of the OptArg flag
+	*		  description, the String value that is teh description of the OptArg flag
+    * @return nothing
+    */
     OptArg(String optionalArgumentName, boolean turnedOff, Arg.DataType dataType, String description) {
         super("-" + optionalArgumentName, description, Arg.DataType.BOOLEAN);
         this.value = "false";
     }
 
+	/**
+	*
+	*	???
+	*
+	*/ 
     public XMLStreamWriter writeArgXML(XMLStreamWriter xMLStreamWriter) {
         try{ 
 
