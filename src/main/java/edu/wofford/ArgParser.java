@@ -69,6 +69,13 @@ public class ArgParser {
     arguments.put(argname, new OptArg(argname, defaultValue, dataType, description));
   }
 
+  public void addOptArg(OptArg arg){
+    arguments.put(arg.getName(), arg);
+    argumentNames.add(arg.getName());
+
+  }
+
+
   public void addFlag(String argname) {
     arguments.put(argname, new OptArg(argname, false, Arg.DataType.BOOLEAN));
     flagNames.add(argname);
