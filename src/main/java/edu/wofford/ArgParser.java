@@ -9,7 +9,7 @@ public class ArgParser {
   private Map<String, String> shortToLong;
   private ArrayList<String> argumentNames;
   private HashSet<String> requiredArgs;
-  private  HashSet<String> flagNames;
+  private HashSet<String> flagNames;
   private Map<String, Arg> arguments;
 
   public ArgParser(String programName) {
@@ -158,25 +158,13 @@ public class ArgParser {
     return arguments.get(argument).getDataType().toString();
   }
 
-  private String getHelpMessage() {
-    String message = "";
-    message = "usage: java " + programName + getParameterString() + "\n" + programDescription + "\n"
-        + "positional arguments:";
-    for (String argNameIterator : arguments.keySet()) {
-      if (!argNameIterator.equals("help") && !argNameIterator.equals("h")) {
-        Arg currentArgumentIterator = arguments.get(argNameIterator);
-        message += "\n   " + argNameIterator + " " + currentArgumentIterator.getDescription() + " ("
-            + currentArgumentIterator.getDataType().toString() + ")";
-      }
-    }
-    return message;
-  }
+
 
   public int getNumberArgs() {
     return arguments.size();
   }
 
-  private String getParameterString() {
+  public String getParameterString() {
     String key_string = "";
     for (String argNameIterator : arguments.keySet()) {
       if (!argNameIterator.equals("help") && !argNameIterator.equals("h")) {
@@ -202,6 +190,11 @@ public class ArgParser {
     return programDescription;
   }
 
+  public String getErrorUsage(){
+    String errorMessage="usage: java " + this.programName + getParameterString() + "\n" + this.programName;
+    return errorMessage;
+  }
+
   private void tooManyInputsGiven(){
     String requiredArgString = "";
     for (String requiredArgs : requiredArgs) {
@@ -216,9 +209,36 @@ public class ArgParser {
     for (int i = usedArguments; i < argumentNames.size(); i++) {
       missingArguements += " " + argumentNames.get(i);
     }
-    String message = "usage: java " + programName + getParameterString() + "\n" + programName
+    String message = getErrorUsage()
         + ".java: error: the following arguments are required:" + missingArguements;
     throw new TooFewArguments(message);
+    }
+
+    private String doesOptionalArgumentExist(String commandLineName){
+      String aname= commandLineName.replace("-", "");
+      if (arguments.get(aname) == null) {
+        throw new IllegalArgumentException("argument " + aname + " does not exist");
+      }
+      return aname;
+    }
+
+    private boolean isArgAFlag(String flagName){
+      if (arguments.get(flagName) != null){
+        arguments.get(flagName).setValue("true");
+      }
+      return arguments.get(flagName) != null;
+    }
+
+    private boolean argIsACollectionOfFlags(String flagNames){
+      for (int j = 0; j < flagNames.length(); j++) {
+        String flagIterator = String.valueOf(flagNames.charAt(j));
+        if (arguments.get(flagIterator) != null) {
+          arguments.get(flagIterator).setValue("true");
+        } else {
+          throw new IllegalArgumentException("flag " + flagIterator + " does not exist");
+        }
+      }
+      return true;
     }
 
 
@@ -226,49 +246,35 @@ public class ArgParser {
     HashSet<String> argRestrictedValues;
     int usedArguments = 0;
     for (int i = 0; i < args.length; i++) {
-      boolean isArgAFlag = false;
       String aname = "";
       if (args[i].equals("-h") || args[i].equals("--help")) {
-        throw new HelpException(getHelpMessage());
+        throw new HelpException(this);
       }
 
       else if (args[i].startsWith("-")) {
         if (args[i].startsWith("--")) {
-          aname = args[i].substring(2);
-          if (arguments.get(aname) == null) {
-            throw new IllegalArgumentException("argument " + args[i].substring(2) + " does not exist");
-          }
-
-        } else {
+          aname = doesOptionalArgumentExist(args[i]);
+        } 
+              //argument is a flag or collection of flags
+        else {
           String sname = args[i].substring(1);
-          //argument is a flag
-          if (arguments.get(sname) != null) {
-            arguments.get(sname).setValue("true");
-            isArgAFlag = true;
+
+          if (isArgAFlag(sname)) {
             continue;
           }
-          //argument is a collection of flags
           else if (sname.length() > 1) {
-            for (int j = 0; j < sname.length(); j++) {
-              String flagIterator = String.valueOf(sname.charAt(j));
-              if (arguments.get(flagIterator) != null) {
-                arguments.get(flagIterator).setValue("true");
-                isArgAFlag = true;
-              } else {
-                throw new IllegalArgumentException("flag " + flagIterator + " does not exist");
-              }
-            }
-            usedArguments++;
+            argIsACollectionOfFlags(sname);
             continue;
           }
 
           aname = shortToLong.get(sname);
-          if (aname == null && !isArgAFlag) {
+          if (aname == null) {
             throw new IllegalArgumentException("argument " + args[i].substring(1) + " does not exist");
           } else {
             usedArguments++;
           }
         }
+
 
         Arg a = arguments.get(aname);
         if (a.getDataType() == Arg.DataType.BOOLEAN) {

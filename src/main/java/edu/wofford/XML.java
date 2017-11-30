@@ -31,7 +31,6 @@ public class XML {
                         tempArg = new OptArg("", "");
                     } else if ("positional".equals(startElement)) {
                         tempArg = new Arg("");
-                        System.out.println("positional");
                     }
 
                     break;
@@ -43,22 +42,16 @@ public class XML {
                 case XMLStreamConstants.END_ELEMENT:
 
                     String endElement = reader.getLocalName();
-                    //done with parsing
                     if ("arguments".equals(endElement)) {
                         if (argPosition.size() > 0) {
                             for (int i = 1; i <= argPosition.size(); i++) {
                                 argChecker.addArg(argPosition.get(i));
                             }
-
                         }
-
                     }
-                    //done using current argument
                     else if ("optional".equals(endElement)) {
                         argChecker.addOptArg((OptArg) tempArg);
-
                     }
-
                     else if ("name".equals(endElement)) {
                         tempArg.setName(tagContent);
 

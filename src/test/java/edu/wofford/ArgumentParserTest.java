@@ -170,7 +170,7 @@ public class ArgumentParserTest {
     try {
       argCheck.parse(cla);
       fail("Should have thrown HelpException but did not!");
-    } catch (HelpException expected) {
+    } catch (BadDataType expected) {
       assertEquals(msg, expected.getMessage());
     }
   }
@@ -183,7 +183,7 @@ public class ArgumentParserTest {
     try {
       argCheck.parse(cla);
       fail("Should have thrown HelpException but did not!");
-    } catch (HelpException expected) {
+    } catch (BadDataType expected) {
       assertEquals(msg, expected.getMessage());
     }
   }
@@ -200,7 +200,7 @@ public class ArgumentParserTest {
     try {
       argCheck.parse(cla);
       fail("Should have thrown HelpException but did not!");
-    } catch (HelpException expected) {
+    } catch (BadDataType expected) {
       assertEquals(msg, expected.getMessage());
     }
   }
@@ -216,7 +216,7 @@ public class ArgumentParserTest {
     try {
       argCheck.parse(cla);
       fail("Should have thrown HelpException but did not!");
-    } catch (HelpException expected) {
+    } catch (BadDataType expected) {
       assertEquals(msg, expected.getMessage());
     }
   }
@@ -232,7 +232,7 @@ public class ArgumentParserTest {
     try {
       argCheck.parse(cla);
       fail("Should have thrown HelpException but did not!");
-    } catch (HelpException expected) {
+    } catch (BadDataType expected) {
       assertEquals(msg, expected.getMessage());
     }
   }
@@ -248,7 +248,7 @@ public class ArgumentParserTest {
     try {
       argCheck.parse(cla);
       fail("Should have thrown HelpException but did not!");
-    } catch (HelpException expected) {
+    } catch (BadDataType expected) {
       assertEquals(msg, expected.getMessage());
     }
   }

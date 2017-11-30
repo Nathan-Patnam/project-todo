@@ -30,7 +30,7 @@ public class Feature08 {
 		argCheck.addArg("height", "the height of the box", Arg.DataType.FLOAT);
 		try {
 			argCheck.parse(args);
-		} catch (HelpException e) {
+		} catch (BadDataType e) {
 			errorMessageThrown = e.getMessage();
 			System.out.println(errorMessageThrown);
 
