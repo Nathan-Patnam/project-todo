@@ -1,23 +1,38 @@
 <?xml version="1.0" ?>
 <arguments>
     <positional>
-        <name>height</name>
-        <datatype>float</datatype>
-        <shortname>l</shortname>
-        <description>length of the box</description>
-        <position>2</position>
+        <name>argOne</name>
+        <position>6</position>
     </positional>
+
     <positional>
-        <name>length</name>
-        <datatype>float</datatype>
-        <shortname>w</shortname>
-        <description>width of the box</description>
-        <position>3</position>
+        <name>argTwo</name>
+        <position>5</position>
     </positional>
-       <positional>
-        <name>width</name>
-        <datatype>float</datatype>
-        <description>width of the box</description>
+
+    <positional>
+        <name>argThree</name>
+        <position>4</position>
+    </positional>
+
+    <positional>
+        <name>argFour</name>
         <position>1</position>
     </positional>
+
+    <positional>
+        <name>argFive</name>
+        <position>2</position>
+    </positional>
+
+    <positional>
+        <name>argSix</name>
+        <position>3</position>
+    </positional>
+    
+    <positional>
+        <name>argSeven</name>
+        <position>7</position>
+    </positional>
+
 </arguments>
