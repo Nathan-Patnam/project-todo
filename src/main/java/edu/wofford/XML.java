@@ -10,32 +10,11 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamReader;
 
 public class XML {
-    private static class ArgPositionPair implements Comparable<ArgPositionPair> {
-        private int position;
-        private Arg argument;
-
-        public ArgPositionPair(int position, Arg argument) {
-            this.position = position;
-            this.argument = argument;
-        }
-
-        public Arg getArg() {
-            return this.argument;
-        }
-
-        @Override
-        public int compareTo(ArgPositionPair o) {
-            return position < o.position ? -1 : position > o.position ? 1 : 0;
-        }
-    }
-
     public static ArgParser loadFromFile(String fileName) {
         Arg tempArg = null;
         ArgParser argChecker = new ArgParser("", "");
         String tagContent;
-
-        List<ArgPositionPair> argPosition = new ArrayList<ArgPositionPair>();
-
+        HashMap<Integer, Arg> argPosition = new HashMap<>();
         Arg.DataType argumentDataType = Arg.DataType.STRING;
         try {
             tagContent = null;
@@ -52,6 +31,7 @@ public class XML {
                         tempArg = new OptArg("", "");
                     } else if ("positional".equals(startElement)) {
                         tempArg = new Arg("");
+                        System.out.println("positional");
                     }
 
                     break;
@@ -66,22 +46,20 @@ public class XML {
                     //done with parsing
                     if ("arguments".equals(endElement)) {
                         if (argPosition.size() > 0) {
-                            Collections.sort(argPosition);
-                            for (int i = 0; i < argPosition.size(); i++) {
-                                argChecker.addArg(argPosition.get(i).getArg());
+                            for (int i = 1; i <= argPosition.size(); i++) {
+                                argChecker.addArg(argPosition.get(i));
                             }
 
                         }
 
-                        break;
                     }
                     //done using current argument
                     else if ("optional".equals(endElement)) {
                         argChecker.addOptArg((OptArg) tempArg);
-                        break;
+
                     }
 
-                    if ("name".equals(endElement)) {
+                    else if ("name".equals(endElement)) {
                         tempArg.setName(tagContent);
 
                     } else if ("value".equals(endElement)) {
@@ -93,6 +71,9 @@ public class XML {
                         } else if (tagContent.equals("float")) {
                             argumentDataType = Arg.DataType.FLOAT;
                         } else if (tagContent.equals("boolean")) {
+                            if (tempArg instanceof OptArg) {
+                                argChecker.addFlagToList(tempArg.getName());
+                            }
                             argumentDataType = Arg.DataType.BOOLEAN;
                         } else if (tagContent.equals("int")) {
                             argumentDataType = Arg.DataType.INT;
@@ -113,11 +94,10 @@ public class XML {
                             tempArg.makeArgRequired();
                         }
                     } else if ("position".equals(endElement)) {
-                        argPosition.add(new ArgPositionPair(Integer.parseInt(tagContent), tempArg));
+                        argPosition.put(Integer.parseInt(tagContent), tempArg);
                     }
-
+                    break;
                 }
-                break;
 
             }
 

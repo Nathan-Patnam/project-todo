@@ -4,4 +4,7 @@ public class HelpException extends RuntimeException {
   public HelpException(String message) {
     super(message);
   }
+  // public void throwNewHelpException(){
+  // throw new HelpException("yes");
+  // }
 }
