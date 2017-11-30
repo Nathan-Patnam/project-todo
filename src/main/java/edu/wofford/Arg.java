@@ -52,7 +52,7 @@ public class Arg {
   }
 
   public String getName() {
-    return this.name;
+    return this.name.replace("-", "");
   }
 
   public void setDescription(String description) {

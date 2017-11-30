@@ -122,9 +122,6 @@ public class ArgParser {
     return this.arguments;
   }
 
-  public HashSet<String> getFlagNames() {
-    return this.flagNames;
-  }
 
   /**
   * Returns the value that the argument holds. If no value has been set for the argument then it will return null
@@ -204,15 +201,7 @@ public class ArgParser {
   }
 
 
-  private void tooFewInputsGiven(int usedArguments){
-    String missingArguements = "";
-    for (int i = usedArguments; i < argumentNames.size(); i++) {
-      missingArguements += " " + argumentNames.get(i);
-    }
-    String message = getErrorUsage()
-        + ".java: error: the following arguments are required:" + missingArguements;
-    throw new TooFewArguments(message);
-    }
+
 
     private String doesOptionalArgumentExist(String commandLineName){
       String aname= commandLineName.replace("-", "");
@@ -303,12 +292,7 @@ public class ArgParser {
             }
 
           } else {
-            // Throw some exception
-            String message = "";
-            message = "usage: java " + programName + getParameterString() + "\n" + programName + ".java: error: "
-                + "argument " + aname + ":" + " invalid " + a.getDataType().toString() + " value: " + args[i + 1];
-
-            throw new BadDataType(message);
+           throw new BadDataType(this, a, args[i + 1]);
           }
         }
       }
@@ -316,9 +300,7 @@ public class ArgParser {
       else {
         // Regular argument value
         if (usedArguments == argumentNames.size()) {
-          String message = "usage: java " + programName + getParameterString() + "\n" + programName
-              + ".java: error: unrecognized arguments: " + args[i];
-          throw new TooManyArguments(message);
+          throw new TooManyArguments(this, args[i]);
         } else {
           aname = argumentNames.get(usedArguments);
           Arg a = arguments.get(aname);
@@ -337,11 +319,7 @@ public class ArgParser {
               usedArguments++;
             }
           } else {
-            String message = "";
-            message = "usage: java " + programName + getParameterString() + "\n" + programName + ".java: error: "
-                + "argument " + aname + ":" + " invalid " + a.getDataType().toString() + " value: " + args[i];
-
-            throw new BadDataType(message);
+            throw new BadDataType(this, a, args[i]);
           }
         }
       }
@@ -349,9 +327,7 @@ public class ArgParser {
     }
 
     if (usedArguments < argumentNames.size()) {
-      System.out.println(usedArguments);
-  
-      tooFewInputsGiven(usedArguments);
+      throw new TooFewArguments(this, usedArguments,argumentNames);
 
     }
     else if (requiredArgs.size() > 0) {
@@ -364,11 +340,10 @@ public class ArgParser {
 }
 
 
-
 public void setArgShortFormName(String argument, String shortFormName) {
   arguments.get(argument).setShortFormName(shortFormName);
   if (shortToLong.get(shortFormName) != null || shortFormName.equals("h")) {
-    throw new IllegalArgumentException("The short form name " + shortFormName + " is already in uses");
+    throw new ShortFormNameException(shortFormName);
   }
   shortToLong.put(shortFormName, argument);
 }

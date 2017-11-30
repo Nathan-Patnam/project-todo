@@ -18,9 +18,9 @@ public class XMLTest {
 
 @Test
 public void testSaveArgsAsXML(){
-  ArgParser argcheckerOne =  XML.loadFromFile("/Users/Patnamnv/Desktop/practice-project-todo/src/test/java/edu/wofford/realXMLFiles/realXML.xml");
-  XML.saveToFile("/Users/Patnamnv/Desktop/practice-project-todo/src/test/java/edu/wofford/testXMLFiles/yourXML.xml", argcheckerOne);
-  ArgParser argcheckerTwo =  XML.loadFromFile("/Users/Patnamnv/Desktop/practice-project-todo/src/test/java/edu/wofford/testXMLFiles/yourXML.xml");
+  ArgParser argcheckerOne =  XML.loadFromFile("./src/test/java/edu/wofford/realXMLFiles/realXML.xml");
+  XML.saveToFile("./src/test/java/edu/wofford/testXMLFiles/yourXML.xml", argcheckerOne);
+  ArgParser argcheckerTwo =  XML.loadFromFile("./src/test/java/edu/wofford/testXMLFiles/yourXML.xml");
   assertEquals(argcheckerOne.getArgValue("height"), argcheckerTwo.getArgValue("height"));
   assertEquals(argcheckerOne.getArgument("height").getRestrictedValuesString(), argcheckerTwo.getArgument("height").getRestrictedValuesString());
 
@@ -31,7 +31,7 @@ public void testSaveArgsAsXML(){
 public void testLoadArgsAsXML(){
   try{
     //ClassLoader.getSystemResourceAsStream( 
-    ArgParser argchecker =  XML.loadFromFile("/Users/Patnamnv/Desktop/practice-project-todo/src/test/java/edu/wofford/realXMLFiles/realXML.xml");
+    ArgParser argchecker =  XML.loadFromFile("./src/test/java/edu/wofford/realXMLFiles//realXML.xml");
     argchecker.setProgramName("volume calculator");
     argchecker.setProgramDescription("calculates the volume of a object");
 
@@ -51,7 +51,7 @@ public void testLoadPositionalArgsInDifferentOrder(){
   try{
     //ClassLoader.getSystemResourceAsStream( 
     String[] cla = {"1","2", "3","4","5","6","7" };
-    ArgParser argchecker =  XML.loadFromFile("/Users/Patnamnv/Desktop/practice-project-todo/src/test/java/edu/wofford/realXMLFiles/outOfOrderPositionalArgs.xml");
+    ArgParser argchecker =  XML.loadFromFile("./src/test/java/edu/wofford/realXMLFiles/outOfOrderPositionalArgs.xml");
     argchecker.setProgramName("volume calculator");
     argchecker.setProgramDescription("calculates the volume of a object");
     argchecker.parse(cla);

@@ -421,11 +421,11 @@ public class ArgumentParserTest {
     argCheck.addArg("yuh");
     argCheck.addArg("fun");
     argCheck.setArgShortFormName("yuh", "d");
-    String msg = "The short form name d is already in uses";
+    String msg = "The short form name d is already in use";
     try {
       argCheck.setArgShortFormName("fun", "d");
       fail("Should have thrown IllegalArgumentException but did not!");
-    } catch (IllegalArgumentException expected) {
+    } catch (ShortFormNameException expected) {
       assertEquals(msg, expected.getMessage());
     }
   }
