@@ -45,7 +45,9 @@ public class XML {
                     if ("arguments".equals(endElement)) {
                         if (argPosition.size() > 0) {
                             for (int i = 1; i <= argPosition.size(); i++) {
+                    
                                 argChecker.addArg(argPosition.get(i));
+                                
                             }
                         }
                     }

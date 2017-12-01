@@ -250,23 +250,33 @@ public class ArgParser {
 
   }
 
+  private boolean isOptional(String s) {
+    return s.startsWith("-");
+  }
+  private boolean isLongForm(String s) {
+    return s.startsWith("--");
+  }
+
   public void parse(String[] args) {
+    Queue<String> queue = new ArrayDeque<>();
+    for(int i = 0; i < args.length; i++) {
+      queue.add(args[i]);
+    }
+
     int usedArguments = 0;
 
-    for (int i = 0; i < args.length; i++) {
-
+    while(!queue.isEmpty()) {
+      String curr = queue.remove();
       String aname = "";
-      if (args[i].equals("-h") || args[i].equals("--help")) {
+      if (curr.equals("-h") || curr.equals("--help")) {
         throw new HelpException(this);
       }
-
-      else if (args[i].startsWith("-")) {
-        if (args[i].startsWith("--")) {
-          aname = doesOptionalArgumentExist(args[i]);
+      else if (isOptional(curr)) {
+        if (isLongForm(curr)) {
+          aname = doesOptionalArgumentExist(curr);
         }
-        //argument is a flag, collection of flags, or a short name
         else {
-          String sname = args[i].substring(1);
+          String sname = curr.substring(1);
           if (isArgAFlag(sname)) {
             continue;
           } else if (sname.length() > 1) {
@@ -284,19 +294,19 @@ public class ArgParser {
         }
 
         else {
-          if (checkType(args[i + 1], a.getDataType())) {
+          String next = queue.remove();
+          if (checkType(next, a.getDataType())) {
 
-            if (doesArgHaveRestrictedValues(a, args[i + 1])) {
+            if (doesArgHaveRestrictedValues(a, next)) {
               removeArgIfRequired(aname);
 
             } else {
               removeArgIfRequired(aname);
 
             }
-            a.setValue(args[i + 1]);
-            i++;
+            a.setValue(next);
           } else {
-            throw new BadDataTypeException(this, a, args[i + 1]);
+            throw new BadDataTypeException(this, a, next);
           }
         }
       }
@@ -304,19 +314,19 @@ public class ArgParser {
       else {
         // Regular argument value 
         if (usedArguments == argumentNames.size()) {
-          throw new TooManyArguments(this, args[i]);
+          throw new TooManyArguments(this, curr);
         } else {
           aname = argumentNames.get(usedArguments);
           Arg a = arguments.get(aname);
-          if (checkType(args[i], a.getDataType())) {
+          if (checkType(curr, a.getDataType())) {
 
-            if (doesArgHaveRestrictedValues(a, args[i])) {
+            if (doesArgHaveRestrictedValues(a, curr)) {
 
             }
-            a.setValue(args[i]);
+            a.setValue(curr);
             usedArguments++;
           } else {
-            throw new BadDataTypeException(this, a, args[i]);
+            throw new BadDataTypeException(this, a, curr);
           }
         }
       }

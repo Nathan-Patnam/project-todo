@@ -28,7 +28,7 @@ public class Arg {
   protected HashSet<String> restrictedValues;
   protected String allRestrictedValuesString;
   protected boolean required;
-  private static int position =0;
+  private int position = 0;
 
   public Arg(String name) {
     this(name, "", DataType.STRING);
@@ -129,7 +129,7 @@ public class Arg {
   
 
 
-  private static int getPosition() {
+  private int getPosition() {
     position++;
     return position;
   }
