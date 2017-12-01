@@ -272,6 +272,24 @@ public class ArgumentParserTest {
   }
 
   @Test
+  public void TestHelpWithOptional() {
+    String[] cla = { "-h" };
+    argCheck.addArg("length", "the length of the box");
+    argCheck.addArg("width", "the width of the box");
+    argCheck.addArg("height", "the height of the box");
+    argCheck.addOptArg("type", "box", "the type of the box to calculate the volume for");
+
+    String msg = "usage: java VolumeCalculator length width height type\nCalculate the volume of a box.\npositional arguments:\n   length the length of the box (string)\n   width the width of the box (string)\n   height the height of the box (string)\noptional arguments:\n   type the type of the box to calculate the volume for (string)";
+    try {
+      argCheck.parse(cla);
+      fail("Should have thrown HelpException but did not!");
+    } catch (HelpException expected) {
+      assertEquals(msg, expected.getMessage());
+    }
+  }
+
+
+  @Test
   public void testOptionalArgumentAllConstructors() {
     String[] cla = { "--length", "8" };
     argCheck.addOptArg("length", "3");

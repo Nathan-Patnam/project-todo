@@ -10,6 +10,7 @@ public class ArgParser {
   private HashSet<String> requiredArgs;
   private HashSet<String> flagNames;
   private Map<String, Arg> arguments;
+  private HashSet<String> positionalArgumentNames;
 
   public ArgParser(String programName) {
     this(programName, "");
@@ -23,6 +24,7 @@ public class ArgParser {
     shortToLong = new HashMap<>();
     flagNames = new HashSet<>();
     requiredArgs = new HashSet<>();
+    positionalArgumentNames = new HashSet<>();
 
   }
 
@@ -41,11 +43,13 @@ public class ArgParser {
   public void addArg(String argname, String description, Arg.DataType dataType) {
     arguments.put(argname, new Arg(argname, description, dataType));
     argumentNames.add(argname);
+    positionalArgumentNames.add(argname);
   }
 
   public void addArg(Arg arg) {
     arguments.put(arg.getName(), arg);
     argumentNames.add(arg.getName());
+    positionalArgumentNames.add(arg.getName());
 
   }
 
@@ -75,8 +79,7 @@ public class ArgParser {
   }
 
   public void addFlag(String argname) {
-    arguments.put(argname, new OptArg(argname, false, Arg.DataType.BOOLEAN));
-    flagNames.add(argname);
+    addFlag(argname, "");
   }
 
   public void addFlag(String argname, String description) {
@@ -150,6 +153,10 @@ public class ArgParser {
   public String getArgDataTypeString(String argument) {
 
     return arguments.get(argument).getDataType().toString();
+  }
+
+  public HashSet<String> getPostionalArgNames(){
+    return this.positionalArgumentNames;
   }
 
   public int getNumberArgs() {
