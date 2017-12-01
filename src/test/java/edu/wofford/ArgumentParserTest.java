@@ -279,7 +279,7 @@ public class ArgumentParserTest {
     argCheck.addArg("height", "the height of the box");
     argCheck.addOptArg("type", "box", "the type of the box to calculate the volume for");
 
-    String msg = "usage: java VolumeCalculator length width height type\nCalculate the volume of a box.\npositional arguments:\n   length the length of the box (string)\n   width the width of the box (string)\n   height the height of the box (string)\noptional arguments:\n   type the type of the box to calculate the volume for (string) default value: box";
+    String msg = "usage: java VolumeCalculator length width height type\nCalculate the volume of a box.\npositional arguments:\n   length the length of the box (string)\n   width the width of the box (string)\n   height the height of the box (string)\noptional arguments:\n   type the type of the box to calculate the volume for (string; default: box)";
     try {
       argCheck.parse(cla);
       fail("Should have thrown HelpException but did not!");

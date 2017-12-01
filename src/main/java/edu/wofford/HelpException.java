@@ -27,7 +27,7 @@ public class HelpException extends RuntimeException {
         if (!argNameIterator.equals("help") && !argNameIterator.equals("h") && !positionalArgumentNames.contains(argNameIterator)) {
           Arg currentArgumentIterator = arguments.get(argNameIterator);
           this.message += "\n   " + argNameIterator + " " + currentArgumentIterator.getDescription() + " ("
-              + currentArgumentIterator.getDataType().toString() + ")" + " default value: " + currentArgumentIterator.getValue();
+              + currentArgumentIterator.getDataType().toString() + "; default: " + currentArgumentIterator.getValue() + ")";
         }
   
      }
