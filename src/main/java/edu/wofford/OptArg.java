@@ -70,7 +70,13 @@ public class OptArg extends Arg {
         xMLStreamWriter.writeCharacters(this.shortFormName);
         xMLStreamWriter.writeEndElement();
     }
+    if (this.description != null && this.description.length() > 0) {
+        xMLStreamWriter.writeCharacters("\n\t\t");
+        xMLStreamWriter.writeStartElement("description");
+        xMLStreamWriter.writeCharacters(this.description);
+        xMLStreamWriter.writeEndElement();
 
+      }
     if (this.allRestrictedValuesString != null
             && this.allRestrictedValuesString.length() > 0) {
         xMLStreamWriter.writeCharacters("\n\t\t");

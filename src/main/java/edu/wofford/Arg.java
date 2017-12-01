@@ -28,7 +28,7 @@ public class Arg {
   protected HashSet<String> restrictedValues;
   protected String allRestrictedValuesString;
   protected boolean required;
-  private static int position =1;
+  private static int position =0;
 
   public Arg(String name) {
     this(name, "", DataType.STRING);
@@ -77,10 +77,14 @@ public class Arg {
     this.dataType = dataType;
   }
 
-  public void setRestrictedValues(String restrictedValues) {
-    for (String value : restrictedValues.split(" ")) {
+  public void setRestrictedValues(String restrictedValuesString) {
+    this.allRestrictedValuesString = "";
+    for (String value : restrictedValuesString.split(" ")) {
       this.restrictedValues.add(value);
+      this.allRestrictedValuesString += value + " ";
     }
+    this.allRestrictedValuesString = this.allRestrictedValuesString.trim();
+
 
   }
 
@@ -117,15 +121,7 @@ public class Arg {
   }
 
   public String getRestrictedValuesString() {
-    this.allRestrictedValuesString = "";
 
-    if (restrictedValues.size() > 0) {
-      for (String restrictedValue : restrictedValues) {
-        this.allRestrictedValuesString += restrictedValue + " ";
-      }
-      this.allRestrictedValuesString = this.allRestrictedValuesString.trim();
-
-    }
 
     return this.allRestrictedValuesString;
   }
@@ -134,6 +130,7 @@ public class Arg {
 
 
   private static int getPosition() {
+    position++;
     return position;
   }
 
@@ -145,11 +142,6 @@ public class Arg {
       streamWriter.writeCharacters("\n\t\t");
       streamWriter.writeStartElement("name");
       streamWriter.writeCharacters(name);
-      streamWriter.writeEndElement();
-
-      streamWriter.writeCharacters("\n\t\t");
-      streamWriter.writeStartElement("position");
-      streamWriter.writeCharacters(String.valueOf(getPosition()));
       streamWriter.writeEndElement();
 
       streamWriter.writeCharacters("\n\t\t");
@@ -180,9 +172,14 @@ public class Arg {
 
       }
 
+      streamWriter.writeCharacters("\n\t\t");
+      streamWriter.writeStartElement("position");
+      streamWriter.writeCharacters(String.valueOf(getPosition()));
+      streamWriter.writeEndElement();
+
       streamWriter.writeCharacters("\n\t");
       streamWriter.writeEndElement();
-      position++;
+   
     }
     catch (XMLStreamException e) {
       e.printStackTrace();

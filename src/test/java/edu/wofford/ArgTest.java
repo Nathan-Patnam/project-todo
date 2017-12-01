@@ -64,7 +64,7 @@ public final void TestSetThenGetArgShortName(){
 }
 @Test
 public final void TestSetThenGetArgDefaultRestrictedValues(){
-    assertEquals("", regArg.getRestrictedValuesString());
+    assertEquals(null, regArg.getRestrictedValuesString());
 }
 
 @Test
