@@ -2,7 +2,6 @@ package edu.wofford;
 
 import java.util.*;
 
-
 public class ArgParser {
   private String programName;
   private String programDescription;
@@ -44,7 +43,7 @@ public class ArgParser {
     argumentNames.add(argname);
   }
 
-  public void addArg(Arg arg){
+  public void addArg(Arg arg) {
     arguments.put(arg.getName(), arg);
     argumentNames.add(arg.getName());
 
@@ -69,12 +68,11 @@ public class ArgParser {
     arguments.put(argname, new OptArg(argname, defaultValue, dataType, description));
   }
 
-  public void addOptArg(OptArg arg){
+  public void addOptArg(OptArg arg) {
     arguments.put(arg.getName(), arg);
     argumentNames.add(arg.getName());
 
   }
-
 
   public void addFlag(String argname) {
     arguments.put(argname, new OptArg(argname, false, Arg.DataType.BOOLEAN));
@@ -86,10 +84,10 @@ public class ArgParser {
     flagNames.add(argname);
   }
 
-
-  public void addFlagToList(String flagName){
+  public void addFlagToList(String flagName) {
     flagNames.add(flagName);
   }
+
   private boolean checkType(String value, Arg.DataType type) {
     switch (type) {
     case BOOLEAN:
@@ -121,7 +119,6 @@ public class ArgParser {
   public Map<String, Arg> getAllArgs() {
     return this.arguments;
   }
-
 
   /**
   * Returns the value that the argument holds. If no value has been set for the argument then it will return null
@@ -155,8 +152,6 @@ public class ArgParser {
     return arguments.get(argument).getDataType().toString();
   }
 
-
-
   public int getNumberArgs() {
     return arguments.size();
   }
@@ -187,54 +182,73 @@ public class ArgParser {
     return programDescription;
   }
 
-  public String getErrorUsage(){
-    String errorMessage="usage: java " + this.programName + getParameterString() + "\n" + this.programName;
+  public String getErrorUsage() {
+    String errorMessage = "usage: java " + this.programName + getParameterString() + "\n" + this.programName;
     return errorMessage;
   }
 
-  private void tooManyInputsGiven(){
-    String requiredArgString = "";
-    for (String requiredArgs : requiredArgs) {
-      requiredArgString += requiredArgs + " ";
+  private String doesOptionalArgumentExist(String commandLineName) {
+    String aname = commandLineName.replace("-", "");
+    if (arguments.get(aname) == null) {
+      throw new ArgDoesNotExistException(aname);
     }
-    throw new IllegalArgumentException("The argument(s) " + requiredArgString + "are required");
+    return aname;
   }
 
+  private boolean isArgAFlag(String flagName) {
+    if (arguments.get(flagName) != null) {
+      arguments.get(flagName).setValue("true");
+    }
+    return arguments.get(flagName) != null;
+  }
 
-
-
-    private String doesOptionalArgumentExist(String commandLineName){
-      String aname= commandLineName.replace("-", "");
-      if (arguments.get(aname) == null) {
-        throw new IllegalArgumentException("argument " + aname + " does not exist");
+  private boolean argIsACollectionOfFlags(String flagNames) {
+    for (int j = 0; j < flagNames.length(); j++) {
+      String flagIterator = String.valueOf(flagNames.charAt(j));
+      if (arguments.get(flagIterator) != null) {
+        arguments.get(flagIterator).setValue("true");
+      } else {
+        throw new FlagDoesNotExistException(flagIterator);
       }
-      return aname;
+    }
+    return true;
+  }
+
+  private boolean doesArgHaveRestrictedValues(Arg argument, String argValue) {
+    if (argument.getRestrictedValuesString() != null && argument.getRestrictedValuesString().length() > 0) {
+      HashSet<String> argRestrictedValues = argument.getRestrictedValues();
+      if (argRestrictedValues.contains(argValue)) {
+        argument.setValue(argValue);
+        return true;
+      } else {
+        throw new IllegalArgumentException(argValue + " is not an allowed value for " + argument.getName());
+      }
+    }
+    return false;
+
+  }
+
+  private void removeArgIfRequired(String argname) {
+    if (requiredArgs.contains(argname)) {
+      requiredArgs.remove(argname);
     }
 
-    private boolean isArgAFlag(String flagName){
-      if (arguments.get(flagName) != null){
-        arguments.get(flagName).setValue("true");
-      }
-      return arguments.get(flagName) != null;
-    }
+  }
 
-    private boolean argIsACollectionOfFlags(String flagNames){
-      for (int j = 0; j < flagNames.length(); j++) {
-        String flagIterator = String.valueOf(flagNames.charAt(j));
-        if (arguments.get(flagIterator) != null) {
-          arguments.get(flagIterator).setValue("true");
-        } else {
-          throw new IllegalArgumentException("flag " + flagIterator + " does not exist");
-        }
-      }
-      return true;
-    }
+  private String isArgAShortName(String shortName) {
 
+    if (shortToLong.get(shortName) == null) {
+      throw new ArgDoesNotExistException(shortName );
+    } else {
+      return shortToLong.get(shortName);
+    }
+  }
 
   public void parse(String[] args) {
-    HashSet<String> argRestrictedValues;
     int usedArguments = 0;
+
     for (int i = 0; i < args.length; i++) {
+
       String aname = "";
       if (args[i].equals("-h") || args[i].equals("--help")) {
         throw new HelpException(this);
@@ -243,62 +257,47 @@ public class ArgParser {
       else if (args[i].startsWith("-")) {
         if (args[i].startsWith("--")) {
           aname = doesOptionalArgumentExist(args[i]);
-        } 
-              //argument is a flag or collection of flags
+        }
+        //argument is a flag, collection of flags, or a short name
         else {
           String sname = args[i].substring(1);
-
           if (isArgAFlag(sname)) {
             continue;
-          }
-          else if (sname.length() > 1) {
+          } else if (sname.length() > 1) {
             argIsACollectionOfFlags(sname);
             continue;
           }
-
-          aname = shortToLong.get(sname);
-          if (aname == null) {
-            throw new IllegalArgumentException("argument " + args[i].substring(1) + " does not exist");
-          } else {
-            usedArguments++;
-          }
+          aname = isArgAShortName(sname);
+          usedArguments++;
         }
 
-
+        //dealing with optional arguments
         Arg a = arguments.get(aname);
         if (a.getDataType() == Arg.DataType.BOOLEAN) {
           a.setValue("true");
-        } else {
+        }
+
+        else {
           if (checkType(args[i + 1], a.getDataType())) {
 
-            if (a.getRestrictedValuesString() != null && a.getRestrictedValuesString().length() > 0) {
-              argRestrictedValues = a.getRestrictedValues();
-              if (argRestrictedValues.contains(args[i + 1])) {
-                if (requiredArgs.contains(aname)) {
-                  requiredArgs.remove(aname);
-                }
+            if (doesArgHaveRestrictedValues(a, args[i + 1])) {
+              removeArgIfRequired(aname);
+              i++;
 
-                a.setValue(args[i + 1]);
-                i++;
-              } else {
-                throw new IllegalArgumentException(args[i + 1] + " is not an allowed value for " + aname);
-              }
             } else {
-              if (requiredArgs.contains(aname)) {
-                requiredArgs.remove(aname);
-              }
+              removeArgIfRequired(aname);
               a.setValue(args[i + 1]);
               i++;
             }
 
           } else {
-           throw new BadDataType(this, a, args[i + 1]);
+            throw new BadDataTypeException(this, a, args[i + 1]);
           }
         }
       }
 
       else {
-        // Regular argument value
+        // Regular argument value 
         if (usedArguments == argumentNames.size()) {
           throw new TooManyArguments(this, args[i]);
         } else {
@@ -306,20 +305,14 @@ public class ArgParser {
           Arg a = arguments.get(aname);
           if (checkType(args[i], a.getDataType())) {
 
-            if (a.getRestrictedValuesString() != null && a.getRestrictedValuesString().length() > 0) {
-              argRestrictedValues = a.getRestrictedValues();
-              if (argRestrictedValues.contains(args[i])) {
-                a.setValue(args[i]);
-                usedArguments++;
-              } else {
-                throw new IllegalArgumentException(args[i] + " is not an allowed value for " + aname);
-              }
+            if (doesArgHaveRestrictedValues(a, args[i])) {
+              usedArguments++;
             } else {
               a.setValue(args[i]);
               usedArguments++;
             }
           } else {
-            throw new BadDataType(this, a, args[i]);
+            throw new BadDataTypeException(this, a, args[i]);
           }
         }
       }
@@ -327,36 +320,32 @@ public class ArgParser {
     }
 
     if (usedArguments < argumentNames.size()) {
-      throw new TooFewArguments(this, usedArguments,argumentNames);
+      throw new TooFewArguments(this, usedArguments, argumentNames);
+
+    } else if (requiredArgs.size() > 0) {
+      throw new RequiredArgException(requiredArgs);
 
     }
-    else if (requiredArgs.size() > 0) {
-      tooManyInputsGiven();
-
 
   }
 
-  
-}
-
-
-public void setArgShortFormName(String argument, String shortFormName) {
-  arguments.get(argument).setShortFormName(shortFormName);
-  if (shortToLong.get(shortFormName) != null || shortFormName.equals("h")) {
-    throw new ShortFormNameException(shortFormName);
+  public void setArgShortFormName(String argument, String shortFormName) {
+    arguments.get(argument).setShortFormName(shortFormName);
+    if (shortToLong.get(shortFormName) != null || shortFormName.equals("h")) {
+      throw new ShortFormNameException(shortFormName);
+    }
+    shortToLong.put(shortFormName, argument);
   }
-  shortToLong.put(shortFormName, argument);
-}
 
-public void setArgRestricedValues(String argument, String restrictedValues) {
-  arguments.get(argument).setRestrictedValues(restrictedValues);
+  public void setArgRestricedValues(String argument, String restrictedValues) {
+    arguments.get(argument).setRestrictedValues(restrictedValues);
 
-}
-
-public void setArgAsRequired(String argument) {
-  if(arguments.get(argument).isArgRequired()==false){
-    arguments.get(argument).makeArgRequired();
-    requiredArgs.add(argument);
   }
-}
+
+  public void setArgAsRequired(String argument) {
+    if (arguments.get(argument).isArgRequired() == false) {
+      arguments.get(argument).makeArgRequired();
+      requiredArgs.add(argument);
+    }
+  }
 }

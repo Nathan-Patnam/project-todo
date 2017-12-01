@@ -170,7 +170,7 @@ public class ArgumentParserTest {
     try {
       argCheck.parse(cla);
       fail("Should have thrown HelpException but did not!");
-    } catch (BadDataType expected) {
+    } catch (BadDataTypeException expected) {
       assertEquals(msg, expected.getMessage());
     }
   }
@@ -183,7 +183,7 @@ public class ArgumentParserTest {
     try {
       argCheck.parse(cla);
       fail("Should have thrown HelpException but did not!");
-    } catch (BadDataType expected) {
+    } catch (BadDataTypeException expected) {
       assertEquals(msg, expected.getMessage());
     }
   }
@@ -200,7 +200,7 @@ public class ArgumentParserTest {
     try {
       argCheck.parse(cla);
       fail("Should have thrown HelpException but did not!");
-    } catch (BadDataType expected) {
+    } catch (BadDataTypeException expected) {
       assertEquals(msg, expected.getMessage());
     }
   }
@@ -216,7 +216,7 @@ public class ArgumentParserTest {
     try {
       argCheck.parse(cla);
       fail("Should have thrown HelpException but did not!");
-    } catch (BadDataType expected) {
+    } catch (BadDataTypeException expected) {
       assertEquals(msg, expected.getMessage());
     }
   }
@@ -232,7 +232,7 @@ public class ArgumentParserTest {
     try {
       argCheck.parse(cla);
       fail("Should have thrown HelpException but did not!");
-    } catch (BadDataType expected) {
+    } catch (BadDataTypeException expected) {
       assertEquals(msg, expected.getMessage());
     }
   }
@@ -248,7 +248,7 @@ public class ArgumentParserTest {
     try {
       argCheck.parse(cla);
       fail("Should have thrown HelpException but did not!");
-    } catch (BadDataType expected) {
+    } catch (BadDataTypeException expected) {
       assertEquals(msg, expected.getMessage());
     }
   }
@@ -375,7 +375,7 @@ public class ArgumentParserTest {
     try {
       argCheck.parse(cla);
       fail("Should have thrown IllegalArgumentException but did not!");
-    } catch (IllegalArgumentException expected) {
+    } catch (ArgDoesNotExistException expected) {
       assertEquals(msg, expected.getMessage());
     }
   }
@@ -389,7 +389,7 @@ public class ArgumentParserTest {
     try {
       argCheck.parse(cla);
       fail("Should have thrown IllegalArgumentException but did not!");
-    } catch (IllegalArgumentException expected) {
+    } catch (FlagDoesNotExistException expected) {
       assertEquals(msg, expected.getMessage());
     }
   }
@@ -464,7 +464,7 @@ public class ArgumentParserTest {
     try {
       argCheck.parse(cla);
       fail("Should have thrown IllegalArgumentException but did not!");
-    } catch (IllegalArgumentException expected) {
+    } catch (ArgDoesNotExistException expected) {
       assertEquals(msg, expected.getMessage());
     }
 
@@ -536,7 +536,7 @@ public void argRequiredButNotGiven(){
     try {
       argCheck.parse(cla);
       fail("Should have thrown IllegalArgumentException but did not!");
-    } catch (IllegalArgumentException expected) {
+    } catch (RequiredArgException expected) {
       assertEquals(msg, expected.getMessage());
     }
   
