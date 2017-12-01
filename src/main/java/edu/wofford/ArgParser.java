@@ -221,7 +221,7 @@ public class ArgParser {
         argument.setValue(argValue);
         return true;
       } else {
-        throw new IllegalArgumentException(argValue + " is not an allowed value for " + argument.getName());
+        throw new RestrictedValueException(argument, argValue);
       }
     }
     return false;
@@ -238,10 +238,10 @@ public class ArgParser {
   private String isArgAShortName(String shortName) {
 
     if (shortToLong.get(shortName) == null) {
-      throw new ArgDoesNotExistException(shortName );
-    } else {
-      return shortToLong.get(shortName);
-    }
+      throw new ArgDoesNotExistException(shortName);
+    } 
+    return shortToLong.get(shortName);
+    
   }
 
   public void parse(String[] args) {

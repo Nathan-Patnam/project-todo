@@ -498,7 +498,7 @@ public void argGivenValueNotInRestricted(){
     try {
       argCheck.parse(cla);
       fail("Should have thrown IllegalArgumentException but did not!");
-    } catch (IllegalArgumentException expected) {
+    } catch (RestrictedValueException expected) {
       assertEquals(msg, expected.getMessage());
     }
   
@@ -517,7 +517,7 @@ public void argGivenValueNotInRestrictedOptional(){
     try {
       argCheck.parse(cla);
       fail("Should have thrown IllegalArgumentException but did not!");
-    } catch (IllegalArgumentException expected) {
+    } catch (RestrictedValueException expected) {
       assertEquals(msg, expected.getMessage());
     }
   

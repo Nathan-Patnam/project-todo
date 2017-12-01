@@ -1,6 +1,7 @@
 package edu.wofford;
 import java.util.*;
-class RequiredArgException extends RuntimeException {
+
+public class RequiredArgException extends RuntimeException {
   private String message;
   
   public RequiredArgException (HashSet<String> requiredArgs) {
