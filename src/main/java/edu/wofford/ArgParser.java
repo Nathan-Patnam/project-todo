@@ -218,7 +218,6 @@ public class ArgParser {
     if (argument.getRestrictedValuesString() != null && argument.getRestrictedValuesString().length() > 0) {
       HashSet<String> argRestrictedValues = argument.getRestrictedValues();
       if (argRestrictedValues.contains(argValue)) {
-        argument.setValue(argValue);
         return true;
       } else {
         throw new RestrictedValueException(argument, argValue);
@@ -239,9 +238,9 @@ public class ArgParser {
 
     if (shortToLong.get(shortName) == null) {
       throw new ArgDoesNotExistException(shortName);
-    } 
+    }
     return shortToLong.get(shortName);
-    
+
   }
 
   public void parse(String[] args) {
@@ -282,14 +281,13 @@ public class ArgParser {
 
             if (doesArgHaveRestrictedValues(a, args[i + 1])) {
               removeArgIfRequired(aname);
-              i++;
 
             } else {
               removeArgIfRequired(aname);
-              a.setValue(args[i + 1]);
-              i++;
-            }
 
+            }
+            a.setValue(args[i + 1]);
+            i++;
           } else {
             throw new BadDataTypeException(this, a, args[i + 1]);
           }
@@ -306,11 +304,10 @@ public class ArgParser {
           if (checkType(args[i], a.getDataType())) {
 
             if (doesArgHaveRestrictedValues(a, args[i])) {
-              usedArguments++;
-            } else {
-              a.setValue(args[i]);
-              usedArguments++;
+
             }
+            a.setValue(args[i]);
+            usedArguments++;
           } else {
             throw new BadDataTypeException(this, a, args[i]);
           }

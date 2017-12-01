@@ -5,8 +5,7 @@ public class BadDataTypeException extends RuntimeException {
     public BadDataTypeException(ArgParser argChecker, Arg argument, String value) {
         super();
     
-        this.message = "";
-        message = "usage: java " + argChecker.getProgramName() + argChecker.getParameterString() + "\n" + argChecker.getProgramName() + ".java: error: "
+        this.message = "usage: java " + argChecker.getProgramName() + argChecker.getParameterString() + "\n" + argChecker.getProgramName() + ".java: error: "
             + "argument " + argument.getName() + ":" + " invalid " + argument.getDataType().toString() + " value: " + value;
     }
 

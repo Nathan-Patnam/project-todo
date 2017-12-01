@@ -5,8 +5,7 @@ public class HelpException extends RuntimeException {
   
   public HelpException(ArgParser argChecker) {
     super();
-    this.message = "";
-    message = "usage: java " + argChecker.getProgramName() + argChecker.getParameterString() + "\n" + argChecker.getProgramDescription() + "\n";
+    this.message = "usage: java " + argChecker.getProgramName() + argChecker.getParameterString() + "\n" + argChecker.getProgramDescription() + "\n";
     Map<String, Arg> arguments = argChecker.getAllArgs();
     message+="positional arguments:";
     for (String argNameIterator : arguments.keySet()) {

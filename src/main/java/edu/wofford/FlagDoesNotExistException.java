@@ -5,8 +5,7 @@ public class FlagDoesNotExistException extends RuntimeException {
     public FlagDoesNotExistException(String flagName) {
         super();
     
-        this.message = "";
-        message = "flag " + flagName + " does not exist";
+        this.message = "flag " + flagName + " does not exist";
     }
 
     @Override

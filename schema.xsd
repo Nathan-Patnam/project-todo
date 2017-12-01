@@ -21,7 +21,6 @@ elementFormDefault="qualified">
   <xs:complexType>
     <xs:sequence>
       <xs:element ref="positional" maxOccurs="unbounded"/>
-      <xs:element ref="flag" maxOccurs="unbounded"/>
       <xs:element ref="optional" maxOccurs="unbounded"/>
     </sequence>
   </complexType>
@@ -58,14 +57,6 @@ elementFormDefault="qualified">
   </complexType>
 </element>
 
-<!-- schema for a Flag-->
-<xs:element name="flag">
-  <xs:complexType>
-    <xs:xsequence>
-      <xs:element name="name" type="xs:string"/>
-      <xs:element name="description" type="xs:string" minOccurs="0" maxOccurs="1"/>
-    </sequence>
-  </complexType>
-</element>
+
 
 </xs:schema>
