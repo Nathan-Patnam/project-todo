@@ -7,7 +7,7 @@ public class OptArg extends Arg {
 
     /**
     * Constructor for an OptArg object with the given name and default value. By default, its data type 
-	* is String.
+	* is String, and its description is an empty String. 
     * @param  name, the String value that is the name of the OptArg 
     *		  defaultValue, the String value that is the default value of the OptArg 
     * @return nothing
@@ -29,7 +29,8 @@ public class OptArg extends Arg {
     }
 
 	/**
-    * Constructor for an OptArg object with the given name, default value, and data type. 
+    * Constructor for an OptArg object with the given name, default value, and data type. Since it is 
+	* unspecified, the decsription is initialized as an empty String. 
     * @param  name, the String value that is the name of the OptArg 
     *		  defaultValue, the String value that is the default value of the OptArg 
 	*		  dataType, the DataType value that is the data type of the OptArg

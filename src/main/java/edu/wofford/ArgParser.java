@@ -191,9 +191,9 @@ public class ArgParser {
   }
 
   /**
-  *Returns the argument object that is specified by the given argument name 
-  *@param  argument, the String value that is the ame of the argument object you want to return 
-  *@return the object argument associated with the argument name 
+  * Returns the argument object that is specified by the given argument name 
+  * @param  argument, the String value that is the ame of the argument object you want to return 
+  * @return the object argument associated with the argument name 
   */
   public Arg getArgument(String argument) {
     return arguments.get(argument);
@@ -292,7 +292,7 @@ public class ArgParser {
   }
 
   /**
-  * Sets the value for the name of the program. 
+  * Sets the name of the program. 
   * @param  programName, the String value that is the name of the program 
   * @return nothing 
   */
@@ -348,7 +348,7 @@ public class ArgParser {
     }
 
   /**
-  * Parses the values passed in  
+  * Parses the input values
   * @param  args, a String array of argument values
   * @return nothing 
   */
