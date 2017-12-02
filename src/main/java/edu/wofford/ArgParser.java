@@ -194,26 +194,41 @@ public class ArgParser {
     return errorMessage;
   }
 
-  private String doesOptionalArgumentExist(String commandLineName) {
-    String aname = commandLineName.replace("-", "");
-    if (arguments.get(aname) == null) {
-      throw new ArgDoesNotExistException(aname);
+  public void setArgShortFormName(String argument, String shortFormName) {
+    arguments.get(argument).setShortFormName(shortFormName);
+    if (shortToLong.get(shortFormName) != null || shortFormName.equals("h")) {
+      throw new ShortFormNameException(shortFormName);
     }
-    return aname;
+    shortToLong.put(shortFormName, argument);
   }
 
-  private boolean isArgAFlag(String flagName) {
-    if (arguments.get(flagName) != null) {
-      arguments.get(flagName).setValue("true");
+  public void setArgRestricedValues(String argument, String restrictedValues) {
+    arguments.get(argument).setRestrictedValues(restrictedValues);
+
+  }
+
+  public void setArgAsRequired(String argument) {
+    if (arguments.get(argument).isArgRequired() == false) {
+      arguments.get(argument).makeArgRequired();
+      requiredArgs.add(argument);
     }
+  }
+
+
+  private boolean isArgAFlag(String flagName) {
+
     return arguments.get(flagName) != null;
+  }
+
+  private void setFlag(String flagName){
+    arguments.get(flagName).setValue("true");
   }
 
   private boolean argIsACollectionOfFlags(String flagNames) {
     for (int j = 0; j < flagNames.length(); j++) {
       String flagIterator = String.valueOf(flagNames.charAt(j));
-      if (arguments.get(flagIterator) != null) {
-        arguments.get(flagIterator).setValue("true");
+      if (isArgAFlag(flagIterator)) {
+        setFlag(flagIterator);
       } else {
         throw new FlagDoesNotExistException(flagIterator);
       }
@@ -250,34 +265,28 @@ public class ArgParser {
 
   }
 
-  private boolean isOptional(String s) {
-    return s.startsWith("-");
-  }
-  private boolean isLongForm(String s) {
-    return s.startsWith("--");
-  }
+  
 
   public void parse(String[] args) {
-    Queue<String> queue = new ArrayDeque<>();
+    Queue<String> commandLineQueue = new ArrayDeque<>();
     for(int i = 0; i < args.length; i++) {
-      queue.add(args[i]);
+      commandLineQueue.add(args[i]);
     }
 
     int usedArguments = 0;
-
-    while(!queue.isEmpty()) {
-      String curr = queue.remove();
+    while(!commandLineQueue.isEmpty()) {
+      String curr = commandLineQueue.remove();
       String aname = "";
-      if (curr.equals("-h") || curr.equals("--help")) {
-        throw new HelpException(this);
-      }
-      else if (isOptional(curr)) {
+      assertHelp(curr);
+
+      if (isOptional(curr)) {
         if (isLongForm(curr)) {
-          aname = doesOptionalArgumentExist(curr);
+          aname = doesOptionalArgumentExist(removeHyphens(curr));
         }
         else {
-          String sname = curr.substring(1);
+          String sname = removeHyphens(curr);
           if (isArgAFlag(sname)) {
+            setFlag(sname);
             continue;
           } else if (sname.length() > 1) {
             argIsACollectionOfFlags(sname);
@@ -294,16 +303,11 @@ public class ArgParser {
         }
 
         else {
-          String next = queue.remove();
+          String next = commandLineQueue.remove();
           if (checkType(next, a.getDataType())) {
 
-            if (doesArgHaveRestrictedValues(a, next)) {
+              doesArgHaveRestrictedValues(a, next);
               removeArgIfRequired(aname);
-
-            } else {
-              removeArgIfRequired(aname);
-
-            }
             a.setValue(next);
           } else {
             throw new BadDataTypeException(this, a, next);
@@ -320,9 +324,8 @@ public class ArgParser {
           Arg a = arguments.get(aname);
           if (checkType(curr, a.getDataType())) {
 
-            if (doesArgHaveRestrictedValues(a, curr)) {
+           doesArgHaveRestrictedValues(a, curr);
 
-            }
             a.setValue(curr);
             usedArguments++;
           } else {
@@ -333,33 +336,55 @@ public class ArgParser {
 
     }
 
+    assertTooFewArgs(usedArguments);
+    assertRequiredArgs();
+  }
+
+
+  private void assertHelp(String value){
+     if((value.equals("-h") || value.equals("--help"))){
+      throw new HelpException(this);
+     };
+  }
+
+  private boolean isOptional(String s) {
+    return s.startsWith("-");
+  }
+  private boolean isLongForm(String s) {
+    return s.startsWith("--");
+  }
+  private String doesOptionalArgumentExist(String commandLineName) {
+    if (arguments.get(commandLineName) == null) {
+      throw new ArgDoesNotExistException(commandLineName);
+    }
+    return commandLineName;
+  }
+
+
+  private String removeHyphens(String argName){
+    return argName.replace("-", "");
+  }
+
+
+
+
+  private void assertTooFewArgs(int usedArguments){
     if (usedArguments < argumentNames.size()) {
       throw new TooFewArguments(this, usedArguments, argumentNames);
 
-    } else if (requiredArgs.size() > 0) {
+    }
+  
+  };
+  private void assertRequiredArgs(){
+    if (requiredArgs.size() > 0) {
       throw new RequiredArgException(requiredArgs);
 
     }
+  };
 
-  }
 
-  public void setArgShortFormName(String argument, String shortFormName) {
-    arguments.get(argument).setShortFormName(shortFormName);
-    if (shortToLong.get(shortFormName) != null || shortFormName.equals("h")) {
-      throw new ShortFormNameException(shortFormName);
-    }
-    shortToLong.put(shortFormName, argument);
-  }
 
-  public void setArgRestricedValues(String argument, String restrictedValues) {
-    arguments.get(argument).setRestrictedValues(restrictedValues);
 
-  }
 
-  public void setArgAsRequired(String argument) {
-    if (arguments.get(argument).isArgRequired() == false) {
-      arguments.get(argument).makeArgRequired();
-      requiredArgs.add(argument);
-    }
-  }
+
 }
