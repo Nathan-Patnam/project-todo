@@ -36,6 +36,6 @@
 		<shortname>w</shortname>
 		<description>width of the box</description>
 		<restrictedValues>3 4 5</restrictedValues>
-		<position>1</position>
+		<position>2</position>
 	</positional>
 </arguments>

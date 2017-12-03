@@ -116,7 +116,7 @@ public class XML {
 
             for (String argNameIterator : arguments.keySet()) {
                 Arg argumentIterator = argparser.getArgument(argNameIterator);
-                argumentIterator.writeArgXML(xMLStreamWriter);
+                argumentIterator.writeArgXML(xMLStreamWriter, argparser);
             }
             //close arguments tag
             xMLStreamWriter.writeCharacters("\n");

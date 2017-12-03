@@ -28,7 +28,6 @@ public class Arg {
   protected HashSet<String> restrictedValues;
   protected String allRestrictedValuesString;
   protected boolean required;
-  private int position = 0;
 
   public Arg(String name) {
     this(name, "", DataType.STRING);
@@ -129,12 +128,9 @@ public class Arg {
   
 
 
-  private int getPosition() {
-    position++;
-    return position;
-  }
 
-  public XMLStreamWriter writeArgXML(XMLStreamWriter streamWriter) {
+
+  public XMLStreamWriter writeArgXML(XMLStreamWriter streamWriter, ArgParser argparser) {
     try {
       streamWriter.writeCharacters("\n\t");
       streamWriter.writeStartElement("positional");
@@ -174,7 +170,7 @@ public class Arg {
 
       streamWriter.writeCharacters("\n\t\t");
       streamWriter.writeStartElement("position");
-      streamWriter.writeCharacters(String.valueOf(getPosition()));
+      streamWriter.writeCharacters(String.valueOf(argparser.getPostionalArgNames().indexOf(name)+1));
       streamWriter.writeEndElement();
 
       streamWriter.writeCharacters("\n\t");

@@ -10,7 +10,7 @@ public class ArgParser {
   private HashSet<String> requiredArgs;
   private HashSet<String> flagNames;
   private Map<String, Arg> arguments;
-  private HashSet<String> positionalArgumentNames;
+  private ArrayList<String> positionalArgumentNames;
 
   public ArgParser(String programName) {
     this(programName, "");
@@ -24,7 +24,7 @@ public class ArgParser {
     shortToLong = new HashMap<>();
     flagNames = new HashSet<>();
     requiredArgs = new HashSet<>();
-    positionalArgumentNames = new HashSet<>();
+    positionalArgumentNames = new ArrayList<>();
 
   }
 
@@ -132,7 +132,7 @@ public class ArgParser {
     return arguments.get(argument).getDataType().toString();
   }
 
-  public HashSet<String> getPostionalArgNames() {
+  public ArrayList<String> getPostionalArgNames() {
     return this.positionalArgumentNames;
   }
 
@@ -200,12 +200,13 @@ public class ArgParser {
     int usedArguments = 0;
     while (!commandLineQueue.isEmpty()) {
       String curr = commandLineQueue.remove();
-      String aname = "";
+      String argumentName = "";
       assertHelpMessage(curr);
 
       if (isOptional(curr)) {
-        if (isLongForm(curr)) {
-          aname = doesOptionalArgumentExist(removeHyphens(curr));
+        if (isLongFormArg(curr)) {
+          assertOptionalArgExists(removeHyphens(curr));
+          argumentName =removeHyphens(curr);
         } else {
           String sname = removeHyphens(curr);
           if (isArgAFlag(sname)) {
@@ -215,12 +216,13 @@ public class ArgParser {
             argIsACollectionOfFlags(sname);
             continue;
           }
-          aname = isArgAShortName(sname);
+          assertShortNameExists(sname);
+          argumentName=getArgNameFromShortName(sname);
           usedArguments++;
         }
 
         //dealing with optional arguments
-        Arg a = arguments.get(aname);
+        Arg a = arguments.get(argumentName);
         if (doesArgHaveBoolVal(a)) {
           a.setValue("true");
         }
@@ -228,8 +230,11 @@ public class ArgParser {
         else {
           String next = commandLineQueue.remove();
           assertBadDataType(a, next);
-          doesArgHaveRestrictedValues(a, next);
-          removeArgIfRequired(aname);
+          if(doesArgHaveRestrictedValues(a)){
+            assertIsValARestrictedVal(a, next);
+          };
+
+          removeArgIfRequired(argumentName);
           a.setValue(next);
         }
       }
@@ -237,10 +242,12 @@ public class ArgParser {
       else {
         // Regular argument value
         assertToManyArguments(usedArguments, curr);
-        aname = argumentNames.get(usedArguments);
-        Arg a = arguments.get(aname);
+        argumentName = argumentNames.get(usedArguments);
+        Arg a = arguments.get(argumentName);
         assertBadDataType(a, curr);
-        doesArgHaveRestrictedValues(a, curr);
+        if(doesArgHaveRestrictedValues(a)){
+          assertIsValARestrictedVal(a, curr);
+        };
 
         a.setValue(curr);
         usedArguments++;
@@ -270,15 +277,14 @@ public class ArgParser {
     return s.startsWith("-");
   }
 
-  private boolean isLongForm(String s) {
+  private boolean isLongFormArg(String s) {
     return s.startsWith("--");
   }
 
-  private String doesOptionalArgumentExist(String commandLineName) {
+  private void assertOptionalArgExists(String commandLineName) {
     if (arguments.get(commandLineName) == null) {
       throw new ArgDoesNotExistException(commandLineName);
     }
-    return commandLineName;
   }
 
   private String removeHyphens(String argName) {
@@ -297,21 +303,30 @@ public class ArgParser {
   private void argIsACollectionOfFlags(String flagNames) {
     for (int j = 0; j < flagNames.length(); j++) {
       String flagIterator = String.valueOf(flagNames.charAt(j));
-      if (isArgAFlag(flagIterator)) {
+      assertFlagExists(flagIterator);
         setFlag(flagIterator);
-      } else {
-        throw new FlagDoesNotExistException(flagIterator);
-      }
+     
     }
   }
 
-  private String isArgAShortName(String shortName) {
+  private void assertFlagExists(String flagName){
+    if (isArgAFlag(flagName)) {
+    } else {
+      throw new FlagDoesNotExistException(flagName);
+    }
+
+  }
+
+  private void assertShortNameExists(String shortName) {
 
     if (shortToLong.get(shortName) == null) {
       throw new ArgDoesNotExistException(shortName);
     }
-    return shortToLong.get(shortName);
 
+  }
+
+  private String getArgNameFromShortName(String shortName){
+    return shortToLong.get(shortName);
   }
 
   private boolean doesArgHaveBoolVal(Arg a) {
@@ -342,17 +357,17 @@ public class ArgParser {
     }
   }
 
-  private boolean doesArgHaveRestrictedValues(Arg argument, String argValue) {
-    if (argument.getRestrictedValuesString() != null && argument.getRestrictedValuesString().length() > 0) {
-      HashSet<String> argRestrictedValues = argument.getRestrictedValues();
-      if (argRestrictedValues.contains(argValue)) {
-        return true;
-      } else {
-        throw new RestrictedValueException(argument, argValue);
-      }
-    }
-    return false;
+  private boolean doesArgHaveRestrictedValues(Arg argument) {
+    return(argument.getRestrictedValuesString() != null && 
+    argument.getRestrictedValuesString().length() > 0); 
 
+  }
+
+  private void assertIsValARestrictedVal(Arg argument, String argValue){
+    HashSet<String> argRestrictedValues = argument.getRestrictedValues();
+    if (!argRestrictedValues.contains(argValue)){
+      throw new RestrictedValueException(argument, argValue);
+    }
   }
 
   private void removeArgIfRequired(String argname) {

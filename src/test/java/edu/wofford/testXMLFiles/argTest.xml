@@ -11,6 +11,6 @@
 		<shortname>w</shortname>
 		<description>the width of the box</description>
 		<restrictedValues>7 8 9</restrictedValues>
-		<position>1</position>
+		<position>2</position>
 	</positional>
 </arguments>

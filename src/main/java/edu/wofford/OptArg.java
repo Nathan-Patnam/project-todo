@@ -35,7 +35,7 @@ public class OptArg extends Arg {
         this.value = "false";
     }
 
-    public XMLStreamWriter writeArgXML(XMLStreamWriter xMLStreamWriter) {
+    public XMLStreamWriter writeArgXML(XMLStreamWriter xMLStreamWriter, ArgParser argparser) {
         try{ 
 
         xMLStreamWriter.writeCharacters("\n\t");
