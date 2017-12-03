@@ -91,29 +91,6 @@ public class ArgParser {
     flagNames.add(flagName);
   }
 
-  private boolean checkType(String value, Arg.DataType type) {
-    switch (type) {
-    case BOOLEAN:
-      return (value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false"));
-    case INT:
-      try {
-        Integer.parseInt(value);
-        return true;
-      } catch (NumberFormatException e) {
-        return false;
-      }
-    case FLOAT:
-      try {
-        Float.parseFloat(value);
-        return true;
-      } catch (NumberFormatException e) {
-        return false;
-      }
-    default:
-      return true;
-    }
-  }
-
   public Arg getArgument(String argument) {
 
     return arguments.get(argument);
@@ -155,7 +132,7 @@ public class ArgParser {
     return arguments.get(argument).getDataType().toString();
   }
 
-  public HashSet<String> getPostionalArgNames(){
+  public HashSet<String> getPostionalArgNames() {
     return this.positionalArgumentNames;
   }
 
@@ -214,17 +191,110 @@ public class ArgParser {
     }
   }
 
+  public void parse(String[] args) {
+    Queue<String> commandLineQueue = new ArrayDeque<>();
+    for (int i = 0; i < args.length; i++) {
+      commandLineQueue.add(args[i]);
+    }
+
+    int usedArguments = 0;
+    while (!commandLineQueue.isEmpty()) {
+      String curr = commandLineQueue.remove();
+      String aname = "";
+      assertHelpMessage(curr);
+
+      if (isOptional(curr)) {
+        if (isLongForm(curr)) {
+          aname = doesOptionalArgumentExist(removeHyphens(curr));
+        } else {
+          String sname = removeHyphens(curr);
+          if (isArgAFlag(sname)) {
+            setFlag(sname);
+            continue;
+          } else if (sname.length() > 1) {
+            argIsACollectionOfFlags(sname);
+            continue;
+          }
+          aname = isArgAShortName(sname);
+          usedArguments++;
+        }
+
+        //dealing with optional arguments
+        Arg a = arguments.get(aname);
+        if (doesArgHaveBoolVal(a)) {
+          a.setValue("true");
+        }
+
+        else {
+          String next = commandLineQueue.remove();
+          assertBadDataType(a, next);
+          doesArgHaveRestrictedValues(a, next);
+          removeArgIfRequired(aname);
+          a.setValue(next);
+        }
+      }
+
+      else {
+        // Regular argument value
+        assertToManyArguments(usedArguments, curr);
+        aname = argumentNames.get(usedArguments);
+        Arg a = arguments.get(aname);
+        assertBadDataType(a, curr);
+        doesArgHaveRestrictedValues(a, curr);
+
+        a.setValue(curr);
+        usedArguments++;
+
+      }
+
+    }
+
+    assertTooFewArgs(usedArguments);
+    assertRequiredArgs();
+  }
+
+  private void assertToManyArguments(int usedArguments, String possibleExtraArg) {
+    if (usedArguments == argumentNames.size()) {
+      throw new TooManyArguments(this, possibleExtraArg);
+    }
+  }
+
+  private void assertHelpMessage(String value) {
+    if ((value.equals("-h") || value.equals("--help"))) {
+      throw new HelpException(this);
+    }
+    ;
+  }
+
+  private boolean isOptional(String s) {
+    return s.startsWith("-");
+  }
+
+  private boolean isLongForm(String s) {
+    return s.startsWith("--");
+  }
+
+  private String doesOptionalArgumentExist(String commandLineName) {
+    if (arguments.get(commandLineName) == null) {
+      throw new ArgDoesNotExistException(commandLineName);
+    }
+    return commandLineName;
+  }
+
+  private String removeHyphens(String argName) {
+    return argName.replace("-", "");
+  }
 
   private boolean isArgAFlag(String flagName) {
 
     return arguments.get(flagName) != null;
   }
 
-  private void setFlag(String flagName){
+  private void setFlag(String flagName) {
     arguments.get(flagName).setValue("true");
   }
 
-  private boolean argIsACollectionOfFlags(String flagNames) {
+  private void argIsACollectionOfFlags(String flagNames) {
     for (int j = 0; j < flagNames.length(); j++) {
       String flagIterator = String.valueOf(flagNames.charAt(j));
       if (isArgAFlag(flagIterator)) {
@@ -233,7 +303,43 @@ public class ArgParser {
         throw new FlagDoesNotExistException(flagIterator);
       }
     }
-    return true;
+  }
+
+  private String isArgAShortName(String shortName) {
+
+    if (shortToLong.get(shortName) == null) {
+      throw new ArgDoesNotExistException(shortName);
+    }
+    return shortToLong.get(shortName);
+
+  }
+
+  private boolean doesArgHaveBoolVal(Arg a) {
+    return a.getDataType() == Arg.DataType.BOOLEAN;
+  }
+
+  private void assertBadDataType(Arg a, String value) {
+    Arg.DataType type = a.getDataType();
+    switch (type) {
+    case BOOLEAN:
+      if (!value.equalsIgnoreCase("true") || !value.equalsIgnoreCase("false")) {
+        throw new BadDataTypeException(this, a, value);
+      }
+      ;
+    case INT:
+      try {
+        Integer.parseInt(value);
+      } catch (NumberFormatException e) {
+        throw new BadDataTypeException(this, a, value);
+      }
+    case FLOAT:
+      try {
+        Float.parseFloat(value);
+      } catch (NumberFormatException e) {
+        throw new BadDataTypeException(this, a, value);
+      }
+    default:
+    }
   }
 
   private boolean doesArgHaveRestrictedValues(Arg argument, String argValue) {
@@ -256,135 +362,19 @@ public class ArgParser {
 
   }
 
-  private String isArgAShortName(String shortName) {
-
-    if (shortToLong.get(shortName) == null) {
-      throw new ArgDoesNotExistException(shortName);
-    }
-    return shortToLong.get(shortName);
-
-  }
-
-  
-
-  public void parse(String[] args) {
-    Queue<String> commandLineQueue = new ArrayDeque<>();
-    for(int i = 0; i < args.length; i++) {
-      commandLineQueue.add(args[i]);
-    }
-
-    int usedArguments = 0;
-    while(!commandLineQueue.isEmpty()) {
-      String curr = commandLineQueue.remove();
-      String aname = "";
-      assertHelp(curr);
-
-      if (isOptional(curr)) {
-        if (isLongForm(curr)) {
-          aname = doesOptionalArgumentExist(removeHyphens(curr));
-        }
-        else {
-          String sname = removeHyphens(curr);
-          if (isArgAFlag(sname)) {
-            setFlag(sname);
-            continue;
-          } else if (sname.length() > 1) {
-            argIsACollectionOfFlags(sname);
-            continue;
-          }
-          aname = isArgAShortName(sname);
-          usedArguments++;
-        }
-
-        //dealing with optional arguments
-        Arg a = arguments.get(aname);
-        if (a.getDataType() == Arg.DataType.BOOLEAN) {
-          a.setValue("true");
-        }
-
-        else {
-          String next = commandLineQueue.remove();
-          if (checkType(next, a.getDataType())) {
-
-              doesArgHaveRestrictedValues(a, next);
-              removeArgIfRequired(aname);
-            a.setValue(next);
-          } else {
-            throw new BadDataTypeException(this, a, next);
-          }
-        }
-      }
-
-      else {
-        // Regular argument value 
-        if (usedArguments == argumentNames.size()) {
-          throw new TooManyArguments(this, curr);
-        } else {
-          aname = argumentNames.get(usedArguments);
-          Arg a = arguments.get(aname);
-          if (checkType(curr, a.getDataType())) {
-
-           doesArgHaveRestrictedValues(a, curr);
-
-            a.setValue(curr);
-            usedArguments++;
-          } else {
-            throw new BadDataTypeException(this, a, curr);
-          }
-        }
-      }
-
-    }
-
-    assertTooFewArgs(usedArguments);
-    assertRequiredArgs();
-  }
-
-
-  private void assertHelp(String value){
-     if((value.equals("-h") || value.equals("--help"))){
-      throw new HelpException(this);
-     };
-  }
-
-  private boolean isOptional(String s) {
-    return s.startsWith("-");
-  }
-  private boolean isLongForm(String s) {
-    return s.startsWith("--");
-  }
-  private String doesOptionalArgumentExist(String commandLineName) {
-    if (arguments.get(commandLineName) == null) {
-      throw new ArgDoesNotExistException(commandLineName);
-    }
-    return commandLineName;
-  }
-
-
-  private String removeHyphens(String argName){
-    return argName.replace("-", "");
-  }
-
-
-
-
-  private void assertTooFewArgs(int usedArguments){
+  private void assertTooFewArgs(int usedArguments) {
     if (usedArguments < argumentNames.size()) {
       throw new TooFewArguments(this, usedArguments, argumentNames);
 
     }
-  
+
   };
-  private void assertRequiredArgs(){
+
+  private void assertRequiredArgs() {
     if (requiredArgs.size() > 0) {
       throw new RequiredArgException(requiredArgs);
 
     }
   };
-
-
-
-
-
 
 }
