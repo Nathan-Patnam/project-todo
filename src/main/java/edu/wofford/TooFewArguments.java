@@ -4,8 +4,7 @@ import java.util.*;
   /**
   * Constructor for a TooFewArguments exception that is thrown when too few arguments are provided in the user 
   * input. The message should include helpful usage information about the missing arguments.
-  * @param  message, a String value that is the message that should contain usage information
-  * @return a TooFewArguments exception with the help message 
+  * a TooFewArguments exception with the help message 
   */
 public class TooFewArguments extends RuntimeException {
   private String message;
