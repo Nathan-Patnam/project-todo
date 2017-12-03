@@ -58,7 +58,9 @@ public class Arg {
     this.description = description;
     this.dataType = dataType;
     this.restrictedValues = new HashSet<>();
-    this.required = true ;
+    this.required = true;
+    this.shortFormName = "";
+    this.allRestrictedValuesString = "";
   }
 
   /**
@@ -130,7 +132,6 @@ public class Arg {
     }
     this.allRestrictedValuesString = this.allRestrictedValuesString.trim();
 
-
   }
 
   /**
@@ -149,13 +150,24 @@ public class Arg {
     return this.value;
   }
 
-  /** 
-  public <T> T getVal() {
-    if (this.dataType == DataType.BOOLEAN) {
-      return Boolean.parseBoolean(this.value);
-    }
-  }
-  */
+  // public <T> T getVal() {
+  //   switch (this.dataType) {
+  //   case BOOLEAN:
+  //     return Boolean.parseBoolean(this.value);
+
+  //   case INT:
+
+  //     return Integer.parseInt(this.value);
+
+  //   case FLOAT:
+
+  //     return Float.parseFloat(this.value);
+
+  //   default:
+  //     return this.value;
+  //   }
+
+  // }
 
   /**
   * Sets the Arg as required  
@@ -194,14 +206,8 @@ public class Arg {
   */
   public String getRestrictedValuesString() {
 
-
     return this.allRestrictedValuesString;
   }
-
-  
-
-
-
 
   public XMLStreamWriter writeArgXML(XMLStreamWriter streamWriter, ArgParser argparser) {
     try {
@@ -218,14 +224,14 @@ public class Arg {
       streamWriter.writeCharacters(this.dataType.toString());
       streamWriter.writeEndElement();
 
-      if (this.shortFormName != null) {
+      if (this.shortFormName.length() > 0) {
         streamWriter.writeCharacters("\n\t\t");
         streamWriter.writeStartElement("shortname");
         streamWriter.writeCharacters(this.shortFormName);
         streamWriter.writeEndElement();
       }
 
-      if (this.description != null && this.description.length() > 0) {
+      if (this.description.length() > 0) {
         streamWriter.writeCharacters("\n\t\t");
         streamWriter.writeStartElement("description");
         streamWriter.writeCharacters(this.description);
@@ -233,7 +239,7 @@ public class Arg {
 
       }
 
-      if (this.allRestrictedValuesString != null && this.allRestrictedValuesString.length() > 0) {
+      if (this.allRestrictedValuesString.length() > 0) {
         streamWriter.writeCharacters("\n\t\t");
         streamWriter.writeStartElement("restrictedValues");
         streamWriter.writeCharacters(allRestrictedValuesString);
@@ -243,16 +249,15 @@ public class Arg {
 
       streamWriter.writeCharacters("\n\t\t");
       streamWriter.writeStartElement("position");
-      streamWriter.writeCharacters(String.valueOf(argparser.getPostionalArgNames().indexOf(name)+1));
+      streamWriter.writeCharacters(String.valueOf(argparser.getPostionalArgNames().indexOf(name) + 1));
       streamWriter.writeEndElement();
 
       streamWriter.writeCharacters("\n\t");
       streamWriter.writeEndElement();
-   
-    }
-    catch (XMLStreamException e) {
+
+    } catch (XMLStreamException e) {
       e.printStackTrace();
-    } 
+    }
 
     return streamWriter;
 

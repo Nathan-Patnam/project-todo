@@ -192,13 +192,6 @@ public class ArgParser {
     return this.arguments;
   }
 
-  /**
-  * Returns all of the flag names 
-  * @return HashSet of all of the flag names 
-  */
-  public HashSet<String> getFlagNames() {
-    return this.flagNames;
-  }
 
   /**
   * Returns the value that the argument holds. If no value has been set for the argument then it will return null
@@ -256,9 +249,9 @@ public class ArgParser {
   public String getParameterString(){ 
     String key_string = "";
     for (String argNameIterator : arguments.keySet()) {
-      if (!argNameIterator.equals("help") && !argNameIterator.equals("h")) {
+      
         key_string += " " + argNameIterator;
-      }
+      
     }
     return key_string;
   }
@@ -332,10 +325,10 @@ public class ArgParser {
   *@param  argument, the String value that is the argument that you want to make required
   */
   public void setArgAsRequired(String argument) {
-    if (arguments.get(argument).isArgRequired() == false) {
+  
       arguments.get(argument).makeArgRequired();
       requiredArgs.add(argument);
-    }
+    
   }
 
   /**
@@ -490,10 +483,10 @@ public class ArgParser {
     Arg.DataType type = a.getDataType();
     switch (type) {
     case BOOLEAN:
-      if (!value.equalsIgnoreCase("true") || !value.equalsIgnoreCase("false")) {
+      if (!(value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false"))) {
         throw new BadDataTypeException(this, a, value);
       }
-      ;
+      
     case INT:
       try {
         Integer.parseInt(value);
@@ -511,7 +504,7 @@ public class ArgParser {
   }
 
   private boolean doesArgHaveRestrictedValues(Arg argument) {
-    return (argument.getRestrictedValuesString() != null && argument.getRestrictedValuesString().length() > 0);
+    return argument.getRestrictedValuesString().length() > 0;
 
   }
 

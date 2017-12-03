@@ -288,6 +288,20 @@ public class ArgumentParserTest {
     }
   }
 
+  @Test
+  public void TestHelpWithOnlyOptional() {
+    String[] cla = { "-h" };
+    argCheck.addOptArg("type", "box", "the type of the box to calculate the volume for");
+
+    String msg = "usage: java VolumeCalculator type\nCalculate the volume of a box.\noptional arguments:\n   type the type of the box to calculate the volume for (string; default: box)";
+    try {
+      argCheck.parse(cla);
+      fail("Should have thrown HelpException but did not!");
+    } catch (HelpException expected) {
+      assertEquals(msg, expected.getMessage());
+    }
+  }
+
 
   @Test
   public void testOptionalArgumentAllConstructors() {
@@ -351,10 +365,13 @@ public class ArgumentParserTest {
 
   @Test
   public void checkDifferentArgumentDataTypes() {
-    String[] cla = { "true", "7" };
+    String[] cla = { "true", "false", "7" };
     argCheck.addArg("isNumber", Arg.DataType.BOOLEAN);
+    argCheck.addArg("isType", Arg.DataType.BOOLEAN);
     argCheck.addArg("length", Arg.DataType.FLOAT);
+    //argCheck.parse(cla);
     assertEquals(Arg.DataType.BOOLEAN, argCheck.getArgDataType("isNumber"));
+    assertEquals(Arg.DataType.BOOLEAN, argCheck.getArgDataType("isType"));
     assertEquals(Arg.DataType.FLOAT, argCheck.getArgDataType("length"));
 
   }

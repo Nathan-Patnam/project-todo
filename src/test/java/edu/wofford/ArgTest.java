@@ -21,60 +21,59 @@ public class ArgTest {
 
 
 @Test
-public final void TestSetThenGetArgDescription(){
+public final void testSetArgDescription(){
     argOnlyName.setDescription("length of the box");
     assertEquals("length of the box", argOnlyName.getDescription());
 } 
 
 @Test
-public final void TestGetArgDescription(){
+public final void testArgWithDescriptionConstructor(){
     assertEquals("width of the box", argOnlyNameDescription.getDescription());
 } 
 
 
 
 @Test
-public final void TestDefaultArgDataType(){
+public final void testDefaultArgDataType(){
     assertEquals(Arg.DataType.STRING, argOnlyName.getDataType());
 } 
 
 @Test
-public final void TestSetThenGetArgDataType(){
+public final void testSetArgDataType(){
     argOnlyName.setDataType(Arg.DataType.INT);
     assertEquals(Arg.DataType.INT, argOnlyName.getDataType());
 } 
 
 @Test
-public final void TestGetArgDataType(){
+public final void testArgWithDataTypeConstructor(){
     assertEquals(Arg.DataType.FLOAT, regArg.getDataType());
 }
 
 
 @Test
-public final void TestSetThenGetArgValue(){
+public final void testSetArgValue(){
     regArg.setValue("3");
     assertEquals("3", regArg.getValue());
 }
 
 @Test
-public final void TestSetThenGetArgShortName(){
-    //would have set it to h, but that's reserved for help message
+public final void testSetArgShortName(){
     regArg.setShortFormName("w");
     assertEquals("w", regArg.getShortFormName());
 }
 @Test
-public final void TestSetThenGetArgDefaultRestrictedValues(){
-    assertEquals(null, regArg.getRestrictedValuesString());
+public final void testArgDefaultRestrictedValues(){
+    assertEquals("", regArg.getRestrictedValuesString());
 }
 
 @Test
-public final void TestSetThenGetArgRestrictedValues(){
+public final void testSetArgRestrictedValues(){
     regArg.setRestrictedValues("1 2 3 4");
     assertEquals("1 2 3 4", regArg.getRestrictedValuesString());
 }
 
 @Test
-public final void TestSetThenGetArgRestrictedValuesAsHashSet(){
+public final void testSetArgRestrictedValuesAsHashSet(){
     HashSet<String> testHasMap = new HashSet<>();
     testHasMap.add("1");
     testHasMap.add("2");
@@ -86,7 +85,7 @@ public final void TestSetThenGetArgRestrictedValuesAsHashSet(){
 }
 
 @Test
-public final void TestSetThenGetEachTypeArgDataType(){
+public final void testSetEachTypeArgDataType(){
     assertEquals("float", regArg.getDataType().toString());
     regArg.setDataType(Arg.DataType.STRING);
     assertEquals("string", regArg.getDataType().toString());

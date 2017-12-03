@@ -21,7 +21,6 @@
 		<value>false</value>
 		<required>false</required>
 		<datatype>boolean</datatype>
-		<description>do you want answer in gallons</description>
 	</optional>
 	<positional>
 		<name>length</name>
