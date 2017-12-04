@@ -464,6 +464,19 @@ public class ArgumentParserTest {
       assertEquals(msg, expected.getMessage());
     }
   }
+
+  @Test
+  public void testUsingShortFormNameH() {
+    String[] cla = { "-f" };
+    argCheck.addArg("yuh");
+    String msg = "usage: java VolumeCalculator yuh\nVolumeCalculator.java: error: the short form name h is already in use";
+    try {
+      argCheck.setArgShortFormName("yuh", "h");
+      fail("Should have thrown IllegalArgumentException but did not!");
+    } catch (ShortFormNameException expected) {
+      assertEquals(msg, expected.getMessage());
+    }
+  }
   
 
   @Test
