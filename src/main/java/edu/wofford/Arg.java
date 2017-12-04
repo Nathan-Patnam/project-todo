@@ -154,15 +154,10 @@ public class Arg {
     switch (this.dataType) {
     case BOOLEAN:
       return (T)((Boolean)Boolean.parseBoolean(this.value));
-
     case INT:
-
       return (T)((Integer)Integer.parseInt(this.value));
-
     case FLOAT:
-
       return (T)((Float)Float.parseFloat(this.value));
-
     default:
       return (T)this.value;
     }
