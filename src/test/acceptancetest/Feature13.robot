@@ -2,7 +2,7 @@
 | Library   | keywords.Feature13 |
 
 | *Variable*                   | *Value*                                                                                                                                    
-| ${expected}                  | The argument(s) type are required     
+| ${expected}                  | usage: java VolumeCalculator length width height type\nVolumeCalculator.java: error: the argument(s) type are required              |  
 | *Test Case*                  | *Action*                       | *Argument*         | *Argument*   | *Argument* | *Argument* | *Argument* | *Argument* | *Argument* |
 | Test Required values         | Start Program With Arguments   | 7                  | --type       | ellipsoid  | 3          | 2          |            |            |
 |                              | ${length}=                     | Get Length         |              |            |            |            |            |            |

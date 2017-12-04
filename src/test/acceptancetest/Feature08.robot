@@ -2,7 +2,7 @@
 | Library   | keywords.Feature08 |
 
 | *Variable*          | *Value*                                                                                                                                    
-| ${unknownArg}       | argument myarg does not exist                                                                        |
+| ${unknownArg}       | usage: java VolumeCalculator length width height\nVolumeCalculator.java: error: argument myarg does not exist                  |                                                                        |
 | ${wrongDataType}    | usage: java VolumeCalculator length width height\nVolumeCalculator.java: error: argument width: invalid float value: something |
 
 

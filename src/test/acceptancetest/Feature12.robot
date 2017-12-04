@@ -2,7 +2,7 @@
 | Library   | keywords.Feature12 |
 
 | *Variable*                   | *Value*                                                                                                                                    
-| ${expected}                  | frustum is not an allowed value for type      
+| ${expected}                  | usage: java VolumeCalculator length width height type\nVolumeCalculator.java: error: frustum is not an accepted value for type      |      
 | *Test Case*                  | *Action*                       | *Argument*         | *Argument*   | *Argument* | *Argument* | *Argument* | *Argument* | *Argument* |
 | Test Required values         | Start Program With Arguments   | 7                  | --type       | ellipsoid  | 3          | 2          |            |            |
 |                              | ${length}=                     | Get Length         |              |            |            |            |            |            |
