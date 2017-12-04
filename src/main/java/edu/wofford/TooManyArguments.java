@@ -1,8 +1,33 @@
 package edu.wofford;
 
+/**
+  * <pre> 
+  * Thrown to indicate that too many arguments have been provided on the command line
+  * For example, suppose the following code was executed:
+  * {@code 
+  *   String[] cla = { "7", "5", "2", "43" };
+  *    argCheck = new ArgParser("VolumeCalculator", "Calculate the volume of a box."); 
+  *    argCheck.addArg("length", "the length of the box", Arg.DataType.FLOAT); 
+  *    argCheck.addArg("width", "the width of the box", Arg.DataType.FLOAT); 
+  *    argCheck.addArg("height", "the height of the box", Arg.DataType.FLOAT);  
+  *    argCheck.parse(cla);
+  * }
+  *
+  *  The TooManyArgumentsException would be thrown with the following error message:
+  *  {@code    
+  *"usage: java VolumeCalculator length width height
+  * VolumeCalculator.java: error: unrecognized arguments: 43"
+  *  }
+  *</pre>
+  */
 public class TooManyArguments extends RuntimeException {
   private String message;
-
+ /**
+  * Constructor for a TooManyArguments exception that is thrown when too many arguments are provided in the user 
+  * input. 
+  * @param argChecker the argparser currently being used to parse arguments
+  * @param argument the first extra argument that has been encountered by the argument parser
+  */
   public TooManyArguments(ArgParser argChecker, String argument) {
     super();
 

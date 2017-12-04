@@ -1,5 +1,8 @@
 package edu.wofford;
 
+
+
+
 public class BadDataTypeException extends RuntimeException {
     private String message;
     public BadDataTypeException(ArgParser argChecker, Arg argument, String value) {

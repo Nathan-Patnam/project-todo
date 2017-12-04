@@ -109,6 +109,7 @@ public class XML {
             XMLOutputFactory xof = XMLOutputFactory.newInstance();
             XMLStreamWriter xMLStreamWriter = xof.createXMLStreamWriter(new FileWriter(fileName));
             Map<String, Arg> arguments = argparser.getAllArgs();
+            ArrayList<String> postionalArgNames=argparser.getPostionalArgNames();
 
             xMLStreamWriter.writeStartDocument();
             xMLStreamWriter.writeCharacters("\n");
@@ -116,7 +117,7 @@ public class XML {
 
             for (String argNameIterator : arguments.keySet()) {
                 Arg argumentIterator = argparser.getArgument(argNameIterator);
-                argumentIterator.writeArgXML(xMLStreamWriter, argparser);
+                argumentIterator.writeArgXML(xMLStreamWriter, postionalArgNames);
             }
             //close arguments tag
             xMLStreamWriter.writeCharacters("\n");

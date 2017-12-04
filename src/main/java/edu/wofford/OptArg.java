@@ -2,7 +2,7 @@ package edu.wofford;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
-
+import java.util.*;
 public class OptArg extends Arg {
 
     /**
@@ -84,7 +84,7 @@ public class OptArg extends Arg {
 	*	???
 	*
 	*/ 
-    public XMLStreamWriter writeArgXML(XMLStreamWriter xMLStreamWriter, ArgParser argparser) {
+    public XMLStreamWriter writeArgXML(XMLStreamWriter xMLStreamWriter, ArrayList<String> postionalArgNames) {
         try{ 
 
         xMLStreamWriter.writeCharacters("\n\t");

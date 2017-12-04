@@ -406,7 +406,7 @@ public class ArgumentParserTest {
   public void throwFlagError() {
     String[] cla = { "-y" };
     argCheck.addFlag("d");
-    String msg = "argument y does not exist";
+    String msg = "usage: java VolumeCalculator d\nVolumeCalculator.java: error: argument y does not exist";
     try {
       argCheck.parse(cla);
       fail("Should have thrown IllegalArgumentException but did not!");
@@ -420,7 +420,7 @@ public class ArgumentParserTest {
     String[] cla = { "-yf" };
     argCheck.addFlag("y");
     argCheck.addFlag("d");
-    String msg = "flag f does not exist";
+    String msg = "usage: java VolumeCalculator y d\nVolumeCalculator.java: error: flag f does not exist";
     try {
       argCheck.parse(cla);
       fail("Should have thrown IllegalArgumentException but did not!");
@@ -456,7 +456,7 @@ public class ArgumentParserTest {
     argCheck.addArg("yuh");
     argCheck.addArg("fun");
     argCheck.setArgShortFormName("yuh", "d");
-    String msg = "The short form name d is already in use";
+    String msg = "usage: java VolumeCalculator yuh fun\nVolumeCalculator.java: error: the short form name d is already in use";
     try {
       argCheck.setArgShortFormName("fun", "d");
       fail("Should have thrown IllegalArgumentException but did not!");
@@ -495,7 +495,7 @@ public class ArgumentParserTest {
     argCheck.addArg("width");
     argCheck.addArg("height");
    
-    String msg = "argument " + "myarg" + " does not exist";
+    String msg = "usage: java VolumeCalculator length width height\nVolumeCalculator.java: error: argument myarg does not exist";
     try {
       argCheck.parse(cla);
       fail("Should have thrown IllegalArgumentException but did not!");
@@ -529,7 +529,7 @@ public void argGivenValueNotInRestricted(){
     String[] cla = { "7"};  
     argCheck.addArg("length");
     argCheck.setArgRestricedValues("length", "5 8 9");
-    String msg = "7 " + "is not an allowed value for" + " length";
+    String msg = "usage: java VolumeCalculator length\nVolumeCalculator.java: error: 7 " + "is not an accepted value for" + " length";
     try {
       argCheck.parse(cla);
       fail("Should have thrown IllegalArgumentException but did not!");
@@ -548,7 +548,7 @@ public void argGivenValueNotInRestrictedOptional(){
   argCheck.addOptArg("optionalArgTwo", "10", Arg.DataType.FLOAT);
   argCheck.setArgRestricedValues("optionalArgOne", "5 7 9");
   argCheck.setArgRestricedValues("optionalArgTwo", "5 8 9");
-    String msg = "7 " + "is not an allowed value for " + "optionalArgTwo";
+    String msg ="usage: java VolumeCalculator optionalArgOne optionalArgTwo\nVolumeCalculator.java: error: 7 " + "is not an accepted value for " + "optionalArgTwo";
     try {
       argCheck.parse(cla);
       fail("Should have thrown IllegalArgumentException but did not!");
@@ -567,7 +567,7 @@ public void argRequiredButNotGiven(){
   argCheck.addOptArg("optionalArgTwo", "10", Arg.DataType.FLOAT);
   argCheck.setArgAsRequired("optionalArgTwo");
   
-    String msg = "The argument(s) optionalArgTwo are required";
+    String msg = "usage: java VolumeCalculator length optionalArgTwo\nVolumeCalculator.java: error: the argument(s) optionalArgTwo are required";
     try {
       argCheck.parse(cla);
       fail("Should have thrown IllegalArgumentException but did not!");

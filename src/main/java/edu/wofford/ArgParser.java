@@ -304,7 +304,7 @@ public class ArgParser {
   public void setArgShortFormName(String argument, String shortFormName) {
     arguments.get(argument).setShortFormName(shortFormName);
     if (shortToLong.get(shortFormName) != null || shortFormName.equals("h")) {
-      throw new ShortFormNameException(shortFormName);
+      throw new ShortFormNameException(this.getErrorUsage(), shortFormName);
     }
     shortToLong.put(shortFormName, argument);
   }
@@ -430,7 +430,7 @@ public class ArgParser {
 
   private void assertOptionalArgExists(String commandLineName) {
     if (arguments.get(commandLineName) == null) {
-      throw new ArgDoesNotExistException(commandLineName);
+      throw new ArgDoesNotExistException(this.getErrorUsage() ,commandLineName);
     }
   }
 
@@ -459,14 +459,14 @@ public class ArgParser {
   private void assertFlagExists(String flagName) {
     if (isArgAFlag(flagName)) {
     } else {
-      throw new FlagDoesNotExistException(flagName);
+      throw new FlagDoesNotExistException(this.getErrorUsage() ,flagName);
     }
   }
 
   private void assertShortNameExists(String shortName) {
 
     if (shortToLong.get(shortName) == null) {
-      throw new ArgDoesNotExistException(shortName);
+      throw new ArgDoesNotExistException(this.getErrorUsage(), shortName);
     }
 
   }
@@ -511,7 +511,7 @@ public class ArgParser {
   private void assertIsValARestrictedVal(Arg argument, String argValue) {
     HashSet<String> argRestrictedValues = argument.getRestrictedValues();
     if (!argRestrictedValues.contains(argValue)) {
-      throw new RestrictedValueException(argument, argValue);
+      throw new RestrictedValueException(this.getErrorUsage() ,argument, argValue);
     }
   }
 
@@ -532,7 +532,7 @@ public class ArgParser {
 
   private void assertRequiredArgs() {
     if (requiredArgs.size() > 0) {
-      throw new RequiredArgException(requiredArgs);
+      throw new RequiredArgException(this.getErrorUsage(),requiredArgs);
 
     }
   };

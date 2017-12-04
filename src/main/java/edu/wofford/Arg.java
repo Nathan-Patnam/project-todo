@@ -209,7 +209,7 @@ public class Arg {
     return this.allRestrictedValuesString;
   }
 
-  public XMLStreamWriter writeArgXML(XMLStreamWriter streamWriter, ArgParser argparser) {
+  public XMLStreamWriter writeArgXML(XMLStreamWriter streamWriter, ArrayList<String> postionalArgNames) {
     try {
       streamWriter.writeCharacters("\n\t");
       streamWriter.writeStartElement("positional");
@@ -249,7 +249,7 @@ public class Arg {
 
       streamWriter.writeCharacters("\n\t\t");
       streamWriter.writeStartElement("position");
-      streamWriter.writeCharacters(String.valueOf(argparser.getPostionalArgNames().indexOf(name) + 1));
+      streamWriter.writeCharacters(String.valueOf(postionalArgNames.indexOf(name) + 1));
       streamWriter.writeEndElement();
 
       streamWriter.writeCharacters("\n\t");
