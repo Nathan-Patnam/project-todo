@@ -4,7 +4,6 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 import java.util.*;
 public class OptArg extends Arg {
-
     /**
     * Constructor for an OptArg object with the given name and default value. By default, its data type 
 	* is String, and its description is an empty String. 
@@ -80,9 +79,10 @@ public class OptArg extends Arg {
         this.value = "false";
     }
 	/**
-	*
-	*	???
-	*
+	* Generates the approriate XML for a given optional argument and writes it in the supplied streamwriter
+    * @param xMLStreamWriter the stream writer the XML will be writen in
+    * @param postionalArgNames a list of all the arguments that are being used by the current argument parser
+	* @return the stream writer after writing the current argument's XML information in it
 	*/ 
     public XMLStreamWriter writeArgXML(XMLStreamWriter xMLStreamWriter, ArrayList<String> postionalArgNames) {
         try{ 
@@ -133,7 +133,6 @@ public class OptArg extends Arg {
         xMLStreamWriter.writeEndElement();
 
     }
-    //close positional and optional tag
     xMLStreamWriter.writeCharacters("\n\t");
     xMLStreamWriter.writeEndElement();
 }

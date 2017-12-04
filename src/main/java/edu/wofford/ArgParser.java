@@ -334,7 +334,13 @@ public class ArgParser {
   /**
   * Parses the input values
   * @param  args, a String array of argument values
-  * 
+  * @exception ArgDoesNotExistException    thrown if an optional argument appears in the String array of argument values, but has not been added to the argument parser
+  * @exception BadDataTypeException        thrown if a argument is being set to a value that is not of its datatype
+  * @exception FlagDoesNotExistException   thrown if a flag is in args, but has not been added to the argument parser
+  * @exception HelpException               thrown if a -h or --help is in args
+  * @exception RequiredArgException               thrown if a -h or --help is in args
+  * @exception HelpException               thrown if a -h or --help is in args
+
   */
   public void parse(String[] args) {
     Queue<String> commandLineQueue = new ArrayDeque<>();
@@ -486,19 +492,21 @@ public class ArgParser {
       if (!(value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false"))) {
         throw new BadDataTypeException(this, a, value);
       }
-      
+      break;
     case INT:
       try {
         Integer.parseInt(value);
       } catch (NumberFormatException e) {
         throw new BadDataTypeException(this, a, value);
       }
+      break;
     case FLOAT:
       try {
         Float.parseFloat(value);
       } catch (NumberFormatException e) {
         throw new BadDataTypeException(this, a, value);
       }
+      break;
     default:
     }
   }

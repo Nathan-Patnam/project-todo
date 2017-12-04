@@ -95,13 +95,38 @@ public final void testSetEachTypeArgDataType(){
     assertEquals("int", regArg.getDataType().toString());
 }
 
-/** 
+
 @Test
 public final void testBooleanValue() {
     Arg a = new Arg("something", "", Arg.DataType.BOOLEAN);
     a.setValue("true");
     assertTrue(a.getVal());
 }
-*/
+
+
+@Test
+public final void testFloatValue() {
+    Arg a = new Arg("something", "", Arg.DataType.FLOAT);
+    a.setValue("7.0");
+    assertTrue(a.getVal());
+}
+
+
+
+@Test
+public final void testIntegerValue() {
+    Arg a = new Arg("something", "", Arg.DataType.BOOLEAN);
+    a.setValue("7");
+    assertTrue(a.getVal());
+}
+
+@Test
+public final void testStringValue() {
+    Arg a = new Arg("something", "", Arg.DataType.BOOLEAN);
+    a.setValue("something");
+    assertTrue(a.getVal());
+}
+
+
 
 }

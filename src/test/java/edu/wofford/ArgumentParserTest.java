@@ -369,7 +369,7 @@ public class ArgumentParserTest {
     argCheck.addArg("isNumber", Arg.DataType.BOOLEAN);
     argCheck.addArg("isType", Arg.DataType.BOOLEAN);
     argCheck.addArg("length", Arg.DataType.FLOAT);
-    //argCheck.parse(cla);
+    argCheck.parse(cla);
     assertEquals(Arg.DataType.BOOLEAN, argCheck.getArgDataType("isNumber"));
     assertEquals(Arg.DataType.BOOLEAN, argCheck.getArgDataType("isType"));
     assertEquals(Arg.DataType.FLOAT, argCheck.getArgDataType("length"));

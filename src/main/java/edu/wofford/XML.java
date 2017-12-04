@@ -9,7 +9,15 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamReader;
 
+
+
+
 public class XML {
+     /**
+  * Will create a argument parser from a supplied XML file and return the argument parser
+  * @param fileName name of the file
+  * @return the generated argument parser
+  */
     public static ArgParser loadFromFile(String fileName) {
         Arg tempArg = null;
         ArgParser argChecker = new ArgParser("", "");
@@ -103,6 +111,13 @@ public class XML {
         }
 
     }
+
+
+    /**
+  * Will create a file and store a argument parser's information as XML in that file
+  * @param fileName name of the file to be created
+  * @param argparser the argument parser that you want to generate XML for
+  */
 
     public static void saveToFile(String fileName, ArgParser argparser) {
         try {

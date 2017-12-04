@@ -6,6 +6,7 @@ import java.util.*;
   * <pre> 
   * Thrown when an optional argument has been set as required, but the user has forgot to include
   * in the command line arguments
+  * For example, suppose the following code was executed
   * {@code 
   *  argCheck = new ArgParser("VolumeCalculator", "Calculate the volume of a box.");   
   *  String[] cla = {"7" };

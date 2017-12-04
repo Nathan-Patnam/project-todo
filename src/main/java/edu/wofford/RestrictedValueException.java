@@ -5,6 +5,7 @@ package edu.wofford;
   * <pre> 
   * Thrown when an argument has been given restricted values and is being assigned a value by the
   * argument parser that is not in the restricted value set
+  * For example, suppose the following code was executed
   * {@code 
   *   argCheck = new ArgParser("VolumeCalculator", "Calculate the volume of a box."); 
   *   String[] cla = { "7" };

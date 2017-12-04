@@ -150,24 +150,24 @@ public class Arg {
     return this.value;
   }
 
-  // public <T> T getVal() {
-  //   switch (this.dataType) {
-  //   case BOOLEAN:
-  //     return Boolean.parseBoolean(this.value);
+  public <T> T getVal() {
+    switch (this.dataType) {
+    case BOOLEAN:
+      return (T)((Boolean)Boolean.parseBoolean(this.value));
 
-  //   case INT:
+    case INT:
 
-  //     return Integer.parseInt(this.value);
+      return (T)((Integer)Integer.parseInt(this.value));
 
-  //   case FLOAT:
+    case FLOAT:
 
-  //     return Float.parseFloat(this.value);
+      return (T)((Float)Float.parseFloat(this.value));
 
-  //   default:
-  //     return this.value;
-  //   }
+    default:
+      return (T)this.value;
+    }
 
-  // }
+  }
 
   /**
   * Sets the Arg as required  
