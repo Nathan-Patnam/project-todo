@@ -2,6 +2,27 @@ package edu.wofford;
 
 import java.util.*;
 
+/**
+* <pre>
+*  Provides a way to set argument information and parses command-line values for the given arguments.
+*  One can specify arguments, create optional arguments and flags, set required arguments, and set restricted values 
+*  
+*	For example:
+*  {@code
+*     argCheck = ArgParser("Volume Calculator", "Calculates the volume of shapes.");
+*  	  String[] cla = { "6", "7" , "rectangle"}; 
+*	  argCheck.addArg("height", "the height of the box", Arg.DataType.FLOAT); 
+*	  argCheck.addArg("width", "the width of the box", Arg.DataType.FLOAT); 
+*	  argCheck.addOptArg("shape", "square", "the default shape is a square"); 
+* 	  argCheck.setArgRestricedValues("height", "6 7 8"); 
+*	  argCheck.parse(cla); 
+*  }
+
+* 	Now "height" is associated with a value of 6, width is associated with a value of 7, and the shape is now set as "rectangle" instead of "square."
+*	value for height was included in its restricted values, so it was set accordingly; otherwise an error would have been thrown. 
+
+* </pre>
+*/
 public class ArgParser {
   private String programName;
   private String programDescription;
@@ -60,8 +81,8 @@ public class ArgParser {
 
   /**
   * Adds an argument with the given name and the given data type. 
-  * @param argname, the String value that is the name of the argument to be added
-  *	@param dataType, the DataType value that is the data type of the argument to be added
+  * @param argname,  the name of the argument to be added
+  *	@param dataType, the data type of the argument to be added
   * 
   */
   public void addArg(String argname, Arg.DataType dataType) {
@@ -70,8 +91,8 @@ public class ArgParser {
 
   /**
   * Adds an argument with the given name, the given description, and the given data type. 
-  * @param argname, the String value that is the name of the argument to be added
-  * @param description, the String value that is the description of the argument to be added
+  * @param argname, the name of the argument to be added
+  * @param description, the description of the argument to be added
   *	@param dataType, the DataType value that is the data type of the argument to be added
   * 
   */
@@ -95,7 +116,7 @@ public class ArgParser {
 
   /**
   * Adds an optional argument with given name and default value. 
-  * @param  argname, the String value that is the name of the optional argument being added
+  * @param  argname, the name of the optional argument being added
   * @param  defaultValue, the string value taht is the value of the optional argument being added.
   * 
   */
@@ -106,9 +127,9 @@ public class ArgParser {
 
   /**
   * Adds an optional argument with given name, default value, and description. 
-  * @param  argname, the String value that is the name of the optional argument being added
+  * @param  argname, the name of the optional argument being added
   * @param  defaultValue, the string value taht is the value of the optional argument being added.
-  * @param  description, the String value that is the description of the optional argument to be added
+  * @param  description, the description of the optional argument to be added
   * 
   */
   public void addOptArg(String argname, String defaultValue, String description) {
@@ -118,9 +139,9 @@ public class ArgParser {
 
   /**
   * Adds an optional argument with given name, default value, and data type. 
-  * @param  argname, the String value that is the name of the optional argument being added
+  * @param  argname, the name of the optional argument being added
   * @param defaultValue, the string value taht is the value of the optional argument being added.
-  *	@param dataType, the String value that is the data type of the optional argument to be added
+  *	@param dataType, the data type of the optional argument to be added
   * 
   */
   public void addOptArg(String argname, String defaultValue, Arg.DataType dataType) {
@@ -130,10 +151,10 @@ public class ArgParser {
 
   /**
   * Adds an optional argument with given name, default value, data type, and description. 
-  * @param  argname, the String value that is the name of the optional argument being added
+  * @param  argname, the name of the optional argument being added
   * @param defaultValue, the string value taht is the value of the optional argument being added.
-  *	@param dataType, the String value that is the data type of the optional argument to be added
-  * @param description, the String value that is the description of the optional argument to be added
+  *	@param dataType, the data type of the optional argument to be added
+  * @param description, the description of the optional argument to be added
   * 
   */
   public void addOptArg(String argname, String defaultValue, Arg.DataType dataType, String description) {
@@ -148,7 +169,7 @@ public class ArgParser {
 
   /**
   * Add a flag, which is a boolean optional argument.
-  * @param  argname, the string value that is the name of the flag
+  * @param  argname, the name of the flag
   * 
   */
   public void addFlag(String argname) {
@@ -156,9 +177,9 @@ public class ArgParser {
   }
 
   /**
-  * Add a flag, which is a boolean optional argument with a name and description. 
-  * @param  argname, the string value that is the name of the flag
-  * @param  description, the String value that is the description of teh flag 
+  * Add a flag, which is a boolean optional argument, with a name and description. 
+  * @param  argname, the name of the flag
+  * @param  description, the description of teh flag 
   * 
   */
   public void addFlag(String argname, String description) {
@@ -168,7 +189,7 @@ public class ArgParser {
 
   /**
   * Adds a flag to the list of flag names 
-  * @param  flagName, the String value that is the name  of the flag 
+  * @param  flagName, the name  of the flag 
   * 
   */
   public void addFlagToList(String flagName) {
@@ -177,7 +198,7 @@ public class ArgParser {
 
   /**
   * Returns the argument object that is specified by the given argument name 
-  * @param  argument, the String value that is the ame of the argument object you want to return 
+  * @param  argument, the ame of the argument object you want to return 
   * @return the object argument associated with the argument name 
   */
   public Arg getArgument(String argument) {
@@ -194,8 +215,7 @@ public class ArgParser {
 
 
   /**
-  * Returns the value that the argument holds. If no value has been set for the argument then it will return null
-  * and if the argument doesn't exist then an error will be thrown.
+  * Returns the value that the argument holds. If no value has been set for the argument then it will return null.
   * @param  argument, the name of the arugment you want the value of
   * @return the value associated with that argument
   */
@@ -205,9 +225,9 @@ public class ArgParser {
 
   /**
   * Returns the description of the argument. If no description has been set for the argument then it will
-  * return an empty string. If the arugment doesn't exists an error will be thrown.
+  * return an empty string. 
   * @param  argument, the name of the arugment you want the description of
-  * @return the value associated with that argument
+  * @return the description of that argument
   */
   public String getArgDescription(String argument) {
     return arguments.get(argument).getDescription();
@@ -215,9 +235,9 @@ public class ArgParser {
 
   /**
   * Returns the data type of the argument. If no data type has been set for the argument then it will
-  * return an empty string. If the argument doesn't exists an error will be thrown.
+  * return an empty string. 
   * @param   argument  the name of the arugment you want the data type of
-  * @return  the value associated with that argument
+  * @return  the data type associated with that argument
   */
   public Arg.DataType getArgDataType(String argument) {
     return arguments.get(argument).getDataType();
@@ -225,14 +245,18 @@ public class ArgParser {
 
   /**
   * Returns the string form of the data type of the argument. If no data type has been set for the argument then it will
-  * return an empty string. If the argument doesn't exists and error will be thrown.
-  * @param   argument  the name of the arugment you want the data type of
-  * @return  the String form of the value associated with that argument
+  * return an empty string. 
+  * @param   argument, the name of the arugment you want the data type of
+  * @return  the data type associated with that argument
   */
   public String getArgDataTypeString(String argument) {
     return arguments.get(argument).getDataType().toString();
   }
 
+  /**
+  * Returns list of positional arguments 
+  * @return list of positional argumemts 
+  */
   public ArrayList<String> getPostionalArgNames() {
     return this.positionalArgumentNames;
   }
@@ -246,6 +270,11 @@ public class ArgParser {
     return arguments.size();
   }
 
+  /**
+  * Returns list of arguments that have been given 
+  * @return list of given arguments 
+  *
+  */
   public String getParameterString(){ 
     String key_string = "";
     for (String argNameIterator : arguments.keySet()) {
@@ -258,15 +287,15 @@ public class ArgParser {
 
   /**
   * Sets the name of the program. 
-  * @param  programName, the String value that is the name of the program 
+  * @param  programName, the name of the program 
 
   */
   public void setProgramName(String programName) {
      this.programName = programName;
   }
     /**
-  * Returns the value for the name of the program. 
-  * @return the String value that is the name of the program
+  * Returns the name of the program. 
+  * @return the name of the program
   */
   public String getProgramName() {
     return programName;
@@ -274,8 +303,8 @@ public class ArgParser {
 
 
   /**
-  * Sets the value for the description of the program. 
-  * @param  programDescription, the String value that is the description of the program 
+  * Sets the description of the program. 
+  * @param  programDescription, the description of the program 
   * 
   */
   public void setProgramDescription(String programDescription) {
@@ -283,22 +312,26 @@ public class ArgParser {
   }
 
   /**
-  * Returns the value for the description of the program. 
-  * @return the String description of the program 
+  * Returns the description of the program. 
+  * @return description of the program 
   */
   public String getProgramDescription() {
     return programDescription;
   }
 
+  /**
+  * Gives error message, including program name and parameter list
+  * @returns an error message 
+  */
   public String getErrorUsage() {
     String errorMessage = "usage: java " + this.programName + getParameterString() + "\n" + this.programName;
     return errorMessage;
   }
 
   /**
-  * Sets a short form name for the given argument 
-  * @param argument, the String value that is the the argument to which you want to set a short form name 
-  *	@param shortFormName, String value that is the short form of the argument name 
+  * Sets a short form name for argument, so that it can be referred to with short or long form name
+  * @param argument, the argument for which you want to set a short form name 
+  *	@param shortFormName, the short form of the argument name 
   * 
   */
   public void setArgShortFormName(String argument, String shortFormName) {
@@ -310,9 +343,9 @@ public class ArgParser {
   }
 
   /**
-  * Sets restricted values for this argument
-  * @param  argument, the String value for which you want to set restricted values 
-  *	@param  restrictedValues, the String that contains the restricted values, separated by spaces
+  * Give the argument restricted values, so that only those values can be assigned to it. 
+  * @param  argument, argument to give restricted values to
+  *	@param  restrictedValues, the restricted values
   * 
   */
   public void setArgRestricedValues(String argument, String restrictedValues) {
@@ -321,8 +354,8 @@ public class ArgParser {
   }
 
   /**
-  *Makes an argument a required argument
-  *@param  argument, the String value that is the argument that you want to make required
+  * Makes argument required 
+  * @param  argument, the argument that you want to make required
   */
   public void setArgAsRequired(String argument) {
   
@@ -333,7 +366,7 @@ public class ArgParser {
 
   /**
   * Parses the input values
-  * @param  args, a String array of argument values
+  * @param  args, argument values
   * @exception ArgDoesNotExistException    thrown if an optional argument appears in the String array of argument values, but has not been added to the argument parser
   * @exception BadDataTypeException        thrown if a argument is being set to a value that is not of its datatype
   * @exception FlagDoesNotExistException   thrown if a flag is in args, but has not been added to the argument parser

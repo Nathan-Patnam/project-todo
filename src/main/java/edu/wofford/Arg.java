@@ -5,6 +5,25 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 import java.io.*;
 
+/**
+* <pre>
+* Arg holds all of the argument's information: its name, description, data type, value, restricted values, and short form name. 
+* Used by ArgParser for adding, accessing, and manipulating arguments 
+* For example:
+*  {@code 
+*	  newArg = Arg("height", "the height of the box");
+*     newArg.setDataType(ARG.DataType.FLOAT);
+*	  newArg.setShortFormName("H"); 
+* 	  newArg.setRestrictedValues("6 7 8");
+* 	  newArg.makeArgRequired();
+*
+*	  newArg.getDescription();
+*	  newArg.getShortFormName();
+*     newArg.isArgRequired();
+*  }
+*	 Would return "the height of the box", "H", and true respectively. 
+* </pre>
+*/
 public class Arg {
 
   public enum DataType {

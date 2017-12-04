@@ -3,7 +3,24 @@ package edu.wofford;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 import java.util.*;
+
+/**
+* <pre>
+* Subclass of Arg for optional arguments.
+* For example:
+*  {@code 
+*	  newOptArg = OptArg("shape", "the shape of the thing to calculate the volume of");
+*	  newOptArg.setShortFormName("S"); 
+* 	  newOptArg.setRestrictedValues("cone cube ellipsoid cylinder");
+*
+*	  newOptArg.getDescription();
+*	  newOptArg.getShortFormName();
+*   }
+* 	 Would return "the shape of the thing to calculate the volume of" and "S" respectively. 
+* </pre>
+*/
 public class OptArg extends Arg {
+	
     /**
     * Constructor for an OptArg object with the given name and default value. By default, its data type 
 	* is String, and its description is an empty String. 
