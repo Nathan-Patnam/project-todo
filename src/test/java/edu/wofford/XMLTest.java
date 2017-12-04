@@ -86,4 +86,14 @@ public final void testCreateXMLFromArg(){
 
 }
 
+@Test
+public final void loadOnlyOptionalArgs(){
+  ArgParser argchecker =  XML.loadFromFile("./src/test/java/edu/wofford/realXMLFiles/addingOnlyOptionalArgs.xml");
+  argchecker.setProgramName("volume calculator");
+  argchecker.setProgramDescription("calculates the volume of a object");
+
+  assertEquals(Arg.DataType.BOOLEAN, argchecker.getArgDataType("type"));
+  assertEquals(Arg.DataType.INT, argchecker.getArgDataType("volume"));
+}
+
 }
