@@ -108,23 +108,25 @@ public final void testBooleanValue() {
 public final void testFloatValue() {
     Arg a = new Arg("something", "", Arg.DataType.FLOAT);
     a.setValue("7.0");
-    assertTrue(a.getVal());
+    Float f = a.getVal();
+    assertEquals( 7.0 , f, 0.0001);
 }
 
 
 
 @Test
 public final void testIntegerValue() {
-    Arg a = new Arg("something", "", Arg.DataType.BOOLEAN);
+    Arg a = new Arg("something", "", Arg.DataType.INT);
     a.setValue("7");
-    assertTrue(a.getVal());
+    int i = a.getVal();
+    assertEquals(7,i);
 }
 
 @Test
 public final void testStringValue() {
-    Arg a = new Arg("something", "", Arg.DataType.BOOLEAN);
+    Arg a = new Arg("something", "", Arg.DataType.STRING);
     a.setValue("something");
-    assertTrue(a.getVal());
+    assertEquals("something",a.getVal());
 }
 
 
