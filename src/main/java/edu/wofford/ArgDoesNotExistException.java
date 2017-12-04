@@ -5,6 +5,7 @@ package edu.wofford;
   * Thrown to indicate that the argument parser has encountered a argument that doesn't exist 
   * For example, suppose the following code was executed
   * {@code 
+  *   argCheck = new ArgParser("VolumeCalculator", "Calculate the volume of a box.");   
   *   String[] cla = { "7", "--myarg","myval","3","2" }; 
   *    argCheck = new ArgParser("VolumeCalculator", "Calculate the volume of a box."); 
   *    argCheck.addArg("length", "the length of the box", Arg.DataType.FLOAT); 

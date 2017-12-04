@@ -4,6 +4,7 @@ package edu.wofford;
   * <pre> 
   * Thrown to indicate that two arguments have been given the same short form name
   * {@code 
+  *   argCheck = new ArgParser("VolumeCalculator", "Calculate the volume of a box.");   
   *   String[] cla = { "3","4" };
   *    argCheck = new ArgParser("VolumeCalculator", "Calculate the volume of a box."); 
   *    argCheck.addArg("length", "the length of the box", Arg.DataType.FLOAT); 
@@ -24,12 +25,22 @@ package edu.wofford;
 public class ShortFormNameException extends RuntimeException {
   private String message;
 
+
+    /**
+  * Constructor for a ShortFormNameException exception that is thrown when two arguments have been given the same short form name
+  * input. 
+  * @param usageMessage the boiler plate first portion of the error message
+  * @param shortFormName the short form name that has already been assigned to a argument
+  */
   public ShortFormNameException(String usageMessage,String shortFormName) {
     super();
     this.message = usageMessage + ".java: error: the short form name " + shortFormName + " is already in use";
   }
 
-  // Overrides Exception's getMessage()
+   /**
+  Retrieves Short Form Name error exception message
+  @return Short Form Name error exception message
+  */
   @Override
   public String getMessage() {
     return this.message;

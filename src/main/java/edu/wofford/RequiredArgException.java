@@ -7,6 +7,7 @@ import java.util.*;
   * Thrown when an optional argument has been set as required, but the user has forgot to include
   * in the command line arguments
   * {@code 
+  *  argCheck = new ArgParser("VolumeCalculator", "Calculate the volume of a box.");   
   *  String[] cla = {"7" };
   *  argCheck.addArg("length",Arg.DataType.FLOAT);
   *  argCheck.addOptArg("type", "ellipsoid", Arg.DataType.STRING, "shape you want to calculate the volume of");

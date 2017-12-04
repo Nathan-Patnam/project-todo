@@ -3,8 +3,8 @@
 	<optional>
 		<name>height</name>
 		<value>1738</value>
-		<required>false</required>
-		<datatype>float</datatype>
+		<required>true</required>
+		<datatype>int</datatype>
 		<shortname>g</shortname>
 		<description>height of the box</description>
 	</optional>

@@ -6,7 +6,8 @@
   * <pre> 
   * Thrown to indicate that the argument parser has encountered a help flag {@code -h} or {@code --help} 
   * For example, suppose the following code was executed
-  * {@code 
+  * {@code
+  *   argCheck = new ArgParser("VolumeCalculator", "Calculate the volume of a box.");    
   *   String[] cla = { "6","-h", "7" , "2", "ellipsoid"}; 
   *    argCheck = new ArgParser("VolumeCalculator", "Calculate the volume of a box."); 
   *    argCheck.addArg("length", "the length of the box", Arg.DataType.FLOAT); 

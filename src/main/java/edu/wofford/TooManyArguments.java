@@ -5,6 +5,7 @@ package edu.wofford;
   * Thrown to indicate that too many arguments have been provided on the command line
   * For example, suppose the following code was executed:
   * {@code 
+  *   argCheck = new ArgParser("VolumeCalculator", "Calculate the volume of a box.");   
   *   String[] cla = { "7", "5", "2", "43" };
   *    argCheck = new ArgParser("VolumeCalculator", "Calculate the volume of a box."); 
   *    argCheck.addArg("length", "the length of the box", Arg.DataType.FLOAT); 
