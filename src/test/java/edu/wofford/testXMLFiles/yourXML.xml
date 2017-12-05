@@ -37,4 +37,10 @@
 		<restrictedValues>3 4 5</restrictedValues>
 		<position>2</position>
 	</positional>
+	<positional>
+		<name>verbose</name>
+		<datatype>boolean</datatype>
+		<description>verbosity</description>
+		<position>3</position>
+	</positional>
 </arguments>

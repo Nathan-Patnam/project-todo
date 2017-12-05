@@ -21,8 +21,10 @@ public void testSaveArgsAsXML(){
   ArgParser argcheckerOne =  XML.loadFromFile("./src/test/java/edu/wofford/realXMLFiles/realXML.xml");
   XML.saveToFile("./src/test/java/edu/wofford/testXMLFiles/yourXML.xml", argcheckerOne);
   ArgParser argcheckerTwo =  XML.loadFromFile("./src/test/java/edu/wofford/testXMLFiles/yourXML.xml");
-  //assertEquals(argcheckerOne.getArgValue("height"), argcheckerTwo.getArgValue("height"));
-  //assertEquals(argcheckerOne.getArgument("height").getRestrictedValuesString(), argcheckerTwo.getArgument("height").getRestrictedValuesString());
+  int h1 = argcheckerOne.getArgValue("height");
+  int h2 = argcheckerTwo.getArgValue("height");
+  assertEquals(h1, h2);
+  assertEquals(argcheckerOne.getArgument("height").getRestrictedValuesString(), argcheckerTwo.getArgument("height").getRestrictedValuesString());
 
 }
 
