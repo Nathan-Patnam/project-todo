@@ -165,11 +165,11 @@ public class Arg {
   * Returns the value of the Arg object 
   * @return the String value that is the value of the Arg object
   */
-  public String getValue() {
+  public String getArgValueString() {
     return this.value;
   }
 
-  public <T> T getVal() {
+  public <T> T getValue() {
     switch (this.dataType) {
     case BOOLEAN:
       return (T)((Boolean)Boolean.parseBoolean(this.value));

@@ -213,15 +213,19 @@ public class ArgParser {
     return this.arguments;
   }
 
-
   /**
   * Returns the value that the argument holds. If no value has been set for the argument then it will return null.
   * @param  argument, the name of the arugment you want the value of
   * @return the value associated with that argument
   */
-  public String getArgValue(String argument) {
+  public String getArgValueString(String argument) {
+    return arguments.get(argument).getArgValueString();
+  }
+
+  public <T> T getArgValue(String argument) {
     return arguments.get(argument).getValue();
   }
+
 
   /**
   * Returns the description of the argument. If no description has been set for the argument then it will
@@ -275,12 +279,12 @@ public class ArgParser {
   * @return list of given arguments 
   *
   */
-  public String getParameterString(){ 
+  public String getParameterString() {
     String key_string = "";
     for (String argNameIterator : arguments.keySet()) {
-      
-        key_string += " " + argNameIterator;
-      
+
+      key_string += " " + argNameIterator;
+
     }
     return key_string;
   }
@@ -288,19 +292,19 @@ public class ArgParser {
   /**
   * Sets the name of the program. 
   * @param  programName, the name of the program 
-
+  
   */
   public void setProgramName(String programName) {
-     this.programName = programName;
+    this.programName = programName;
   }
-    /**
+
+  /**
   * Returns the name of the program. 
   * @return the name of the program
   */
   public String getProgramName() {
     return programName;
   }
-
 
   /**
   * Sets the description of the program. 
@@ -358,10 +362,10 @@ public class ArgParser {
   * @param  argument, the argument that you want to make required
   */
   public void setArgAsRequired(String argument) {
-  
-      arguments.get(argument).makeArgRequired();
-      requiredArgs.add(argument);
-    
+
+    arguments.get(argument).makeArgRequired();
+    requiredArgs.add(argument);
+
   }
 
   /**
@@ -373,7 +377,7 @@ public class ArgParser {
   * @exception HelpException               thrown if a -h or --help is in args
   * @exception RequiredArgException               thrown if a -h or --help is in args
   * @exception HelpException               thrown if a -h or --help is in args
-
+  
   */
   public void parse(String[] args) {
     Queue<String> commandLineQueue = new ArrayDeque<>();
@@ -383,59 +387,54 @@ public class ArgParser {
 
     int usedArguments = 0;
     while (!commandLineQueue.isEmpty()) {
-      String curr = commandLineQueue.remove();
+      String cLIValue = commandLineQueue.remove();
       String argumentName = "";
-      assertHelpMessage(curr);
+      assertHelpMessage(cLIValue);
 
-      if (isOptional(curr)) {
-        if (isLongFormArg(curr)) {
-          assertOptionalArgExists(removeHyphens(curr));
-          argumentName = removeHyphens(curr);
+      if (isArgOptional(cLIValue)) {
+        if (isArgLongForm(cLIValue)) {
+          assertOptionalArgExists(removeHyphens(cLIValue));
+          argumentName = removeHyphens(cLIValue);
         } else {
-          String sname = removeHyphens(curr);
-          if (isArgAFlag(sname)) {
-            setFlag(sname);
+          String shortName = removeHyphens(cLIValue);
+          if (isArgAFlag(shortName)) {
+            setFlag(shortName);
             continue;
-          } else if (sname.length() > 1) {
-            argIsACollectionOfFlags(sname);
+          } else if (shortName.length() > 1) {
+            argIsACollectionOfFlags(shortName);
             continue;
           }
-          assertShortNameExists(sname);
-          argumentName = getArgNameFromShortName(sname);
+          assertShortNameExists(shortName);
+          argumentName = getArgNameFromShortName(shortName);
           usedArguments++;
         }
 
-        //dealing with optional arguments
         Arg a = arguments.get(argumentName);
         if (doesArgHaveBoolVal(a)) {
           a.setValue("true");
         }
 
         else {
-          String next = commandLineQueue.remove();
-          assertBadDataType(a, next);
+          String valToSetArgTo = commandLineQueue.remove();
+          assertBadDataType(a, valToSetArgTo);
           if (doesArgHaveRestrictedValues(a)) {
-            assertIsValARestrictedVal(a, next);
+            assertIsValAAcceptedVal(a, valToSetArgTo);
           }
-          ;
-
           removeArgIfRequired(argumentName);
-          a.setValue(next);
+          a.setValue(valToSetArgTo);
         }
       }
 
       else {
-        // Regular argument value
-        assertToManyArguments(usedArguments, curr);
+        assertTooManyArguments(usedArguments, cLIValue);
         argumentName = argumentNames.get(usedArguments);
         Arg a = arguments.get(argumentName);
-        assertBadDataType(a, curr);
+        assertBadDataType(a, cLIValue);
         if (doesArgHaveRestrictedValues(a)) {
-          assertIsValARestrictedVal(a, curr);
+          assertIsValAAcceptedVal(a, cLIValue);
         }
-        ;
 
-        a.setValue(curr);
+        a.setValue(cLIValue);
         usedArguments++;
 
       }
@@ -446,12 +445,6 @@ public class ArgParser {
     assertRequiredArgs();
   }
 
-  private void assertToManyArguments(int usedArguments, String possibleExtraArg) {
-    if (usedArguments == argumentNames.size()) {
-      throw new TooManyArguments(this, possibleExtraArg);
-    }
-  }
-
   private void assertHelpMessage(String value) {
     if ((value.equals("-h") || value.equals("--help"))) {
       throw new HelpException(this);
@@ -459,17 +452,17 @@ public class ArgParser {
     ;
   }
 
-  private boolean isOptional(String s) {
+  private boolean isArgOptional(String s) {
     return s.startsWith("-");
   }
 
-  private boolean isLongFormArg(String s) {
+  private boolean isArgLongForm(String s) {
     return s.startsWith("--");
   }
 
   private void assertOptionalArgExists(String commandLineName) {
     if (arguments.get(commandLineName) == null) {
-      throw new ArgDoesNotExistException(this.getErrorUsage() ,commandLineName);
+      throw new ArgDoesNotExistException(this.getErrorUsage(), commandLineName);
     }
   }
 
@@ -498,7 +491,7 @@ public class ArgParser {
   private void assertFlagExists(String flagName) {
     if (isArgAFlag(flagName)) {
     } else {
-      throw new FlagDoesNotExistException(this.getErrorUsage() ,flagName);
+      throw new FlagDoesNotExistException(this.getErrorUsage(), flagName);
     }
   }
 
@@ -549,10 +542,10 @@ public class ArgParser {
 
   }
 
-  private void assertIsValARestrictedVal(Arg argument, String argValue) {
+  private void assertIsValAAcceptedVal(Arg argument, String argValue) {
     HashSet<String> argRestrictedValues = argument.getRestrictedValues();
     if (!argRestrictedValues.contains(argValue)) {
-      throw new RestrictedValueException(this.getErrorUsage() ,argument, argValue);
+      throw new RestrictedValueException(this.getErrorUsage(), argument, argValue);
     }
   }
 
@@ -561,6 +554,12 @@ public class ArgParser {
       requiredArgs.remove(argname);
     }
 
+  }
+
+  private void assertTooManyArguments(int usedArguments, String possibleExtraArg) {
+    if (usedArguments == argumentNames.size()) {
+      throw new TooManyArguments(this, possibleExtraArg);
+    }
   }
 
   private void assertTooFewArgs(int usedArguments) {
@@ -573,7 +572,7 @@ public class ArgParser {
 
   private void assertRequiredArgs() {
     if (requiredArgs.size() > 0) {
-      throw new RequiredArgException(this.getErrorUsage(),requiredArgs);
+      throw new RequiredArgException(this.getErrorUsage(), requiredArgs);
 
     }
   };

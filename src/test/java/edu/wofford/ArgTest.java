@@ -53,7 +53,8 @@ public final void testArgWithDataTypeConstructor(){
 @Test
 public final void testSetArgValue(){
     regArg.setValue("3");
-    assertEquals("3", regArg.getValue());
+    Float i = regArg.getValue();
+    assertEquals(3, i, .001);
 }
 
 @Test
@@ -100,7 +101,7 @@ public final void testSetEachTypeArgDataType(){
 public final void testBooleanValue() {
     Arg a = new Arg("something", "", Arg.DataType.BOOLEAN);
     a.setValue("true");
-    assertTrue(a.getVal());
+    assertTrue(a.getValue());
 }
 
 
@@ -108,7 +109,7 @@ public final void testBooleanValue() {
 public final void testFloatValue() {
     Arg a = new Arg("something", "", Arg.DataType.FLOAT);
     a.setValue("7.0");
-    Float f = a.getVal();
+    Float f = a.getValue();
     assertEquals( 7.0 , f, 0.0001);
 }
 
@@ -118,7 +119,7 @@ public final void testFloatValue() {
 public final void testIntegerValue() {
     Arg a = new Arg("something", "", Arg.DataType.INT);
     a.setValue("7");
-    int i = a.getVal();
+    int i = a.getValue();
     assertEquals(7,i);
 }
 
@@ -126,7 +127,7 @@ public final void testIntegerValue() {
 public final void testStringValue() {
     Arg a = new Arg("something", "", Arg.DataType.STRING);
     a.setValue("something");
-    assertEquals("something",a.getVal());
+    assertEquals("something",a.getValue());
 }
 
 

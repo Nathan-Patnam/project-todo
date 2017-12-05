@@ -35,11 +35,13 @@ public void testLoadArgsAsXML(){
     ArgParser argchecker =  XML.loadFromFile("./src/test/java/edu/wofford/realXMLFiles/realXML.xml");
     argchecker.setProgramName("volume calculator");
     argchecker.setProgramDescription("calculates the volume of a object");
+    int i = argchecker.getArgValue("height");
+    int j =argchecker.getArgValue("precision");
 
     assertEquals("length of the box", argchecker.getArgDescription("length"));
-    assertEquals("1738", argchecker.getArgValue("height"));
-    assertEquals("3", argchecker.getArgValue("precision"));
-    assertEquals("false", argchecker.getArgValue("metric"));
+    assertEquals(1738, i);
+    assertEquals(3, j);
+    assertEquals(false, argchecker.getArgValue("metric"));
     }
     catch(Exception e){
       e.printStackTrace();

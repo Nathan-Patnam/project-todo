@@ -69,17 +69,19 @@ public class XML {
                         tempArg.setValue(tagContent);
 
                     } else if ("datatype".equals(endElement)) {
-                        if (tagContent.equals("string")) {
-                            argumentDataType = Arg.DataType.STRING;
-                        } else if (tagContent.equals("float")) {
+                         if (tagContent.equals("float")) {
                             argumentDataType = Arg.DataType.FLOAT;
-                        } else if (tagContent.equals("boolean")) {
+                        } 
+                        else if (tagContent.equals("int")) {
+                            argumentDataType = Arg.DataType.INT;
+                        }
+                        else if (tagContent.equals("boolean")) {
                             if (tempArg instanceof OptArg) {
                                 argChecker.addFlagToList(tempArg.getName());
                             }
                             argumentDataType = Arg.DataType.BOOLEAN;
-                        } else if (tagContent.equals("int")) {
-                            argumentDataType = Arg.DataType.INT;
+                        } else {
+                            argumentDataType = Arg.DataType.STRING;;
                         }
 
                         tempArg.setDataType(argumentDataType);

@@ -23,23 +23,23 @@ public class Feature05 {
 
 
 public String getLength() {
-    return argCheck.getArgValue("length");
+    return argCheck.getArgValueString("length");
 }
 
 public String getWidth() {
-    return argCheck.getArgValue("width");
+    return argCheck.getArgValueString("width");
 }
 
 public String getHeight() {
-    return argCheck.getArgValue("height");
+    return argCheck.getArgValueString("height");
 }
 
 public String getType() {
-    return argCheck.getArgValue("type");
+    return argCheck.getArgValueString("type");
 }
 
 public String getDigits() {
-    return argCheck.getArgValue("digits");
+    return argCheck.getArgValueString("digits");
 }
 
 

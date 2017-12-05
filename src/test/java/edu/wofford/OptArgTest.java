@@ -48,7 +48,7 @@ public final void TestGetArgDatatype(){
 @Test
 public final void TestCreateFlag(){
     OptArg flag =  new OptArg("metric", false , Arg.DataType.FLOAT);
-    assertEquals("false", flag.getValue());
+    assertEquals(false, flag.getValue());
 }
 
 @Test

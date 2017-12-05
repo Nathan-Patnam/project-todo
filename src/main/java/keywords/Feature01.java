@@ -53,18 +53,18 @@ public class Feature01 {
 			argCheck.parse(args);
 	}
 	public String getPet() {
-		return argCheck.getArgValue("pet");
+		return argCheck.getArgValueString("pet");
 	}
 
 	public String getNumber() {
-		return argCheck.getArgValue("number");
+		return argCheck.getArgValueString("number");
 	}
 
 	public String getRainy() {
-		return argCheck.getArgValue("rainy");
+		return argCheck.getArgValueString("rainy");
 	}
 
 	public String getBathrooms() {
-		return argCheck.getArgValue("bathrooms");
+		return argCheck.getArgValueString("bathrooms");
 		}
 }

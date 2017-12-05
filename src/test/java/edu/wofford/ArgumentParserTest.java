@@ -381,7 +381,7 @@ public class ArgumentParserTest {
     String[] cla = { "-y" };
     argCheck.addFlag("y");
     argCheck.parse(cla);
-    assertEquals("true", argCheck.getArgValue("y"));
+    assertTrue(argCheck.getArgValue("y"));
   }
 
   @Test
@@ -389,17 +389,18 @@ public class ArgumentParserTest {
     String[] cla = { "-m" };
     argCheck.addFlag("m", "if true units will be given in liters, if false will be given in gallons");
     argCheck.parse(cla);
-    assertEquals("true", argCheck.getArgValue("m"));
+    assertTrue(argCheck.getArgValue("m"));
   }
 
   @Test
   public void addOneFlagSetValue() {
     String[] cla = { "-y", "7" };
     argCheck.addFlag("y");
-    argCheck.addArg("length");
+    argCheck.addArg("length" , Arg.DataType.INT);
     argCheck.parse(cla);
-    assertEquals("true", argCheck.getArgValue("y"));
-    assertEquals("7", argCheck.getArgValue("length"));
+    int i = argCheck.getArgValue("length");
+    assertTrue(argCheck.getArgValue("y"));
+    assertEquals(7, i);
   }
 
   @Test
@@ -435,8 +436,8 @@ public class ArgumentParserTest {
     argCheck.addFlag("y");
     argCheck.addFlag("f");
     argCheck.parse(cla);
-    assertEquals("true", argCheck.getArgValue("y"));
-    assertEquals("true", argCheck.getArgValue("f"));
+    assertTrue(argCheck.getArgValue("y"));
+    assertTrue(argCheck.getArgValue("f"));
   }
 
   @Test
@@ -445,9 +446,8 @@ public class ArgumentParserTest {
     argCheck.addFlag("y");
     argCheck.addFlag("f");
     argCheck.parse(cla);
-
-    assertEquals("true", argCheck.getArgValue("y"));
-    assertEquals("true", argCheck.getArgValue("f"));
+    assertTrue(argCheck.getArgValue("y"));
+    assertTrue(argCheck.getArgValue("f"));
   }
 
   @Test
@@ -598,8 +598,24 @@ public void argRequiredAndGiven(){
   argCheck.addOptArg("optionalArgTwo", "10", Arg.DataType.FLOAT);
   argCheck.setArgAsRequired("optionalArgTwo");
   argCheck.parse(cla);
-  assertEquals("7",argCheck.getArgValue("length"));
-  assertEquals("9", argCheck.getArgValue("optionalArgTwo"));
+  Float i =argCheck.getArgValue("length");
+  Float j =argCheck.getArgValue("optionalArgTwo");
+  assertEquals(7,i, .0001);
+  assertEquals(9, j, .0001);
+  
+  
+}
+
+@Test
+public void testOptionalArgServingAsFlag(){
+
+  String[] cla = {"7","--optionalArgTwo" };
+  argCheck.addArg("length",Arg.DataType.FLOAT);
+  argCheck.addOptArg("optionalArgTwo", "false", Arg.DataType.BOOLEAN);
+  argCheck.parse(cla);
+  Float i = argCheck.getArgValue("length");
+  assertEquals(7,i , .001);
+  assertTrue(argCheck.getArgValue("optionalArgTwo"));
   
   
 }
