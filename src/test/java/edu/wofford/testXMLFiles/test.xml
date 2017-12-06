@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+<arguments>
+    <positional>
+		<name>radius</name>
+		<datatype>float</datatype>
+		<description>the radius of the sphere</description>
+		<position>1</position>
+    </positional>
+    <optional>
+        <name>precision</name>
+        <value>2</value>
+        <required>true</required>
+        <datatype>int</datatype>
+        <shortname>p</shortname>
+        <description>number of decimal places volume 
+        will be given in</description>
+        <restrictedValues>1 2 3 4 5 6</restrictedValues>
+    </optional>
+     <optional>
+        <name>metric</name>
+        <value>false</value>
+        <required>false</required>
+        <datatype>boolean</datatype>
+        <description>if true volume will be given in liters, 
+        if false volume will be given in gallons</description>
+    </optional>
+</arguments>

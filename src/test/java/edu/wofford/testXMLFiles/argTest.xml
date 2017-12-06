@@ -3,11 +3,13 @@
 	<positional>
 		<name>length</name>
 		<datatype>string</datatype>
+		<setValue></setValue>
 		<position>1</position>
 	</positional>
 	<positional>
 		<name>width</name>
 		<datatype>float</datatype>
+		<setValue></setValue>
 		<shortname>w</shortname>
 		<description>the width of the box</description>
 		<restrictedValues>7 8 9</restrictedValues>

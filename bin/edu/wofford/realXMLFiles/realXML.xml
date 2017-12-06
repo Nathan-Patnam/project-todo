@@ -37,6 +37,12 @@
         <required>false</required>
         <datatype>boolean</datatype>
     </optional>
+       <positional>
+        <name>verbose</name>
+        <datatype>boolean</datatype>
+        <description>verbosity</description>
+        <position>3</position>
+    </positional>
 
     
 </arguments>

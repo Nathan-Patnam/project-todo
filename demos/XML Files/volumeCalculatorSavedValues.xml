@@ -1,0 +1,53 @@
+<?xml version="1.0" ?>
+<arguments>
+	<optional>
+		<name>precision</name>
+		<value>2</value>
+		<required>false</required>
+		<datatype>int</datatype>
+		<description>number of decimal places volume will be given in</description>
+		<restrictedValues>1 2 3 4 5</restrictedValues>
+	</optional>
+	<optional>
+		<name>type</name>
+		<value>rectangular-prism</value>
+		<required>false</required>
+		<datatype>string</datatype>
+		<shortname>t</shortname>
+		<description>the type of shape you want to calculate the volume</description>
+		<restrictedValues>rectangular-prism pyramid ellipsoid</restrictedValues>
+	</optional>
+	<optional>
+		<name>metric</name>
+		<value>true</value>
+		<required>false</required>
+		<datatype>boolean</datatype>
+		<shortname>m</shortname>
+		<description>if given by user volume will be given in liters, if not volume will be given in gallons</description>
+		<restrictedValues>rectangular-prism pyramid ellipsoid</restrictedValues>
+	</optional>
+	<positional>
+		<name>length</name>
+		<datatype>float</datatype>
+		<setValue>1</setValue>
+		<shortname>l</shortname>
+		<description>length of the box</description>
+		<position>1</position>
+	</positional>
+	<positional>
+		<name>width</name>
+		<datatype>float</datatype>
+		<setValue>2</setValue>
+		<shortname>w</shortname>
+		<description>length of the box</description>
+		<position>2</position>
+	</positional>
+	<positional>
+		<name>height</name>
+		<datatype>float</datatype>
+		<setValue>3</setValue>
+		<shortname>h</shortname>
+		<description>length of the box</description>
+		<position>3</position>
+	</positional>
+</arguments>

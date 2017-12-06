@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<arguments>
+  <optional>
+        <name>type</name>
+        <value>false</value>
+        <datatype>boolean</datatype>
+        <shortname>g</shortname>
+        <description>height of the box</description>
+</optional>
+
+  <optional>
+        <name>volume</name>
+        <value>100</value>
+        <datatype>int</datatype>
+        <shortname>v</shortname>
+        <description>volume of the shape</description>
+</optional>
+</arguments>

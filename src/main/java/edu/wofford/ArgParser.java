@@ -167,7 +167,11 @@ public class ArgParser {
 
   public void addOptArg(OptArg arg) {
     arguments.put(arg.getName(), arg);
-    argumentNames.add(arg.getName());
+    if (arg.getDataType()==Arg.DataType.BOOLEAN){
+      addFlagToList(arg.getName());
+
+    }
+
 
   }
 
@@ -360,9 +364,10 @@ public class ArgParser {
   * @exception BadDataTypeException        thrown if a argument is being set to a value that is not of its datatype
   * @exception FlagDoesNotExistException   thrown if a flag is in args, but has not been added to the argument parser
   * @exception HelpException               thrown if a -h or --help is in args
-  * @exception RequiredArgException               thrown if a -h or --help is in args
-  * @exception HelpException               thrown if a -h or --help is in args
-  
+  * @exception RequiredArgException        thrown if a argument that is marked as required and is not given
+  * @exception TooManyArgumentsException   thrown if user enters in more arguments than argument parser was given
+  * @exception TooFewArgumentsException    thrown if user enters less arguments than argument parser was given
+  * @exception RestrictedValueException    thrown if a value has restricted values and is being set to a value not in that set
   */
   public void parse(String[] args) {
     Queue<String> commandLineQueue = new ArrayDeque<>();
@@ -548,7 +553,7 @@ public class ArgParser {
 
   private void assertTooFewArgs(int usedArguments) {
     if (usedArguments < argumentNames.size()) {
-      throw new TooFewArgumentsException(this, usedArguments, argumentNames);
+      throw new TooFewArgumentsException(this, usedArguments, argumentNames, requiredArgs);
 
     }
 

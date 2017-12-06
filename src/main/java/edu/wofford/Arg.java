@@ -238,6 +238,12 @@ public class Arg {
       streamWriter.writeCharacters(this.dataType.toString());
       streamWriter.writeEndElement();
 
+      streamWriter.writeCharacters("\n\t\t");
+      streamWriter.writeStartElement("setValue");
+      streamWriter.writeCharacters(this.value);
+      streamWriter.writeEndElement();
+
+
       if (this.shortFormName.length() > 0) {
         streamWriter.writeCharacters("\n\t\t");
         streamWriter.writeStartElement("shortname");

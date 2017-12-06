@@ -25,6 +25,7 @@
 	<positional>
 		<name>length</name>
 		<datatype>string</datatype>
+		<setValue></setValue>
 		<shortname>l</shortname>
 		<description>length of the box</description>
 		<position>1</position>
@@ -32,6 +33,7 @@
 	<positional>
 		<name>width</name>
 		<datatype>float</datatype>
+		<setValue></setValue>
 		<shortname>w</shortname>
 		<description>width of the box</description>
 		<restrictedValues>3 4 5</restrictedValues>
@@ -40,6 +42,7 @@
 	<positional>
 		<name>verbose</name>
 		<datatype>boolean</datatype>
+		<setValue></setValue>
 		<description>verbosity</description>
 		<position>3</position>
 	</positional>

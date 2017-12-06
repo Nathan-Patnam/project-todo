@@ -1,10 +1,10 @@
 package edu.wofford;
 
 /**
-  * <pre> 
+  *
   * A ArgDoesNotExistException is thrown to indicate that the argument parser has encountered a argument that doesn't exist.
   * For example, suppose the following code was executed:
-  * {@code 
+  * <pre> 
   *   argCheck = new ArgParser("VolumeCalculator", "Calculate the volume of a box.");   
   *   String[] cla = { "7", "--myarg","myval","3","2" }; 
   *    argCheck = new ArgParser("VolumeCalculator", "Calculate the volume of a box."); 
@@ -15,11 +15,12 @@ package edu.wofford;
   * }
   *
   *  The ArgDoesNotExistException would be thrown with the following error message: 
-  <p>
+  * </pre>
+  * <p>
   * "usage: java VolumeCalculator length width height
   *  VolumeCalculator.java: error: argument myarg does not exist";
-  </p>
-  *</pre>
+  * </p>
+  *
   */
 public class ArgDoesNotExistException extends RuntimeException {
 
