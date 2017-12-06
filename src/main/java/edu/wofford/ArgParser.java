@@ -159,6 +159,10 @@ public class ArgParser {
   */
   public void addOptArg(String argname, String defaultValue, Arg.DataType dataType, String description) {
     arguments.put(argname, new OptArg(argname, defaultValue, dataType, description));
+    if (dataType==Arg.DataType.BOOLEAN){
+      addFlagToList(argname);
+
+    }
   }
 
   public void addOptArg(OptArg arg) {
@@ -167,25 +171,8 @@ public class ArgParser {
 
   }
 
-  /**
-  * Add a flag, which is a boolean optional argument.
-  * @param  argname, the name of the flag
-  * 
-  */
-  public void addFlag(String argname) {
-    addFlag(argname, "");
-  }
 
-  /**
-  * Add a flag, which is a boolean optional argument, with a name and description. 
-  * @param  argname, the name of the flag
-  * @param  description, the description of teh flag 
-  * 
-  */
-  public void addFlag(String argname, String description) {
-    arguments.put(argname, new OptArg(argname, false, Arg.DataType.BOOLEAN, description));
-    flagNames.add(argname);
-  }
+
 
   /**
   * Adds a flag to the list of flag names 
@@ -216,12 +203,8 @@ public class ArgParser {
   /**
   * Returns the value that the argument holds. If no value has been set for the argument then it will return null.
   * @param  argument, the name of the arugment you want the value of
-  * @return the value associated with that argument
+  * @return the value associated with that argument in the argument's data type
   */
-  public String getArgValueString(String argument) {
-    return arguments.get(argument).getArgValueString();
-  }
-
   public <T> T getArgValue(String argument) {
     return arguments.get(argument).getValue();
   }
@@ -323,9 +306,11 @@ public class ArgParser {
     return programDescription;
   }
 
+
+
   /**
   * Gives error message, including program name and parameter list
-  * @returns an error message 
+  * @return an error message 
   */
   public String getErrorUsage() {
     String errorMessage = "usage: java " + this.programName + getParameterString() + "\n" + this.programName;
@@ -384,7 +369,6 @@ public class ArgParser {
     for (int i = 0; i < args.length; i++) {
       commandLineQueue.add(args[i]);
     }
-
     int usedArguments = 0;
     while (!commandLineQueue.isEmpty()) {
       String cLIValue = commandLineQueue.remove();
@@ -558,13 +542,13 @@ public class ArgParser {
 
   private void assertTooManyArguments(int usedArguments, String possibleExtraArg) {
     if (usedArguments == argumentNames.size()) {
-      throw new TooManyArguments(this, possibleExtraArg);
+      throw new TooManyArgumentsException(this, possibleExtraArg);
     }
   }
 
   private void assertTooFewArgs(int usedArguments) {
     if (usedArguments < argumentNames.size()) {
-      throw new TooFewArguments(this, usedArguments, argumentNames);
+      throw new TooFewArgumentsException(this, usedArguments, argumentNames);
 
     }
 

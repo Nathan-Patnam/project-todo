@@ -2,21 +2,23 @@ package edu.wofford;
 
 /**
   *  
-  * Thrown to indicate that a argument has been set a value that is no of its own data type
-  * For example, suppose the following code was executed
+  * A BadDataTypeException is thrown to indicate that a argument has been set a value that is not of its own data type.
+  * For example, suppose the following code was executed:
   * <pre>
   *  argCheck = new ArgParser("VolumeCalculator", "Calculate the volume of a box.");   
   *  String[] cla = { "three", "3.1", "3.2" };
   *  argCheck.addArg("length", "the length of the box", Arg.DataType.FLOAT);
   *  argCheck.addArg("width", "the width of the box", Arg.DataType.FLOAT);
   *  argCheck.addArg("height", "the height of the box", Arg.DataType.FLOAT);
+  *  argCheck.parse(cla);
   * </pre>
   *
   *  The BadDataTypeException would be thrown with the following error message:
-  *  {@code    
+    <p>
   *  "usage: java VolumeCalculator length width height
   *   VolumeCalculator.java: error: argument length: invalid float value: three"
-  *  }
+  </p>
+  *  
   *
   */
 

@@ -57,7 +57,7 @@ public class ArgumentParserTest {
     assertEquals(1, argCheck.getNumberArgs());
   }
 
-  @Test(expected = TooFewArguments.class)
+  @Test(expected = TooFewArgumentsException.class)
   public final void testTooFewArguments() {
     argCheck.addArg("length");
     argCheck.addArg("width");
@@ -73,7 +73,7 @@ public class ArgumentParserTest {
     argCheck.parse(cla);
   }
 
-  @Test(expected = TooManyArguments.class)
+  @Test(expected = TooManyArgumentsException.class)
   public final void testTooManyArguments() {
     argCheck.addArg("length");
     String[] cla = { "5", "3" };
@@ -89,7 +89,7 @@ public class ArgumentParserTest {
     try {
       argCheck.parse(cla);
       fail("Should have thrown TooManyArguments but did not!");
-    } catch (TooManyArguments expected) {
+    } catch (TooManyArgumentsException expected) {
       String msg = "usage: java VolumeCalculator length width height\nVolumeCalculator.java: error: unrecognized arguments: 43";
       assertEquals(msg, expected.getMessage());
     }
@@ -104,7 +104,7 @@ public class ArgumentParserTest {
     try {
       argCheck.parse(cla);
       fail("Should have thrown TooFewArguments but did not!");
-    } catch (TooFewArguments expected) {
+    } catch (TooFewArgumentsException expected) {
       String msg = "usage: java VolumeCalculator length width height\nVolumeCalculator.java: error: the following arguments are required: height";
       assertEquals(msg, expected.getMessage());
     }
@@ -379,7 +379,7 @@ public class ArgumentParserTest {
   @Test
   public void addOneFlag() {
     String[] cla = { "-y" };
-    argCheck.addFlag("y");
+    argCheck.addOptArg("y", "false", Arg.DataType.BOOLEAN);
     argCheck.parse(cla);
     assertTrue(argCheck.getArgValue("y"));
   }
@@ -387,7 +387,8 @@ public class ArgumentParserTest {
   @Test
   public void addOneFlagWithDescription() {
     String[] cla = { "-m" };
-    argCheck.addFlag("m", "if true units will be given in liters, if false will be given in gallons");
+    argCheck.addOptArg("m", "false", Arg.DataType.BOOLEAN,"if true units will be given in liters, if false will be given in gallons");
+
     argCheck.parse(cla);
     assertTrue(argCheck.getArgValue("m"));
   }
@@ -395,7 +396,7 @@ public class ArgumentParserTest {
   @Test
   public void addOneFlagSetValue() {
     String[] cla = { "-y", "7" };
-    argCheck.addFlag("y");
+    argCheck.addOptArg("y", "false", Arg.DataType.BOOLEAN);
     argCheck.addArg("length" , Arg.DataType.INT);
     argCheck.parse(cla);
     int i = argCheck.getArgValue("length");
@@ -406,7 +407,7 @@ public class ArgumentParserTest {
   @Test
   public void throwFlagError() {
     String[] cla = { "-y" };
-    argCheck.addFlag("d");
+    argCheck.addOptArg("d", "false", Arg.DataType.BOOLEAN);
     String msg = "usage: java VolumeCalculator d\nVolumeCalculator.java: error: argument y does not exist";
     try {
       argCheck.parse(cla);
@@ -419,8 +420,8 @@ public class ArgumentParserTest {
   @Test
   public void testMultipleBadFlags() {
     String[] cla = { "-yf" };
-    argCheck.addFlag("y");
-    argCheck.addFlag("d");
+    argCheck.addOptArg("y", "false", Arg.DataType.BOOLEAN);
+    argCheck.addOptArg("d", "false", Arg.DataType.BOOLEAN);
     String msg = "usage: java VolumeCalculator y d\nVolumeCalculator.java: error: flag f does not exist";
     try {
       argCheck.parse(cla);
@@ -433,8 +434,8 @@ public class ArgumentParserTest {
   @Test
   public void settingMultipleFlags() {
     String[] cla = { "-yf" };
-    argCheck.addFlag("y");
-    argCheck.addFlag("f");
+    argCheck.addOptArg("y", "false", Arg.DataType.BOOLEAN);
+    argCheck.addOptArg("f", "false", Arg.DataType.BOOLEAN);
     argCheck.parse(cla);
     assertTrue(argCheck.getArgValue("y"));
     assertTrue(argCheck.getArgValue("f"));
@@ -443,8 +444,8 @@ public class ArgumentParserTest {
   @Test
   public void settingMultipleFlagsInDifferentOrder() {
     String[] cla = { "-fy" };
-    argCheck.addFlag("y");
-    argCheck.addFlag("f");
+    argCheck.addOptArg("y", "false", Arg.DataType.BOOLEAN);
+    argCheck.addOptArg("f", "false", Arg.DataType.BOOLEAN);
     argCheck.parse(cla);
     assertTrue(argCheck.getArgValue("y"));
     assertTrue(argCheck.getArgValue("f"));

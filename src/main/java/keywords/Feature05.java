@@ -23,24 +23,33 @@ public class Feature05 {
 
 
 public String getLength() {
-    return argCheck.getArgValueString("length");
+    Float length = argCheck.getArgValue("length");
+    int l = Math.round(length);
+    return String.valueOf(l);
 }
 
 public String getWidth() {
-    return argCheck.getArgValueString("width");
+    Float width = argCheck.getArgValue("width");
+    int w = Math.round(width);
+    return String.valueOf(w);
 }
 
 public String getHeight() {
-    return argCheck.getArgValueString("height");
+    Float height = argCheck.getArgValue("height");
+    int h = Math.round(height);
+    return String.valueOf(h);
 }
 
 public String getType() {
-    return argCheck.getArgValueString("type");
+    String type = argCheck.getArgValue("type");
+    return String.valueOf(type);
+}
+public String getDigits() {
+    String digits = argCheck.getArgValue("digits");
+    return String.valueOf(digits);
 }
 
-public String getDigits() {
-    return argCheck.getArgValueString("digits");
-}
+
 
 
 }

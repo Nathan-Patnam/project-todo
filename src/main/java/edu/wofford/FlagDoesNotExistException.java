@@ -2,20 +2,21 @@ package edu.wofford;
 
 /**
   * <pre> 
-  * Thrown when a flag has been encountered by the argument parser, but has not been added by the user
+  * A FlagDoesNotExistException is thrown when a flag has been encountered by the argument parser, but has not been added by the user.
   * For example, suppose the following code was executed:
   * {@code 
   * argCheck = new ArgParser("VolumeCalculator", "Calculate the volume of a box.");   
   * String[] cla = { "-lw" };
   *  argCheck.addFlag("l");
   *  argCheck.addFlag("h");
+  *  argCheck.parse(cla);
   * }
   *
   *  The FlagDoesNotExistException would be thrown with the following error message:
-  *  {@code    
+<p>
   *  "usage: java VolumeCalculator l h
   *   VolumeCalculator.java: error: flag w does not exist"
-  *  }
+  </p>
   *</pre>
   */
 

@@ -61,4 +61,5 @@ runrobot.dependsOn test
 javadoc {
 source = sourceSets.main.allJava
 classpath = configurations.compile
+exclude '**/keywords/**'
 }

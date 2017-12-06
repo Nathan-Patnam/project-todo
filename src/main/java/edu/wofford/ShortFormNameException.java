@@ -2,7 +2,7 @@ package edu.wofford;
 
 /**
   * <pre> 
-  * Thrown to indicate that two arguments have been given the same short form name
+  * The ShortFormNameException is thrown to indicate that two arguments have been given the same short form name.
   * For example, suppose the following code was executed
   * {@code 
   *   argCheck = new ArgParser("VolumeCalculator", "Calculate the volume of a box.");   
@@ -16,10 +16,10 @@ package edu.wofford;
   * }
   *
   *  The ShortFormNameException would be thrown with the following error message:
-  *  {@code    
+  * <p> 
   *"usage: java VolumeCalculator length width
   * VolumeCalculator.java: error: the short form name d is already in use"
-  *  }
+  * </p>
   *</pre>
   */
 

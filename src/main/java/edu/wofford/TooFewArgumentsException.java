@@ -4,7 +4,7 @@ import java.util.*;
 
 /**
   * <pre> 
-  * Thrown to indicate that too few arguments have been provided on the command line
+  * The TooFewArgumentsException is thrown to indicate that too few arguments have been provided on the command line.
   * For example, suppose the following code was executed:
   * {@code 
   *   argCheck = new ArgParser("VolumeCalculator", "Calculate the volume of a box.");   
@@ -17,14 +17,14 @@ import java.util.*;
   * }
   *
   *  The TooFewArgumentsException would be thrown with the following error message:
-  *  {@code    
+  *  <p>  
   * "usage: java VolumeCalculator length width height
   *  VolumeCalculator.java: error: the following arguments are required: height"
-  *  }
+  *  </p>
   *</pre>
   */
 
-public class TooFewArguments extends RuntimeException {
+public class TooFewArgumentsException extends RuntimeException {
   private String message;
 
   /**
@@ -34,7 +34,7 @@ public class TooFewArguments extends RuntimeException {
   * @param usedArguments the number of required arguments that been set by parse already
   * @param argumentNames a list of all required arguments required by the program
   */
-  public TooFewArguments(ArgParser argChecker, int usedArguments, ArrayList<String> argumentNames) {
+  public TooFewArgumentsException(ArgParser argChecker, int usedArguments, ArrayList<String> argumentNames) {
     super();
     String missingArguments = "";
     for (int i = usedArguments; i < argumentNames.size(); i++) {

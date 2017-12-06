@@ -4,8 +4,7 @@ targetNamespace="https://www.w3schools.com"
 xmlns="https://www.w3schools.com"
 elementFormDefault="qualified">
 
-
-<!--Types of dataTypes arguments can be-->
+<!--Types of data types arguments can be-->
 <xs:simpleType name="datatype" final="restriction" >
   <xs:restriction base="xs:string">
     <xs:enumeration value="string"/>
@@ -16,7 +15,6 @@ elementFormDefault="qualified">
 </simpleType>
 
 <!-- schema for the Argument Parser-->
-<!--Using maxOccurs="unbounded" because maxOccurs is by default set to one when inside a group element -->
 <xs:element name="arguments">
   <xs:complexType>
     <xs:sequence>
@@ -28,7 +26,6 @@ elementFormDefault="qualified">
 
 
 <!-- schema for an Argument-->
-<!--minOccurs and maxOccurs have a defaul  value of1 -->
 <xs:element name="positional">
   <xs:complexType>
     <xs:xsequence>
@@ -56,7 +53,4 @@ elementFormDefault="qualified">
     </sequence>
   </complexType>
 </element>
-
-
-
 </xs:schema>

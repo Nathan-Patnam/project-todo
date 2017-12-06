@@ -4,7 +4,7 @@
   
     /**
   * <pre> 
-  * Thrown to indicate that the argument parser has encountered a help flag {@code -h} or {@code --help} 
+  * The HelpException is thrown to indicate that the argument parser has encountered a help flag {@code -h} or {@code --help}.
   * For example, suppose the following code was executed
   * {@code
   *   argCheck = new ArgParser("VolumeCalculator", "Calculate the volume of a box.");    
@@ -18,7 +18,7 @@
   * }
   *
   *  The HelpException would be thrown with the following error message:
-  *  {@code    
+  * <p> 
   * "usage: java VolumeCalculator length width height type\nCalculate the volume of a box.
   *  positional arguments:
   *     length the length of the box (float)
@@ -26,7 +26,7 @@
   *     height the height of the box (float)
   *  optional arguments:
   *     type the type of the box to calculate the volume for (string; default: cube)" 
-  *  }
+  * </p> 
   *</pre>
   */
 public class HelpException extends RuntimeException {

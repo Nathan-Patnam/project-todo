@@ -4,8 +4,8 @@ import java.util.*;
 
 /**
   * <pre> 
-  * Thrown when an optional argument has been set as required, but the user has forgot to include
-  * in the command line arguments
+  * The RequiredArgException is thrown when an optional argument has been set as required, but the user has forgot to include it
+  * in the command line arguments.
   * For example, suppose the following code was executed
   * {@code 
   *  argCheck = new ArgParser("VolumeCalculator", "Calculate the volume of a box.");   
@@ -13,13 +13,14 @@ import java.util.*;
   *  argCheck.addArg("length",Arg.DataType.FLOAT);
   *  argCheck.addOptArg("type", "ellipsoid", Arg.DataType.STRING, "shape you want to calculate the volume of");
   *  argCheck.setArgAsRequired("type");
+  *  argCheck.parse(cla);
   * }
   *
   *  The RequiredArgException would be thrown with the following error message:
-  *  {@code    
+  * <p>
   *"usage: java VolumeCalculator length type
   * VolumeCalculator.java: error: the argument(s) type are required"
-  *  }
+  * </p>
   *</pre>
   */
 

@@ -3,8 +3,8 @@ package edu.wofford;
 
 /**
   * <pre> 
-  * Thrown when an argument has been given restricted values and is being assigned a value by the
-  * argument parser that is not in the restricted value set
+  * The RestrictedValueException is thrown when an argument has been given restricted values and is being assigned a value by the
+  * argument parser that is not in the restricted value set.
   * For example, suppose the following code was executed
   * {@code 
   *   argCheck = new ArgParser("VolumeCalculator", "Calculate the volume of a box."); 
@@ -14,12 +14,12 @@ package edu.wofford;
   *    argCheck.setArgRestricedValues("length", "5 8 9");
   *    argCheck.parse(cla);
   * }
-  *
+  * 
   *  The RestrictedValueException would be thrown with the following error message:
-  *  {@code    
-  *"usage: java VolumeCalculator length
+  * <p>
+  * "usage: java VolumeCalculator length
   * VolumeCalculator.java: error: 7 is not an accepted value for length"
-  *  }
+  *  </p>
   *</pre>
   */
 
