@@ -1,4 +1,49 @@
 <?xml version="1.0" ?>
 <arguments>
-	
+	<optional>
+		<name>height</name>
+		<value>1738</value>
+		<required>true</required>
+		<datatype>int</datatype>
+		<shortname>g</shortname>
+		<description>height of the box</description>
+	</optional>
+	<optional>
+		<name>precision</name>
+		<value>3</value>
+		<required>false</required>
+		<datatype>int</datatype>
+		<description>degrees of precision of answer</description>
+		<restrictedValues>3 4 5</restrictedValues>
+	</optional>
+	<optional>
+		<name>metric</name>
+		<value>false</value>
+		<required>false</required>
+		<datatype>boolean</datatype>
+	</optional>
+	<positional>
+		<name>length</name>
+		<datatype>string</datatype>
+		<setValue></setValue>
+		<shortname>l</shortname>
+		<description>length of the box</description>
+		<position>1</position>
+	</positional>
+	<positional>
+		<name>width</name>
+		<datatype>float</datatype>
+		<setValue></setValue>
+		<shortname>w</shortname>
+		<description>width of the box</description>
+		<restrictedValues>3 4 5</restrictedValues>
+		<position>2</position>
+	</positional>
+	<positional>
+		<name>verbose</name>
+		<datatype>boolean</datatype>
+		<setValue></setValue>
+		<description>verbosity</description>
+		<position>3</position>
+	</positional>
 </arguments>
